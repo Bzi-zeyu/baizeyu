@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="author" content="bzy">
+<meta name="description" content="高级网页设计I 网页元素设计项目报告 —— 仿闲鱼APP首页，作者 bzy">
+<title>闲鱼 · 首页（响应式全屏版） | bzy 网页元素设计</title>
+<link rel="stylesheet" href="bzy-reset.css">
+<link rel="stylesheet" href="bzy-main.css">
+<link rel="stylesheet" href="bzy-responsive.css">
+</head>
+<body class="bzy-body">
+
+<!-- ============================================================
+     页面外壳：桌面端居中展示手机模拟框
+     ============================================================ -->
+<div class="bzy-page">
+  <h1 class="bzy-page__title">闲鱼 · 首页（响应式全屏版）</h1>
+  <p class="bzy-page__subtitle">高级网页设计I —— 网页元素设计 项目报告 &nbsp;|&nbsp; 作者：bzy</p>
+
+  <!-- 手机外壳 -->
+  <div class="bzy-phone">
+    <span class="bzy-phone__notch" aria-hidden="true"></span>
+
+    <div class="bzy-phone__screen">
+
+      <!-- 状态栏 -->
+      <div class="bzy-statusbar">
+        <span class="bzy-statusbar__time" data-bzy-clock>10:26</span>
+        <span class="bzy-statusbar__pill">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+            <rect x="3.2" y="1" width="5.6" height="10" rx="1.6"/>
+          </svg>
+          <b>1台</b>
+        </span>
+        <span class="bzy-statusbar__right">
+          <span class="bzy-statusbar__net">248 <i>KB/s</i></span>
+          <span class="bzy-statusbar__net">5G</span>
+          <svg class="bzy-statusbar__icon" width="25" height="12" viewBox="0 0 25 12" fill="none" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" opacity="0.42"/>
+            <rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/>
+            <path d="M23 4v4a2.2 2.2 0 0 0 0-4Z" fill="currentColor" opacity="0.42"/>
+          </svg>
+        </span>
+      </div>
+
+      <!-- ==========================================================
+           网页元素 ① 顶部导航
+           顶部分页标签 + 签到 + 闲鱼搜索框 + 频道筛选
+           ========================================================== -->
+      <header class="bzy-header">
+
+        <!-- 第一行：顶部分页标签 + 签到 -->
+        <div class="bzy-header__bar">
+          <nav class="bzy-nav" aria-label="首页分区">
+            <span class="bzy-nav__item bzy-nav__item--on">首页</span>
+            <span class="bzy-nav__item">集市<span class="bzy-nav__badge">补贴中</span></span>
+            <span class="bzy-nav__item">圈子</span>
+            <span class="bzy-nav__item">回收</span>
+          </nav>
+
+          <div class="bzy-signin" data-bzy-toast="每日签到 —— 领闲鱼币「bzy」" aria-label="签到">
+            <span class="bzy-signin__badge">领</span>
+            <span class="bzy-signin__icon">🐳</span>
+            <span class="bzy-signin__text">签到</span>
+          </div>
+        </div>
+
+        <!-- 第二行：搜索框（取景框 + 关键词轮播 + 相机 + 搜索按钮） -->
+        <div class="bzy-searchbar" data-bzy-toast="搜索 —— bzy">
+          <span class="bzy-searchbar__logo" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.1" stroke-linecap="round">
+              <path d="M8.6 3.2H6.1A2.9 2.9 0 0 0 3.2 6.1v2.5"/>
+              <path d="M15.4 3.2h2.5a2.9 2.9 0 0 1 2.9 2.9v2.5"/>
+              <path d="M8.6 20.8H6.1a2.9 2.9 0 0 1-2.9-2.9v-2.5"/>
+              <path d="M15.4 20.8h2.5a2.9 2.9 0 0 0 2.9-2.9v-2.5"/>
+            </svg>
+          </span>
+
+          <div class="bzy-searchbar__swiper">
+            <span class="bzy-searchbar__item bzy-searchbar__item--on">fc27🔥</span>
+            <span class="bzy-searchbar__item">iPad Pro 2024 11 寸</span>
+            <span class="bzy-searchbar__item">九成新 山姆会员卡</span>
+            <span class="bzy-searchbar__item">考研数学 张宇全套</span>
+            <span class="bzy-searchbar__item">索尼 WH-1000XM5</span>
+            <span class="bzy-searchbar__item">闲置 公路自行车</span>
+          </div>
+
+          <span class="bzy-searchbar__cam" aria-hidden="true">
+            <svg width="19" height="19" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M3 7.4h2.6l1.3-2h8.2l1.3 2H19a1.6 1.6 0 0 1 1.6 1.6v7.2A1.6 1.6 0 0 1 19 18.8H3a1.6 1.6 0 0 1-1.6-1.6V9A1.6 1.6 0 0 1 3 7.4Z" stroke-linejoin="round"/>
+              <circle cx="11" cy="13" r="3.1"/>
+            </svg>
+          </span>
+
+          <span class="bzy-searchbar__btn" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.1">
+              <circle cx="7.6" cy="7.6" r="5.4"/><path d="m11.8 11.8 4 4" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </div>
+
+        <!-- 第三行：频道筛选 -->
+        <nav class="bzy-channel" aria-label="频道筛选">
+          <span class="bzy-channel__item">关注</span>
+          <span class="bzy-channel__item bzy-channel__item--on">推荐</span>
+          <span class="bzy-channel__item">新发</span>
+          <span class="bzy-channel__item">找服务</span>
+          <span class="bzy-channel__item">价格指数</span>
+          <span class="bzy-channel__item">数码</span>
+          <span class="bzy-channel__item">卡券</span>
+        </nav>
+        <span class="bzy-channel__more" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m3 5.4 4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </header>
+
+      <!-- 滚动内容区 -->
+      <main class="bzy-main" data-bzy-scroll>
+
+        <!-- ====================================================
+             网页元素 ② 金刚区：横向分页的图标导航
+             ==================================================== -->
+        <section class="bzy-cate" aria-label="分类导航">
+          <div class="bzy-cate__track" data-bzy-cate>
+
+            <div class="bzy-cate__page">
+              <div class="bzy-cate__cell" data-bzy-cate-name="玩游戏">
+                <span class="bzy-cate__icon">🎮</span>
+                <span class="bzy-cate__text">玩游戏</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="吃喝玩乐">
+                <span class="bzy-cate__icon">🍔</span>
+                <span class="bzy-cate__text">吃喝玩乐</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="手机数码">
+                <span class="bzy-cate__icon">📱</span>
+                <span class="bzy-cate__text">手机数码</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="上门回收">
+                <span class="bzy-cate__icon">📦</span>
+                <span class="bzy-cate__text">上门回收</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="租房">
+                <span class="bzy-cate__icon">🏠</span>
+                <span class="bzy-cate__text">租房</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="二手车">
+                <span class="bzy-cate__icon">🚗</span>
+                <span class="bzy-cate__text">二手车</span>
+              </div>
+            </div>
+
+            <div class="bzy-cate__page">
+              <div class="bzy-cate__cell" data-bzy-cate-name="技能服务">
+                <span class="bzy-cate__icon">🧰</span>
+                <span class="bzy-cate__text">技能服务</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="潮玩手办">
+                <span class="bzy-cate__icon">🧸</span>
+                <span class="bzy-cate__text">潮玩手办</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="服饰鞋包">
+                <span class="bzy-cate__icon">👟</span>
+                <span class="bzy-cate__text">服饰鞋包</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="美妆个护">
+                <span class="bzy-cate__icon">💄</span>
+                <span class="bzy-cate__text">美妆个护</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="图书教材">
+                <span class="bzy-cate__icon">📚</span>
+                <span class="bzy-cate__text">图书教材</span>
+              </div>
+              <div class="bzy-cate__cell" data-bzy-cate-name="乐器">
+                <span class="bzy-cate__icon">🎸</span>
+                <span class="bzy-cate__text">乐器</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="bzy-cate__dots" data-bzy-cate-dots>
+            <span class="bzy-cate__dot bzy-cate__dot--on"></span>
+            <span class="bzy-cate__dot"></span>
+          </div>
+        </section>
+
+        <!-- ====================================================
+             网页元素 ③ 商品瀑布流（双列错落卡片）
+             ==================================================== -->
+        <section class="bzy-feed" aria-label="为你推荐">
+
+          <div class="bzy-feed__cols">
+            <!-- 左列 -->
+            <div class="bzy-feed__col">
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.07">
+                  <img class="bzy-card__img" src="图片/1-1.jpg" alt="动物园之星2 国区 游戏海报">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>动物园之星2 国区</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">175</span>
+                    <span class="bzy-card__want">11人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline">24小时发货</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">杂</span>
+                    <span class="bzy-card__nick">杂货铺子</span>
+                    <span class="bzy-card__credit">回头客好评过百</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.15">
+                  <img class="bzy-card__img" src="图片/1-5.jpg" alt="三角洲行动 周年庆 游戏画面">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>三角洲行动周年庆 躺赢领券真香</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">88</span>
+                    <span class="bzy-card__want">6人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline bzy-card__tagline--hot">秒发货</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">游</span>
+                    <span class="bzy-card__nick">游戏账号铺</span>
+                    <span class="bzy-card__credit">已售 300+</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.14">
+                  <img class="bzy-card__img" src="图片/1-6.jpg" alt="华为手机 商品图">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>华为 Mate60 12+512 雅川青</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">3980</span>
+                    <span class="bzy-card__want">23人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline">支持验机</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">数</span>
+                    <span class="bzy-card__nick">数码回收站</span>
+                    <span class="bzy-card__credit">信用极好</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.00">
+                  <img class="bzy-card__img" src="图片/1-2.jpg" alt="运动鞋 商品图">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>Nike Air Zoom 43码 仅试穿</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">320</span>
+                    <span class="bzy-card__want">9人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline">7天无理由</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">跑</span>
+                    <span class="bzy-card__nick">跑者不歇</span>
+                    <span class="bzy-card__credit">好评过百</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.02">
+                  <img class="bzy-card__img" src="图片/1-7.jpg" alt="考研书籍 商品图">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>考研数学 张宇全套 无笔记</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">68</span>
+                    <span class="bzy-card__want">56人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline">当天发货</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">研</span>
+                    <span class="bzy-card__nick">上岸学长</span>
+                    <span class="bzy-card__credit">回头客好评过百</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.10">
+                  <img class="bzy-card__img" src="图片/1-8.jpg" alt="民谣吉他 商品图">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>雅马哈 F310 民谣吉他 41寸</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">450</span>
+                    <span class="bzy-card__want">12人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline">可同城自提</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">琴</span>
+                    <span class="bzy-card__nick">闲置的琴房</span>
+                    <span class="bzy-card__credit">信用极好</span>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+
+            <!-- 右列 -->
+            <div class="bzy-feed__col">
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.12">
+                  <img class="bzy-card__img" src="图片/1-3.jpg" alt="辽宁省营口市群演现场合影">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>辽宁省营口市群演，观众会议，讲座群</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">99</span>
+                    <span class="bzy-card__want">1人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline bzy-card__tagline--plain">全国三方人员供应</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">演</span>
+                    <span class="bzy-card__nick">营口活动执行</span>
+                    <span class="bzy-card__credit">已服务 200 单</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.05">
+                  <img class="bzy-card__img" src="图片/1-9.jpg" alt="炫彩勇敢者行动 星际拓荒者 活动宣传图">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>炫彩勇敢者行动PC 代打包过 新店开业特</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">26</span>
+                    <span class="bzy-card__want">4人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline bzy-card__tagline--hot">秒回在线</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">星</span>
+                    <span class="bzy-card__nick">星际拓荒者</span>
+                    <span class="bzy-card__credit">新店开业</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.00">
+                  <img class="bzy-card__img" src="图片/1-10.jpg" alt="头戴降噪耳机 商品图">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>索尼 WH-1000XM5 银色 带原盒</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">1320</span>
+                    <span class="bzy-card__want">73人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline">顺丰包邮</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">声</span>
+                    <span class="bzy-card__nick">声音收藏家</span>
+                    <span class="bzy-card__credit">好评过千</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.09">
+                  <img class="bzy-card__img" src="图片/1-4.jpg" alt="游戏主机 商品图">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>Switch OLED 白色 含2卡带</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">1480</span>
+                    <span class="bzy-card__want">24人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline">支持验机</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">玩</span>
+                    <span class="bzy-card__nick">宿舍游戏王</span>
+                    <span class="bzy-card__credit">信用极好</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.03">
+                  <img class="bzy-card__img" src="图片/1-11.jpg" alt="人体工学椅 商品图">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>西昊人体工学椅 M18 可升降</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">389</span>
+                    <span class="bzy-card__want">8人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline">同城自提</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">宅</span>
+                    <span class="bzy-card__nick">居家办公转</span>
+                    <span class="bzy-card__credit">已售 50+</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bzy-card">
+                <div class="bzy-card__media" style="--bzy-ratio: 1 / 1.08">
+                  <img class="bzy-card__img" src="图片/1-12.jpg" alt="盲盒手办 商品图">
+                </div>
+                <div class="bzy-card__body">
+                  <p class="bzy-card__title"><span class="bzy-card__ship">包邮</span>泡泡玛特 隐藏款 未拆袋 有票</p>
+                  <div class="bzy-card__price-row">
+                    <span class="bzy-card__price">199</span>
+                    <span class="bzy-card__want">37人想要</span>
+                  </div>
+                  <p class="bzy-card__tagline">支持验货</p>
+                  <div class="bzy-card__seller">
+                    <span class="bzy-card__avatar">藏</span>
+                    <span class="bzy-card__nick">潮玩小仓库</span>
+                    <span class="bzy-card__credit">好评过百</span>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+          <p class="bzy-feed__end">—— 已经到底啦 ——</p>
+        </section>
+      </main>
+
+      <!-- 回到顶部 -->
+      <div class="bzy-totop bzy-flex-center" data-bzy-totop aria-label="回到顶部">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- 冒泡提示 -->
+      <div class="bzy-toast" data-bzy-toastbox></div>
+
+      <!-- ==========================================================
+           底部 TabBar：闲鱼 / 大连 / 卖闲置 / 消息 / 我的
+           ========================================================== -->
+      <nav class="bzy-tabbar">
+        <div class="bzy-tabbar__item bzy-tabbar__item--on">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor" aria-hidden="true">
+            <path d="M11 2.2 3 9.1v9.3A1.6 1.6 0 0 0 4.6 20h4.2v-5.2a1 1 0 0 1 1-1h2.4a1 1 0 0 1 1 1V20h4.2a1.6 1.6 0 0 0 1.6-1.6V9.1L11 2.2Z"/>
+          </svg>
+          <span>闲鱼</span>
+        </div>
+
+        <div class="bzy-tabbar__item">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M11 2.6c-3.2 0-5.6 2.3-5.6 5.2 0 3.4 4.6 8.4 5.6 9.6 1-1.2 5.6-6.2 5.6-9.6 0-2.9-2.4-5.2-5.6-5.2Z" stroke-linejoin="round"/>
+            <circle cx="11" cy="7.8" r="2.2"/>
+          </svg>
+          <span>大连</span>
+        </div>
+
+        <div class="bzy-tabbar__publish">
+          <div class="bzy-tabbar__publish-btn" data-bzy-toast="发布闲置 —— bzy">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+              <path d="M3.4 8h3l1.4-2.2h8.4L17.6 8h3A1.8 1.8 0 0 1 22.4 9.8v7.6A1.8 1.8 0 0 1 20.6 19.2H3.4A1.8 1.8 0 0 1 1.6 17.4V9.8A1.8 1.8 0 0 1 3.4 8Z" stroke-linejoin="round"/>
+              <circle cx="12" cy="13.4" r="3.4"/>
+            </svg>
+          </div>
+          <span class="bzy-tabbar__publish-text">卖闲置</span>
+        </div>
+
+        <div class="bzy-tabbar__item">
+          <span class="bzy-tabbar__badge">12</span>
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M3 6.6A2.6 2.6 0 0 1 5.6 4h10.8A2.6 2.6 0 0 1 19 6.6v6.8a2.6 2.6 0 0 1-2.6 2.6H9.4L5 19.4v-3.4H5.6A2.6 2.6 0 0 1 3 13.4V6.6Z" stroke-linejoin="round"/>
+          </svg>
+          <span>消息</span>
+        </div>
+
+        <div class="bzy-tabbar__item">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="11" cy="7.4" r="3.8"/>
+            <path d="M3.6 19.4c.8-3.5 3.7-5.6 7.4-5.6s6.6 2.1 7.4 5.6" stroke-linecap="round"/>
+          </svg>
+          <span>我的</span>
+        </div>
+      </nav>
+
+      <!-- 底部横条 -->
+      <div class="bzy-homebar">
+        <span class="bzy-homebar__pill"></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/bzy-app.js"></script>
+</body>
+</html>

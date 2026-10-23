@@ -1,0 +1,7 @@
+﻿node_modules/
+*.log
+.trae/
+.vs/
+bin/
+obj/
+.DS_Store

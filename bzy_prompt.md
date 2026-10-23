@@ -1,0 +1,52 @@
+# 提示词记录 - 网页开发与设计项目
+
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 设置项目强制规则：1) 所有 CSS 类名、id 名、JS 变量都以 bzy_ 开头；2) 所有提示词在执行前追加写入 bzy_prompt.md，包含时间、模型、提示词内容。
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 设置规则：所有新建的html文件加入超链接入口到首页index.html
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 扫描现有 HTML 文件补齐返回首页超链接
+- **执行结果**: 共 12 个 HTML，修改 10 个（跳过首页自身和独立项目），使用 Edit 工具直接写入 bzy_homeLink 按钮，按层级正确使用相对路径
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 设置规则：所有新建的html文件加入超链接入口到首页index.html（重复确认）
+- **执行结果**: 规则已在本会话内锁定，历史 10 个文件已补齐 bzy_homeLink 入口，本条目为重复确认追加记录
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 使用当前目录下skills文件夹中的frontend-design skill做两个html网页iconfont-1.html、iconfont-2.html，使得页面具有艺术品牌的样式。分别显示 Font Awesome 图标（字体方式）和 Lucide 图标（SVG方式），相关 CDN 文件下载到本目录下的 cdn 目录。
+- **设计方案**:
+  - 主题：艺术品牌「Atelier Icône」，面向设计师与品牌方的图标工作室展示页
+  - iconfont-1.html：Font Awesome 6（字体），配色深墨黑 + 古金 + 雾白，衬线标题 + 无衬线正文，优雅画廊式布局
+  - iconfont-2.html：Lucide（SVG），配色雾白 + 石墨灰 + 青绿点缀，几何感现代布局，图标卡片矩阵
+  - CDN 资源本地化：cdn/fontawesome/ 与 cdn/lucide/
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 根据 font 目录中的 iconfont 图标完成移动端的固定的自适应宽度的下导航，导航项目包括 4 个，完成 html 网页的设计，网页名称 iconfont-3.html 和 iconfont-4.html 分别使用字体图标和 svg，包括右上角的数字徽章和红点。
+- **设计方案**:
+  - iconfont-3.html：使用 font/iconfont 图标字体（字体方式），固定底部 4 tab（首页/点赞/购物车/我的），购物车数字徽章，点赞红点
+  - iconfont-4.html：使用 Lucide SVG（SVG 方式），同结构但用 data-lucide 渲染
+  - 整体风格：仿闲鱼 APP 移动端，自适应手机宽度
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 为 iconfont-3 和 iconfont-4 添加首页入口链接
+- **执行结果**: 已存在——两个文件创建时按规则自动插入 bzy_homeLink（iconfont-3 第 191 行、iconfont-4 第 195 行），无需额外修改
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 创建 skill——提交项目：使用 git commit 并 push 到 gitee 仓库；私人令牌 cd6e1e4b57aee7a891b51238d70d5c39；仓库地址 https://gitee.com/neusoft_wangyao_jsj/webprojectbzy.git
+- **执行结果**: 创建 project-scope skill `.trae/skills/git-push-gitee/`，含 SKILL.md 和 scripts/push.ps1，首次运行自动 git init + add remote + commit + push
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 执行 git-push-gitee skill——推送项目到 gitee 仓库
+---

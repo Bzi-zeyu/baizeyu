@@ -1,0 +1,898 @@
+@charset "utf-8";
+/* ==========================================================================
+   bzy-xianyu 组件样式表  |  作者：bzy（白赜宇）
+   包含：手机外壳 / 状态栏 / 顶部导航（分区标签·搜索·频道）/ 金刚区 / 瀑布流 / TabBar
+   说明：所有选择器均使用 class（不使用 id 选择器），交互钩子统一用 data-* 属性。
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 应用外壳（手机模拟框）
+   -------------------------------------------------------------------------- */
+.bzy-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 28px 16px 40px;
+  background:
+    radial-gradient(1200px 500px at 50% -10%, #fff3b8 0%, rgba(255, 243, 184, 0) 60%),
+    linear-gradient(160deg, #f7f8fa 0%, #eef0f4 100%);
+}
+
+.bzy-page__title {
+  margin-bottom: 6px;
+  font-size: var(--bzy-fs-xxl);
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #2b2b2b;
+}
+
+.bzy-page__subtitle {
+  margin-bottom: 22px;
+  font-size: var(--bzy-fs-sm);
+  color: var(--bzy-color-text-weak);
+  letter-spacing: 0.5px;
+}
+
+/* 手机外壳 */
+.bzy-phone {
+  position: relative;
+  width: var(--bzy-app-width);
+  height: var(--bzy-app-height);
+  border-radius: 44px;
+  background: #1c1c1e;
+  padding: 11px;
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.28),
+    0 0 0 2px #3a3a3d,
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.bzy-phone__screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 34px;
+  background: var(--bzy-color-white);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 灵动岛刘海 */
+.bzy-phone__notch {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 104px;
+  height: 26px;
+  border-radius: var(--bzy-radius-full);
+  background: #000;
+  z-index: 60;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   2. 状态栏
+   -------------------------------------------------------------------------- */
+.bzy-statusbar {
+  position: relative;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 18px 0 26px;
+  flex: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--bzy-color-text);
+  background: var(--bzy-color-white);
+}
+
+.bzy-statusbar__time {
+  letter-spacing: 0.2px;
+}
+
+/* 中间「1台」黑色胶囊 */
+.bzy-statusbar__pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--bzy-radius-full);
+  background: #000;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.bzy-statusbar__pill b {
+  font-weight: 600;
+}
+
+.bzy-statusbar__right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.bzy-statusbar__net {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+.bzy-statusbar__net i {
+  font-style: normal;
+  font-size: 8px;
+}
+
+.bzy-statusbar__icon {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   3. 顶部导航
+   3.1 第一行：分区标签（首页/集市/圈子/回收）+ 签到
+   -------------------------------------------------------------------------- */
+.bzy-header {
+  position: relative;
+  z-index: 40;
+  flex: none;
+  background: var(--bzy-color-white);
+  padding-bottom: 6px;
+}
+
+.bzy-header__bar {
+  display: flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 12px 0 14px;
+}
+
+.bzy-nav {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.bzy-nav__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding-bottom: 4px;
+  font-size: 17px;
+  font-weight: 400;
+  color: #7a7a7a;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--bzy-dur-base);
+}
+
+.bzy-nav__item--on {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
+}
+
+.bzy-nav__item--on::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 3px;
+  border-radius: var(--bzy-radius-full);
+  background: #111;
+}
+
+/* 「集市」上的补贴中角标 */
+.bzy-nav__badge {
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #ff6b4a, #ff3b1f);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* 签到按钮：橙色胶囊 + 左上角「领」角标 */
+.bzy-signin {
+  flex: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 48px;
+  height: 46px;
+  border-radius: 16px;
+  background: linear-gradient(165deg, #ffc24d 0%, #ff9a00 60%, #ff7a00 100%);
+  box-shadow: 0 2px 8px rgba(255, 138, 0, 0.42);
+  cursor: pointer;
+  transition: transform var(--bzy-dur-fast);
+}
+
+.bzy-signin:active {
+  transform: scale(0.9);
+}
+
+.bzy-signin__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 17px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: var(--bzy-radius-full);
+  background: #ff3b30;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  text-align: center;
+}
+
+.bzy-signin__icon {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.bzy-signin__text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #6b3300;
+  line-height: 1.3;
+}
+
+/* --------------------------------------------------------------------------
+   3.2 第二行：搜索框（闲鱼 logo + 关键词轮播 + 相机 + 搜索按钮）
+   -------------------------------------------------------------------------- */
+.bzy-searchbar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 42px;
+  margin: 0 12px 4px;
+  padding: 0 5px 0 13px;
+  border: 2px solid #111;
+  border-radius: var(--bzy-radius-full);
+  background: var(--bzy-color-white);
+  cursor: pointer;
+  transition: border-color var(--bzy-dur-base), box-shadow var(--bzy-dur-base);
+}
+
+.bzy-searchbar:active {
+  border-color: #333;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.12);
+}
+
+.bzy-searchbar__logo {
+  flex: none;
+  display: flex;
+  align-items: center;
+  color: #a5a5a5;
+}
+
+/* 关键词轮播容器 */
+.bzy-searchbar__swiper {
+  position: relative;
+  flex: 1;
+  height: 20px;
+  overflow: hidden;
+}
+
+.bzy-searchbar__item {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity var(--bzy-dur-slow), transform var(--bzy-dur-slow);
+}
+
+.bzy-searchbar__item--on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bzy-searchbar__item--out {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.bzy-searchbar__cam {
+  flex: none;
+  display: flex;
+  align-items: center;
+  color: #9a9a9a;
+}
+
+.bzy-searchbar__btn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   3.3 第三行：频道筛选行（横向滚动 + 右侧下拉）
+   -------------------------------------------------------------------------- */
+.bzy-channel {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  height: 34px;
+  padding: 0 40px 0 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.bzy-channel::-webkit-scrollbar {
+  display: none;
+}
+
+.bzy-channel__item {
+  position: relative;
+  flex: none;
+  font-size: 15px;
+  font-weight: 400;
+  color: #7d7d7d;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--bzy-dur-base);
+}
+
+.bzy-channel__item--on {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111;
+}
+
+.bzy-channel__item--on::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  border-radius: var(--bzy-radius-full);
+  background: #111;
+}
+
+/* 右侧下拉箭头（覆盖在频道行末尾） */
+.bzy-channel__more {
+  position: absolute;
+  right: 10px;
+  top: 88px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 30px;
+  height: 34px;
+  padding-right: 4px;
+  color: #666;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff 42%);
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   4. 金刚区（第二处网页元素：横向分页图标导航）
+   -------------------------------------------------------------------------- */
+.bzy-main {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bzy-color-page);
+}
+
+.bzy-cate {
+  background: var(--bzy-color-white);
+  border-radius: 0 0 var(--bzy-radius-lg) var(--bzy-radius-lg);
+  padding: 10px 0 6px;
+  margin-bottom: 6px;
+}
+
+/* 横向滚动轨道 */
+.bzy-cate__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.bzy-cate__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* 每一「屏」放 6 个分类（第 6 个自然被裁切，露出边缘提示可滑动） */
+.bzy-cate__page {
+  flex: 0 0 100%;
+  display: flex;
+  align-items: flex-start;
+  padding: 0 12px;
+  scroll-snap-align: start;
+}
+
+.bzy-cate__cell {
+  flex: 0 0 66px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: transform var(--bzy-dur-fast);
+}
+
+.bzy-cate__cell:active {
+  transform: scale(0.9);
+}
+
+/* 图标：直接浮在白底上的彩色图形，不加底色方块 */
+.bzy-cate__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  font-size: 37px;
+  line-height: 1;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.16));
+}
+
+.bzy-cate__text {
+  font-size: 11px;
+  color: #333;
+  white-space: nowrap;
+}
+
+/* 分页圆点 */
+.bzy-cate__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  height: 16px;
+  padding-top: 4px;
+}
+
+/* 分页圆点：未选中为浅灰长条，选中收缩为深色圆点 */
+.bzy-cate__dot {
+  width: 14px;
+  height: 5px;
+  border-radius: var(--bzy-radius-full);
+  background: #dcdcdc;
+  transition: all var(--bzy-dur-base);
+}
+
+.bzy-cate__dot--on {
+  width: 6px;
+  background: #111;
+}
+
+/* --------------------------------------------------------------------------
+   5. 瀑布流商品卡片（第三处网页元素）
+   -------------------------------------------------------------------------- */
+.bzy-feed {
+  padding: 0 4px 12px;
+}
+
+.bzy-feed__cols {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.bzy-feed__col {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bzy-feed__end {
+  padding: 12px 0 6px;
+  text-align: center;
+  font-size: 11px;
+  color: #c2c2c2;
+}
+
+/* 商品卡片 */
+.bzy-card {
+  width: 100%;
+  border-radius: 6px;
+  background: var(--bzy-color-white);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--bzy-dur-base);
+}
+
+.bzy-card:active {
+  transform: scale(0.985);
+}
+
+.bzy-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--bzy-ratio, 1 / 1.05);
+  background: #f2f3f5;
+  overflow: hidden;
+}
+
+.bzy-card__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--bzy-dur-slow);
+}
+
+.bzy-card:hover .bzy-card__img {
+  transform: scale(1.05);
+}
+
+.bzy-card__body {
+  padding: 7px 8px 8px;
+}
+
+/* 标题行：包邮标签 + 商品名（最多 2 行） */
+.bzy-card__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #1a1a1a;
+}
+
+.bzy-card__ship {
+  display: inline-block;
+  margin-right: 4px;
+  padding: 0 3px;
+  border-radius: 3px;
+  background: #ffdd33;
+  color: #1a1a1a;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  vertical-align: 1px;
+}
+
+/* 价格行 */
+.bzy-card__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.bzy-card__price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff4400;
+  letter-spacing: -0.5px;
+  font-family: "DIN Alternate", "Helvetica Neue", Arial, sans-serif;
+}
+
+.bzy-card__price::before {
+  content: "¥";
+  margin-right: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bzy-card__want {
+  font-size: 10px;
+  color: #8c8c8c;
+}
+
+/* 服务标签行：默认橙色描边，--plain 为灰色中性样式 */
+.bzy-card__tagline {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 1px 5px;
+  border: 1px solid #ffe0c8;
+  border-radius: 3px;
+  background: #fff7f0;
+  font-size: 10px;
+  color: #ff6a00;
+}
+
+.bzy-card__tagline--hot {
+  border-color: #ffd0d0;
+  background: #fff2f2;
+  color: #ff3b30;
+}
+
+.bzy-card__tagline--plain {
+  border-color: #ededed;
+  background: #f7f7f7;
+  color: #4a4a4a;
+}
+
+/* 卖家行 */
+.bzy-card__seller {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid #f3f3f3;
+}
+
+.bzy-card__avatar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd76e, #ffb000);
+  color: #7a4a00;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.bzy-card__nick {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  color: #8a8a8a;
+}
+
+.bzy-card__credit {
+  flex: none;
+  font-size: 10px;
+  color: #ff6a00;
+}
+
+/* --------------------------------------------------------------------------
+   6. 底部 TabBar
+   -------------------------------------------------------------------------- */
+.bzy-tabbar {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  height: var(--bzy-tabbar-height);
+  padding-bottom: 5px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--bzy-color-line);
+}
+
+.bzy-tabbar__item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  height: 100%;
+  padding-bottom: 2px;
+  color: #9a9a9a;
+  font-size: 10px;
+  cursor: pointer;
+  transition: color var(--bzy-dur-base), transform var(--bzy-dur-fast);
+}
+
+.bzy-tabbar__item:active {
+  transform: scale(0.9);
+}
+
+.bzy-tabbar__item--on {
+  color: #111;
+  font-weight: 600;
+}
+
+/* 消息角标 */
+.bzy-tabbar__badge {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  margin-left: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--bzy-radius-full);
+  background: #ff3b30;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* 中间「卖闲置」凸起按钮 */
+.bzy-tabbar__publish {
+  flex: none;
+  width: 66px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.bzy-tabbar__publish-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 46px;
+  margin-top: -24px;
+  border-radius: 15px;
+  background: linear-gradient(160deg, #ffe066, #ffc400);
+  color: #5a3a00;
+  box-shadow: 0 4px 12px rgba(255, 196, 0, 0.5);
+  transition: transform var(--bzy-dur-base);
+}
+
+.bzy-tabbar__publish-btn:active {
+  transform: scale(0.9);
+}
+
+.bzy-tabbar__publish-text {
+  font-size: 10px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* 底部横条 */
+.bzy-homebar {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  padding: 6px 0 8px;
+  background: rgba(255, 255, 255, 0.97);
+}
+
+.bzy-homebar__pill {
+  width: 120px;
+  height: 5px;
+  border-radius: var(--bzy-radius-full);
+  background: #111;
+}
+
+/* --------------------------------------------------------------------------
+   7. 悬浮回到顶部
+   -------------------------------------------------------------------------- */
+.bzy-totop {
+  position: absolute;
+  right: 14px;
+  bottom: 96px;
+  z-index: 45;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--bzy-shadow-float);
+  color: #666;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all var(--bzy-dur-base);
+  cursor: pointer;
+}
+
+.bzy-totop--show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.bzy-totop:active {
+  transform: scale(0.9);
+}
+
+/* --------------------------------------------------------------------------
+   8. 冒泡提示
+   -------------------------------------------------------------------------- */
+.bzy-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 130px;
+  z-index: 70;
+  transform: translate(-50%, 10px);
+  padding: 8px 16px;
+  border-radius: var(--bzy-radius-full);
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font-size: var(--bzy-fs-sm);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--bzy-dur-base);
+  pointer-events: none;
+}
+
+.bzy-toast--show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+/* --------------------------------------------------------------------------
+   9. 响应式：小屏（真实手机直接铺满）
+   -------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .bzy-page {
+    display: block;
+    padding: 0;
+    background: var(--bzy-color-page);
+    min-height: auto;
+  }
+
+  .bzy-page__title,
+  .bzy-page__subtitle {
+    display: none;
+  }
+
+  .bzy-phone {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .bzy-phone__screen {
+    border-radius: 0;
+  }
+
+  .bzy-phone__notch {
+    display: none;
+  }
+
+  .bzy-statusbar {
+    height: 32px;
+    padding: 0 16px;
+  }
+
+  .bzy-totop {
+    bottom: 82px;
+  }
+}
+
+/* 矮屏（如 iPhone SE / 横屏）压缩高度 */
+@media (max-height: 700px) and (min-width: 721px) {
+  .bzy-phone {
+    --bzy-app-height: 640px;
+    --bzy-app-width: 320px;
+  }
+}
