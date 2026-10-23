@@ -50,3 +50,12 @@
 - **模型**: Trae AI Assistant
 - **提示词**: 执行 git-push-gitee skill——推送项目到 gitee 仓库
 ---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 修复 embedded git repository——webprojectbzy 子目录本身是 git 仓库，需转成普通目录再推送
+---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 以后上传到 master 分支
+- **执行结果**: 更新 push.ps1 默认分支为 master；本地 main 重命名为 master；推送到远程 origin/master
+---
