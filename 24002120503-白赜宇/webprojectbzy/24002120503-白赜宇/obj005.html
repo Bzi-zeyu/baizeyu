@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS对象</title>
+    <!-- 类 实例就是对象,两个要素, 属性和方法
+     学生的属性：学号、性别、姓名、班级
+     方法：学习、考试、请假 -->
+</head>
+<body>
+    <a id="bzy_homeLink" class="bzy-home-link" href="index.html" style="position:fixed;top:12px;right:12px;z-index:9999;background:#345ca8;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.15);">← 返回首页</a>
+    <script>
+        // 定义一个学生对象
+        var student = {
+            id: "2021001",
+            name: "张三",
+            gender: "男",
+            class: "计算机科学与技术",
+            hobby:['看电影','游戏','旅游'],
+            study: function() {
+                console.log(this.name + "正在学习。");
+            },
+            exam: function() {
+                console.log(this.name + "正在考试。");
+            },
+            leave: function() {
+                console.log(this.name + "请假了。");
+            }
+        };
+        console.log(student.name);
+        console.log(student.id);
+        // 调用学生对象的方法
+        student.study();
+        student.exam();
+        student.leave();
+        // 删除对象方法
+        delete student.exam;
+        console.log(student.exam);
+        // 判断对象中是否有某个属性或则方法
+        console.log("name" in student);
+        // 遍历对象
+        for (var key in student) {
+            console.log(key,student[key]);
+        }
+        var o=student;
+        console.log(o.name);
+        o.name="王五";
+        console.log(o.name);
+        console.log(student.name);
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS</title>
+</head>
+<body>
+    <a id="bzy_homeLink" class="bzy-home-link" href="24002120503-白赜宇/index.html" style="position:fixed;top:12px;right:12px;z-index:9999;background:#345ca8;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.15);">← 返回首页</a>
+    
+    <script>
+        //math对象的常用方法
+        console.log(Math.ceil(4.2)); //向上取整
+        console.log(Math.floor(4.8)); //向下取整
+        console.log(Math.round(4.5)); //四舍五入
+        console.log(Math.max(1, 2, 3, 4, 5)); //最大值
+        console.log(Math.min(1, 2, 3, 4, 5)); //最小值
+        console.log(Math.random()); //随机数
+        //获取从min到max之间的随机整数
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        console.log(getRandomInt(100, 900)); //输出100到900之间的随机整数
+        //date对象的常用方法
+        var date = new Date();
+        console.log(date.getFullYear()); //获取年份
+        console.log(date.getMonth() + 1); //获取月份（0-11）
+        console.log(date.getDate()); //获取日期（1-31）
+        console.log(date.getDay()); //获取星期几（0-6）
+        console.log(date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()); //获取小时（0-23）
+        console.log(date.getMinutes()); //获取分钟（0-59）
+        console.log(date.getSeconds()); //获取秒数（0-59）
+
+        //数组对象
+        var arr = [1, 2, 3, 4, 5,'six','seven'];
+        console.log(arr.length); //获取数组长度
+        console.log(arr[0]); //获取数组第一个元素
+        arr.push('eight'); //向数组末尾添加元素
+        console.log(arr); //输出数组
+        console.log(new Array(5)); //创建一个长度为5的数组
+        var arr2 =Array.of(5); //创建一个包含5的数组
+        console.log(arr2); //输出数组
+    </script>
+
+</body>
+</html>

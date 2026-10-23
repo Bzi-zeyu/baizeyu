@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iconfont-3 · 字体图标 · 移动端下导航</title>
+    <!-- iconfont 字体图标 -->
+    <link rel="stylesheet" href="font/iconfont.css">
+    <style>
+        /* ==================== 设计令牌 ==================== */
+        :root {
+            --bzy-primary:   #ff7a3d;     /* 主橙 */
+            --bzy-primary-soft:#fff1e8;
+            --bzy-text:      #222222;
+            --bzy-text-soft: #8a8a8a;
+            --bzy-line:      #f0f0f0;
+            --bzy-bg:        #f7f7f9;
+            --bzy-white:     #ffffff;
+            --bzy-red:       #ff3b3b;     /* 红点/徽章 */
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html, body { height: 100%; }
+        body {
+            font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background: var(--bzy-bg);
+            color: var(--bzy-text);
+            /* 在桌面端居中展示手机框 */
+            display: flex; justify-content: center; align-items: flex-start;
+            padding: 24px 0;
+        }
+
+        /* ============ 返回首页 ============ */
+        #bzy_homeLink {
+            position: fixed; top: 14px; right: 14px; z-index: 9999;
+            background: var(--bzy-primary); color: #fff;
+            padding: 7px 14px; border-radius: 16px;
+            text-decoration: none; font-size: 12px; font-weight: 600;
+            box-shadow: 0 3px 10px rgba(255,122,61,.35);
+        }
+
+        /* ============ 手机模拟框 ============ */
+        .bzy_phone {
+            width: 390px; max-width: 100%;
+            min-height: 100vh;
+            background: var(--bzy-bg);
+            position: relative;
+            box-shadow: 0 0 0 1px var(--bzy-line), 0 20px 60px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        /* ============ 顶部状态栏 ============ */
+        .bzy_status {
+            height: 44px; padding: 0 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--bzy-white);
+            font-size: 14px; font-weight: 600;
+        }
+        .bzy_status__icons { display: flex; gap: 5px; }
+        .bzy_status__icons span { font-size: 12px; }
+
+        /* ============ 顶部搜索栏 ============ */
+        .bzy_search {
+            background: var(--bzy-white);
+            padding: 10px 14px 14px;
+            border-bottom: 1px solid var(--bzy-line);
+        }
+        .bzy_search__bar {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--bzy-bg);
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 13px; color: var(--bzy-text-soft);
+        }
+        .bzy_search__bar .iconfont { font-size: 15px; }
+
+        /* ============ 内容区 ============ */
+        .bzy_content {
+            padding: 16px 14px 120px;  /* 底部留出 tabbar 空间 */
+        }
+        .bzy_content h2 {
+            font-size: 18px; font-weight: 700;
+            margin-bottom: 14px; letter-spacing: -0.5px;
+        }
+        .bzy_cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .bzy_card {
+            background: var(--bzy-white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        }
+        .bzy_card__img {
+            width: 100%; aspect-ratio: 1 / 1;
+            background: linear-gradient(135deg, var(--bzy-primary-soft), #ffe2d0);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--bzy-primary); font-size: 32px;
+        }
+        .bzy_card__body { padding: 10px 12px 12px; }
+        .bzy_card__title {
+            font-size: 13px; line-height: 1.4;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; color: var(--bzy-text);
+        }
+        .bzy_card__price {
+            color: var(--bzy-red); font-weight: 700; font-size: 16px;
+            margin-top: 6px;
+        }
+        .bzy_card__price small { font-size: 11px; font-weight: 500; }
+
+        /* ============ 底部 TabBar ============ */
+        .bzy_tabbar {
+            position: fixed; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 390px; max-width: 100%;
+            background: var(--bzy-white);
+            border-top: 1px solid var(--bzy-line);
+            display: flex;
+            padding-bottom: env(safe-area-inset-bottom, 0);
+            z-index: 100;
+        }
+        .bzy_tabbar__item {
+            flex: 1;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 8px 0 calc(6px + env(safe-area-inset-bottom, 0));
+            cursor: pointer; position: relative;
+            color: var(--bzy-text-soft);
+            text-decoration: none;
+            transition: color .2s ease;
+        }
+        .bzy_tabbar__item--on { color: var(--bzy-primary); }
+
+        /* 图标容器（包徽章） */
+        .bzy_tabbar__icon-wrap {
+            position: relative;
+            line-height: 0;    /* 让徽章对齐图标中心 */
+        }
+
+        /* 图标本体（字体图标） */
+        .bzy_tabbar__icon {
+            font-family: "iconfont" !important;
+            font-size: 24px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 数字徽章（购物车） */
+        .bzy_tabbar__badge {
+            position: absolute;
+            top: -6px; right: -14px;
+            min-width: 18px; height: 18px;
+            padding: 0 5px;
+            background: var(--bzy-red);
+            color: #fff;
+            font-size: 11px; font-weight: 700;
+            border-radius: 9px;
+            display: inline-flex; align-items: center; justify-content: center;
+            line-height: 1;
+            box-shadow: 0 1px 3px rgba(255,59,59,.4);
+        }
+
+        /* 红点徽章（点赞） */
+        .bzy_tabbar__dot {
+            position: absolute;
+            top: -4px; right: -10px;
+            width: 9px; height: 9px;
+            background: var(--bzy-red);
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px var(--bzy-white);
+        }
+
+        /* 标签文字 */
+        .bzy_tabbar__label {
+            font-size: 11px; margin-top: 2px;
+        }
+
+        /* ============ 响应式 ============ */
+        @media (max-width: 420px) {
+            body { padding: 0; }
+            .bzy_phone { width: 100%; box-shadow: none; }
+            .bzy_tabbar { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 返回首页 -->
+    <a id="bzy_homeLink" class="bzy-home-link" href="index.html">← 返回首页</a>
+
+    <!-- 手机框 -->
+    <div class="bzy_phone">
+
+        <!-- 状态栏 -->
+        <div class="bzy_status">
+            <span>9:41</span>
+            <div class="bzy_status__icons">
+                <span>●●●</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="bzy_search">
+            <div class="bzy_search__bar">
+                <i class="iconfont icon-shouye"></i>
+                <span>搜索你想要的宝贝</span>
+            </div>
+        </div>
+
+        <!-- 内容 -->
+        <main class="bzy_content">
+            <h2>猜你喜欢</h2>
+            <div class="bzy_cards">
+                <div class="bzy_card">
+                    <div class="bzy_card__img"><i class="iconfont icon-shouye" style="font-size:40px"></i></div>
+                    <div class="bzy_card__body">
+                        <div class="bzy_card__title">iconfont 图标字体演示 · 移动端底部导航设计</div>
+                        <div class="bzy_card__price"><small>¥</small> 0</div>
+                    </div>
+                </div>
+                <div class="bzy_card">
+                    <div class="bzy_card__img" style="background:linear-gradient(135deg,#e8f4ff,#c6e0ff);color:#1e88e5">
+                        <i class="iconfont icon-dianzan" style="font-size:40px"></i>
+                    </div>
+                    <div class="bzy_card__body">
+                        <div class="bzy_card__title">点赞 Tab · 右上角带红点徽章的样式</div>
+                        <div class="bzy_card__price"><small>¥</small> 0</div>
+                    </div>
+                </div>
+                <div class="bzy_card">
+                    <div class="bzy_card__img" style="background:linear-gradient(135deg,#fff3e0,#ffd59a);color:#ef6c00">
+                        <i class="iconfont icon-gouwuchekong" style="font-size:40px"></i>
+                    </div>
+                    <div class="bzy_card__body">
+                        <div class="bzy_card__title">购物车 Tab · 数字徽章显示 12 件商品</div>
+                        <div class="bzy_card__price"><small>¥</small> 99</div>
+                    </div>
+                </div>
+                <div class="bzy_card">
+                    <div class="bzy_card__img" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);color:#3949ab">
+                        <i class="iconfont icon-wode" style="font-size:40px"></i>
+                    </div>
+                    <div class="bzy_card__body">
+                        <div class="bzy_card__title">我的 Tab · 固定在底部的四个导航项</div>
+                        <div class="bzy_card__price"><small>¥</small> 0</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部 TabBar（固定） -->
+        <nav class="bzy_tabbar">
+            <!-- Tab 1: 首页（激活） -->
+            <div class="bzy_tabbar__item bzy_tabbar__item--on">
+                <span class="bzy_tabbar__icon-wrap">
+                    <i class="bzy_tabbar__icon iconfont icon-shouye"></i>
+                </span>
+                <span class="bzy_tabbar__label">首页</span>
+            </div>
+
+            <!-- Tab 2: 点赞（红点） -->
+            <div class="bzy_tabbar__item" data-bzy-tab="dianzan">
+                <span class="bzy_tabbar__icon-wrap">
+                    <i class="bzy_tabbar__icon iconfont icon-dianzan"></i>
+                    <span class="bzy_tabbar__dot"></span>
+                </span>
+                <span class="bzy_tabbar__label">点赞</span>
+            </div>
+
+            <!-- Tab 3: 购物车（数字徽章） -->
+            <div class="bzy_tabbar__item" data-bzy-tab="cart">
+                <span class="bzy_tabbar__icon-wrap">
+                    <i class="bzy_tabbar__icon iconfont icon-gouwuchekong"></i>
+                    <span class="bzy_tabbar__badge">12</span>
+                </span>
+                <span class="bzy_tabbar__label">购物车</span>
+            </div>
+
+            <!-- Tab 4: 我的 -->
+            <div class="bzy_tabbar__item" data-bzy-tab="mine">
+                <span class="bzy_tabbar__icon-wrap">
+                    <i class="bzy_tabbar__icon iconfont icon-wode"></i>
+                </span>
+                <span class="bzy_tabbar__label">我的</span>
+            </div>
+        </nav>
+
+    </div>
+
+    <!-- Tab 点击交互 -->
+    <script>
+        (function() {
+            var bzy_tabs = document.querySelectorAll('.bzy_tabbar__item');
+            bzy_tabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    bzy_tabs.forEach(function(t) { t.classList.remove('bzy_tabbar__item--on'); });
+                    tab.classList.add('bzy_tabbar__item--on');
+                });
+            });
+        })();
+    </script>
+
+</body>
+</html>

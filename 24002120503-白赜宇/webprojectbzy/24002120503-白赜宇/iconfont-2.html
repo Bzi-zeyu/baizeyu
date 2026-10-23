@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier Icône — Lucide · SVG 图标矩阵</title>
+    <!-- Lucide 本地化 -->
+    <script src="../../../cdn/lucide/lucide.min.js"></script>
+    <style>
+        /* ==================== 设计令牌 ==================== */
+        :root {
+            --bzy-fog:      #f4f3ef;     /* 雾白 */
+            --bzy-fog-soft: #ebe9e3;
+            --bzy-graphite: #2b2d2a;     /* 石墨灰 */
+            --bzy-graphite-soft: #54564e;
+            --bzy-sage:     #5a8a6b;     /* 青绿点缀 */
+            --bzy-sage-deep:#3f6450;
+            --bzy-ochre:    #c98a3b;     /* 琥珀小点缀 */
+            --bzy-line:     #d8d5cc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bzy-fog);
+            color: var(--bzy-graphite);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ============ 返回首页按钮 ============ */
+        #bzy_homeLink {
+            position: fixed; top: 18px; right: 18px; z-index: 9999;
+            background: transparent; color: var(--bzy-graphite);
+            padding: 9px 16px;
+            text-decoration: none; font-size: 13px; font-weight: 500;
+            letter-spacing: 1px; border: 1.5px solid var(--bzy-graphite);
+            border-radius: 999px;
+            transition: all .2s ease;
+        }
+        #bzy_homeLink:hover { background: var(--bzy-graphite); color: var(--bzy-fog); }
+
+        /* ============ 几何装饰 ============ */
+        .bzy_grid-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background-image:
+                linear-gradient(var(--bzy-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--bzy-line) 1px, transparent 1px);
+            background-size: 80px 80px;
+            opacity: .35;
+        }
+
+        /* ============ 品牌头 ============ */
+        .bzy_hero {
+            padding: 100px 48px 72px;
+            max-width: 1280px; margin: 0 auto;
+            position: relative;
+        }
+        .bzy_hero__badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-size: 11px; letter-spacing: 4px; font-weight: 600;
+            color: var(--bzy-sage-deep); text-transform: uppercase;
+            padding: 6px 14px; border: 1.5px solid var(--bzy-sage);
+            border-radius: 999px; margin-bottom: 36px;
+        }
+        .bzy_hero__badge i { font-size: 14px; }
+        .bzy_hero h1 {
+            font-size: clamp(42px, 7vw, 84px);
+            font-weight: 800; letter-spacing: -2px;
+            color: var(--bzy-graphite); line-height: .95;
+            margin-bottom: 24px;
+        }
+        .bzy_hero h1 span {
+            color: var(--bzy-sage-deep);
+        }
+        .bzy_hero p {
+            font-size: 16px; color: var(--bzy-graphite-soft);
+            max-width: 520px; line-height: 1.8;
+        }
+        .bzy_hero__corner {
+            position: absolute; top: 100px; right: 48px;
+            width: 80px; height: 80px;
+            border-top: 3px solid var(--bzy-graphite);
+            border-right: 3px solid var(--bzy-graphite);
+        }
+        .bzy_hero__corner--bl {
+            top: auto; right: auto; bottom: 72px; left: 48px;
+            border: none; border-bottom: 3px solid var(--bzy-sage);
+            border-left: 3px solid var(--bzy-sage);
+        }
+
+        /* ============ 分割线 ============ */
+        .bzy_rule {
+            max-width: 1280px; margin: 0 auto;
+            height: 1px; background: var(--bzy-line);
+        }
+
+        /* ============ 矩阵区 ============ */
+        .bzy_section {
+            max-width: 1280px; margin: 0 auto;
+            padding: 80px 48px;
+        }
+        .bzy_section__head {
+            display: flex; justify-content: space-between;
+            align-items: flex-end; margin-bottom: 48px;
+        }
+        .bzy_section__head h2 {
+            font-size: clamp(24px, 3.5vw, 36px);
+            font-weight: 700; letter-spacing: -1px;
+            color: var(--bzy-graphite);
+        }
+        .bzy_section__head h2 span {
+            font-family: Georgia, serif; font-style: italic;
+            font-weight: 400; color: var(--bzy-sage-deep);
+            letter-spacing: 0;
+        }
+        .bzy_section__meta {
+            font-size: 11px; letter-spacing: 3px;
+            color: var(--bzy-graphite-soft); opacity: .55;
+            text-transform: uppercase;
+        }
+
+        /* ============ 图标矩阵 ============ */
+        .bzy_matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+        }
+        .bzy_cell {
+            background: var(--bzy-fog);
+            border: 1.5px solid var(--bzy-line);
+            border-radius: 4px;
+            padding: 36px 20px 24px;
+            text-align: center;
+            transition: all .25s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .bzy_cell::before {
+            content: ""; position: absolute;
+            top: 0; left: 0; width: 0; height: 3px;
+            background: var(--bzy-sage);
+            transition: width .3s ease;
+        }
+        .bzy_cell:hover {
+            background: var(--bzy-graphite);
+            border-color: var(--bzy-graphite);
+            transform: translateY(-3px);
+        }
+        .bzy_cell:hover::before { width: 100%; }
+        .bzy_cell:hover .bzy_cell__icon { stroke: var(--bzy-sage); }
+        .bzy_cell:hover .bzy_cell__name { color: var(--bzy-sage); }
+
+        .bzy_cell__icon {
+            width: 44px; height: 44px;
+            stroke: var(--bzy-graphite);
+            margin-bottom: 18px;
+            transition: stroke .25s ease;
+        }
+        .bzy_cell__name {
+            font-size: 13px; font-weight: 500;
+            color: var(--bzy-graphite);
+            transition: color .25s ease;
+        }
+        .bzy_cell__num {
+            font-size: 10px; letter-spacing: 2px;
+            color: var(--bzy-graphite-soft); opacity: .4;
+            margin-top: 6px; font-family: Georgia, serif;
+        }
+
+        /* ============ 大字 Feature ============ */
+        .bzy_big {
+            margin-top: 80px;
+            padding: 80px 48px;
+            background: var(--bzy-graphite);
+            color: var(--bzy-fog);
+            border-radius: 4px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: center;
+        }
+        .bzy_big__visual {
+            display: flex; gap: 24px; align-items: center; justify-content: center;
+        }
+        .bzy_big__visual .lucide {
+            width: clamp(80px, 10vw, 140px);
+            height: clamp(80px, 10vw, 140px);
+            stroke: var(--bzy-sage);
+        }
+        .bzy_big__visual .lucide:nth-child(2) {
+            stroke: var(--bzy-ochre);
+            width: clamp(50px, 6vw, 80px);
+            height: clamp(50px, 6vw, 80px);
+        }
+        .bzy_big h2 {
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 700; letter-spacing: -1px;
+            margin-bottom: 20px; line-height: 1.15;
+        }
+        .bzy_big h2 em {
+            font-family: Georgia, serif; font-style: italic;
+            font-weight: 400; color: var(--bzy-sage);
+        }
+        .bzy_big p {
+            font-size: 14px; line-height: 1.9;
+            color: var(--bzy-fog); opacity: .7;
+            max-width: 420px;
+        }
+
+        /* ============ 数据条 ============ */
+        .bzy_stats {
+            max-width: 1280px; margin: 0 auto;
+            padding: 0 48px 80px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px; background: var(--bzy-line);
+            border: 1px solid var(--bzy-line);
+        }
+        .bzy_stat {
+            background: var(--bzy-fog);
+            padding: 36px 20px; text-align: center;
+        }
+        .bzy_stat strong {
+            display: block; font-size: 36px; font-weight: 800;
+            color: var(--bzy-sage-deep); letter-spacing: -1px;
+            margin-bottom: 6px;
+        }
+        .bzy_stat span {
+            font-size: 11px; letter-spacing: 3px;
+            color: var(--bzy-graphite-soft); opacity: .6;
+            text-transform: uppercase;
+        }
+
+        /* ============ 页脚 ============ */
+        .bzy_footer {
+            padding: 40px 48px;
+            border-top: 1px solid var(--bzy-line);
+            display: flex; justify-content: space-between;
+            align-items: center;
+            font-size: 12px; letter-spacing: 2px;
+            color: var(--bzy-graphite-soft);
+        }
+        .bzy_footer i { margin-right: 8px; stroke: var(--bzy-sage); width: 14px; height: 14px; vertical-align: middle; }
+
+        /* ============ 响应式 ============ */
+        @media (max-width: 800px) {
+            .bzy_hero { padding: 60px 24px 48px; }
+            .bzy_hero__corner { display: none; }
+            .bzy_section { padding: 56px 24px; }
+            .bzy_section__head { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .bzy_big { grid-template-columns: 1fr; padding: 56px 24px; gap: 32px; text-align: center; }
+            .bzy_big p { margin: 0 auto; }
+            .bzy_stats { grid-template-columns: repeat(2, 1fr); padding: 0 24px 56px; }
+            .bzy_footer { flex-direction: column; gap: 10px; padding: 28px 24px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 返回首页 -->
+    <a id="bzy_homeLink" class="bzy-home-link" href="index.html">← 返回首页</a>
+
+    <!-- 网格背景 -->
+    <div class="bzy_grid-bg"></div>
+
+    <!-- Hero -->
+    <header class="bzy_hero">
+        <div class="bzy_hero__corner"></div>
+        <div class="bzy_hero__corner bzy_hero__corner--bl"></div>
+
+        <div class="bzy_hero__badge">
+            <i data-lucide="sparkles"></i>
+            Studio · 2026 Collection
+        </div>
+        <h1>Atelier<br><span>Icône</span></h1>
+        <p>一套为品牌而生的 SVG 图标——从线条到圆角，每一个节点都经过反复打磨。Lucide 的克制与几何，在这里找到它的归宿。</p>
+    </header>
+
+    <div class="bzy_rule"></div>
+
+    <!-- Section 01 -->
+    <section class="bzy_section">
+        <div class="bzy_section__head">
+            <h2>工具与<span>造物</span></h2>
+            <span class="bzy_section__meta">01 / Work & Craft</span>
+        </div>
+        <div class="bzy_matrix">
+            <div class="bzy_cell"><i data-lucide="palette" class="bzy_cell__icon"></i><div class="bzy_cell__name">Palette</div><div class="bzy_cell__num">01</div></div>
+            <div class="bzy_cell"><i data-lucide="paintbrush" class="bzy_cell__icon"></i><div class="bzy_cell__name">Brush</div><div class="bzy_cell__num">02</div></div>
+            <div class="bzy_cell"><i data-lucide="pen-tool" class="bzy_cell__icon"></i><div class="bzy_cell__name">Pen Tool</div><div class="bzy_cell__num">03</div></div>
+            <div class="bzy_cell"><i data-lucide="compass" class="bzy_cell__icon"></i><div class="bzy_cell__name">Compass</div><div class="bzy_cell__num">04</div></div>
+            <div class="bzy_cell"><i data-lucide="ruler" class="bzy_cell__icon"></i><div class="bzy_cell__name">Ruler</div><div class="bzy_cell__num">05</div></div>
+            <div class="bzy_cell"><i data-lucide="scissors" class="bzy_cell__icon"></i><div class="bzy_cell__name">Scissors</div><div class="bzy_cell__num">06</div></div>
+            <div class="bzy_cell"><i data-lucide="layers" class="bzy_cell__icon"></i><div class="bzy_cell__name">Layers</div><div class="bzy_cell__num">07</div></div>
+            <div class="bzy_cell"><i data-lucide="grid-3x3" class="bzy_cell__icon"></i><div class="bzy_cell__name">Grid</div><div class="bzy_cell__num">08</div></div>
+        </div>
+    </section>
+
+    <!-- Section 02 -->
+    <section class="bzy_section" style="padding-top:0">
+        <div class="bzy_section__head">
+            <h2>连接与<span>网络</span></h2>
+            <span class="bzy_section__meta">02 / Connect</span>
+        </div>
+        <div class="bzy_matrix">
+            <div class="bzy_cell"><i data-lucide="globe" class="bzy_cell__icon"></i><div class="bzy_cell__name">Globe</div><div class="bzy_cell__num">01</div></div>
+            <div class="bzy_cell"><i data-lucide="radio" class="bzy_cell__icon"></i><div class="bzy_cell__name">Radio</div><div class="bzy_cell__num">02</div></div>
+            <div class="bzy_cell"><i data-lucide="wifi" class="bzy_cell__icon"></i><div class="bzy_cell__name">WiFi</div><div class="bzy_cell__num">03</div></div>
+            <div class="bzy_cell"><i data-lucide="link" class="bzy_cell__icon"></i><div class="bzy_cell__name">Link</div><div class="bzy_cell__num">04</div></div>
+            <div class="bzy_cell"><i data-lucide="mail" class="bzy_cell__icon"></i><div class="bzy_cell__name">Mail</div><div class="bzy_cell__num">05</div></div>
+            <div class="bzy_cell"><i data-lucide="message-square" class="bzy_cell__icon"></i><div class="bzy_cell__name">Message</div><div class="bzy_cell__num">06</div></div>
+            <div class="bzy_cell"><i data-lucide="share-2" class="bzy_cell__icon"></i><div class="bzy_cell__name">Share</div><div class="bzy_cell__num">07</div></div>
+            <div class="bzy_cell"><i data-lucide="bookmark" class="bzy_cell__icon"></i><div class="bzy_cell__name">Bookmark</div><div class="bzy_cell__num">08</div></div>
+        </div>
+    </section>
+
+    <!-- Section 03 -->
+    <section class="bzy_section" style="padding-top:0">
+        <div class="bzy_section__head">
+            <h2>时间与<span>秩序</span></h2>
+            <span class="bzy_section__meta">03 / Time & Order</span>
+        </div>
+        <div class="bzy_matrix">
+            <div class="bzy_cell"><i data-lucide="clock" class="bzy_cell__icon"></i><div class="bzy_cell__name">Clock</div><div class="bzy_cell__num">01</div></div>
+            <div class="bzy_cell"><i data-lucide="hourglass" class="bzy_cell__icon"></i><div class="bzy_cell__name">Hourglass</div><div class="bzy_cell__num">02</div></div>
+            <div class="bzy_cell"><i data-lucide="calendar" class="bzy_cell__icon"></i><div class="bzy_cell__name">Calendar</div><div class="bzy_cell__num">03</div></div>
+            <div class="bzy_cell"><i data-lucide="stopwatch" class="bzy_cell__icon"></i><div class="bzy_cell__name">Stopwatch</div><div class="bzy_cell__num">04</div></div>
+            <div class="bzy_cell"><i data-lucide="sun" class="bzy_cell__icon"></i><div class="bzy_cell__name">Sun</div><div class="bzy_cell__num">05</div></div>
+            <div class="bzy_cell"><i data-lucide="moon" class="bzy_cell__icon"></i><div class="bzy_cell__name">Moon</div><div class="bzy_cell__num">06</div></div>
+            <div class="bzy_cell"><i data-lucide="cloud-sun" class="bzy_cell__icon"></i><div class="bzy_cell__name">Dawn</div><div class="bzy_cell__num">07</div></div>
+            <div class="bzy_cell"><i data-lucide="timer" class="bzy_cell__icon"></i><div class="bzy_cell__name">Timer</div><div class="bzy_cell__num">08</div></div>
+        </div>
+    </section>
+
+    <!-- Big Feature -->
+    <section class="bzy_section" style="padding-top:0">
+        <div class="bzy_big">
+            <div class="bzy_big__visual">
+                <i data-lucide="hexagon"></i>
+                <i data-lucide="circle"></i>
+                <i data-lucide="triangle"></i>
+            </div>
+            <div>
+                <h2>Geometry is the <em>grammar</em> of design.</h2>
+                <p>
+                    在 Atelier Icône，我们相信一切复杂都可以回归基础形状。
+                    三角形、圆形、六边形——这三种母题编织出了整个工作室的视觉语言。
+                    Lucide 提供的是字母表，我们负责造句。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="bzy_stats">
+        <div class="bzy_stat"><strong>1000+</strong><span>Icons</span></div>
+        <div class="bzy_stat"><strong>1.5px</strong><span>Stroke</span></div>
+        <div class="bzy_stat"><strong>24×24</strong><span>Grid Base</span></div>
+        <div class="bzy_stat"><strong>SVG</strong><span>Format</span></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bzy_footer">
+        <div><i data-lucide="sparkles"></i>Atelier Icône · Lucide 0.469 · SVG 方式</div>
+        <div>© 2026 All Rights Reserved</div>
+    </footer>
+
+    <!-- 初始化 Lucide -->
+    <script>
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    </script>
+
+</body>
+</html>

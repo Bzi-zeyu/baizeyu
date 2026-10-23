@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抓小球游戏|函数的三个方法的应用</title>
+    <style>
+        body{
+            margin: 0;
+            min-height: 100vh;
+            background: #f0f8ff;
+            overflow: hidden;
+            font-size: 24px;
+        }
+        #info{
+            padding: 16px;
+            background: #222;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+        .ball{
+            width: 50px;
+            height: 50px;
+            background: red;
+            border-radius: 50%;
+            position: fixed;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <a id="bzy_homeLink" class="bzy-home-link" href="index.html" style="position:fixed;top:12px;right:12px;z-index:9999;background:#345ca8;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.15);">← 返回首页</a>
+    <div id="info">当前分数：<span id="score">0</span></div>
+    <div class="ball" id="ball"></div>
+
+    <script> 
+    // const是常量指的是变量的引用地址不能变，不是对象里面的数据不能改。
+    const game = {
+        score: 0,
+        ballDom: document.getElementById("ball"),
+        scoreDom: document.getElementById("score"),
+        infoDom: document.getElementById("info"),
+        width: 50,
+        height: 50
+    };
+
+    function moveBall(){
+        const ballRect = game.ballDom.getBoundingClientRect();
+        const infoHeight = game.infoDom.getBoundingClientRect().height;
+        const maxX = Math.max(0, window.innerWidth - ballRect.width);
+        const maxY = Math.max(0, window.innerHeight - infoHeight - ballRect.height);
+        const randomX = Math.floor(Math.random() * (maxX + 1));
+        const randomY = infoHeight + Math.floor(Math.random() * (maxY + 1));
+
+        game.ballDom.style.left = randomX + "px";
+        game.ballDom.style.top = randomY + "px";
+    }
+
+    function updateScore(){
+        game.scoreDom.textContent = game.score;
+    }
+
+    // 监听 document，空白点击落在 body 或 html 上都能被捕获。
+    document.addEventListener("click", function(e){
+        const target = e.target;
+        if (!(target instanceof Element)) {
+            return;
+        }
+
+        if (target.closest("#ball")) {
+            game.score += 2;
+            updateScore();
+            moveBall();        } else if (!target.closest("#info")) {
+            game.score -= 1;
+            updateScore();
+        }
+    });
+
+    window.addEventListener("resize", moveBall);
+    moveBall();
+    //扩展同时产生多个小球，但是不能交叉，小球定时随机换位置，如果有漏掉的小球扣分
+    setInterval(() => {
+        moveBall();
+    }, 2000);
+    </script>
+</body>
+</html>

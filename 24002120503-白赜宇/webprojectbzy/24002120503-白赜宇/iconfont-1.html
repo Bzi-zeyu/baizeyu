@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier Icône — Font Awesome · 字体图标画廊</title>
+    <!-- Font Awesome 本地化 -->
+    <link rel="stylesheet" href="../../../cdn/fontawesome/css/all.min.css">
+    <style>
+        /* ==================== 设计令牌 ==================== */
+        :root {
+            --bzy-ink:        #0f0e0c;     /* 深墨黑 */
+            --bzy-ink-soft:   #252320;
+            --bzy-gold:       #c8a97e;     /* 古金 */
+            --bzy-gold-deep:  #9a7d52;
+            --bzy-ash:        #e8e3da;     /* 雾白 */
+            --bzy-paper:      #f6f2ea;
+            --bzy-line:       #d4cdbf;
+            --bzy-sienna:     #6b4a2a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Noto Serif SC", "Source Han Serif SC", Georgia, "Times New Roman", serif;
+            background: var(--bzy-paper);
+            color: var(--bzy-ink);
+            min-height: 100vh;
+            line-height: 1.7;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ============ 返回首页按钮 ============ */
+        #bzy_homeLink {
+            position: fixed; top: 18px; right: 18px; z-index: 9999;
+            background: var(--bzy-ink); color: var(--bzy-gold);
+            padding: 9px 16px; border-radius: 2px;
+            text-decoration: none; font-size: 13px; font-weight: 600;
+            letter-spacing: 1.5px; border: 1px solid var(--bzy-gold);
+            transition: all .25s ease;
+        }
+        #bzy_homeLink:hover { background: var(--bzy-gold); color: var(--bzy-ink); }
+
+        /* ============ 顶部装饰线 ============ */
+        .bzy_topline {
+            height: 3px; background: var(--bzy-ink);
+            position: relative;
+        }
+        .bzy_topline::after {
+            content: ""; position: absolute;
+            top: 0; left: 22%; right: 22%; height: 3px;
+            background: var(--bzy-gold);
+        }
+
+        /* ============ 品牌头 ============ */
+        .bzy_brand {
+            padding: 72px 40px 48px;
+            text-align: center;
+            border-bottom: 1px solid var(--bzy-line);
+        }
+        .bzy_brand__mark {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 80px; height: 80px;
+            border: 2px solid var(--bzy-ink);
+            transform: rotate(45deg); margin-bottom: 28px;
+            background: var(--bzy-paper);
+        }
+        .bzy_brand__mark i {
+            transform: rotate(-45deg);
+            font-size: 32px; color: var(--bzy-gold-deep);
+        }
+        .bzy_brand h1 {
+            font-size: clamp(36px, 5vw, 58px);
+            font-weight: 400; letter-spacing: 8px;
+            color: var(--bzy-ink);
+            margin-bottom: 12px;
+        }
+        .bzy_brand h1 em {
+            font-style: italic; color: var(--bzy-gold-deep);
+            font-weight: 400; letter-spacing: 2px;
+        }
+        .bzy_brand p {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 14px; letter-spacing: 4px;
+            color: var(--bzy-sienna); text-transform: uppercase;
+        }
+
+        /* ============ 画廊容器 ============ */
+        .bzy_gallery {
+            max-width: 1280px; margin: 0 auto;
+            padding: 72px 40px 96px;
+        }
+        .bzy_gallery__label {
+            display: flex; align-items: center; gap: 18px;
+            margin-bottom: 40px;
+        }
+        .bzy_gallery__label::before {
+            content: ""; width: 40px; height: 1px;
+            background: var(--bzy-gold-deep);
+        }
+        .bzy_gallery__label span {
+            font-family: "PingFang SC", sans-serif;
+            font-size: 12px; letter-spacing: 5px;
+            color: var(--bzy-gold-deep); text-transform: uppercase;
+        }
+        .bzy_gallery__title {
+            font-size: clamp(28px, 3.5vw, 40px);
+            font-weight: 400; color: var(--bzy-ink);
+            margin-bottom: 8px;
+        }
+        .bzy_gallery__sub {
+            font-family: "PingFang SC", sans-serif;
+            font-size: 13px; color: var(--bzy-sienna);
+            letter-spacing: 1px; margin-bottom: 48px;
+        }
+
+        /* ============ 图标网格 ============ */
+        .bzy_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1px;
+            background: var(--bzy-line);
+            border: 1px solid var(--bzy-line);
+        }
+        .bzy_tile {
+            background: var(--bzy-paper);
+            padding: 44px 20px 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: background .35s ease;
+            position: relative; overflow: hidden;
+        }
+        .bzy_tile:hover { background: var(--bzy-ink); }
+        .bzy_tile:hover .bzy_tile__icon { color: var(--bzy-gold); transform: translateY(-4px) scale(1.08); }
+        .bzy_tile:hover .bzy_tile__name { color: var(--bzy-gold); }
+        .bzy_tile:hover .bzy_tile__label { opacity: .9; color: var(--bzy-ash); }
+
+        .bzy_tile__icon {
+            font-size: 42px; color: var(--bzy-ink);
+            transition: all .4s cubic-bezier(.2,.8,.2,1);
+            display: inline-block; margin-bottom: 20px;
+        }
+        .bzy_tile__name {
+            font-family: "Noto Serif SC", serif;
+            font-size: 15px; color: var(--bzy-ink);
+            font-weight: 400; margin-bottom: 6px;
+            transition: color .3s ease;
+        }
+        .bzy_tile__label {
+            font-family: "PingFang SC", sans-serif;
+            font-size: 10px; letter-spacing: 3px;
+            color: var(--bzy-sienna); text-transform: uppercase;
+            opacity: .55; transition: all .3s ease;
+        }
+
+        /* ============ 大图标 Feature ============ */
+        .bzy_feature {
+            margin-top: 96px;
+            padding: 64px 48px;
+            background: var(--bzy-ink);
+            color: var(--bzy-ash);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 72px; align-items: center;
+        }
+        .bzy_feature__icon {
+            text-align: center;
+        }
+        .bzy_feature__icon i {
+            font-size: clamp(120px, 16vw, 220px);
+            color: var(--bzy-gold);
+            opacity: .95;
+        }
+        .bzy_feature h2 {
+            font-size: clamp(24px, 3vw, 34px);
+            font-weight: 400; color: var(--bzy-gold);
+            margin-bottom: 18px; letter-spacing: 3px;
+        }
+        .bzy_feature h2 em { font-style: italic; }
+        .bzy_feature p {
+            font-family: "PingFang SC", sans-serif;
+            font-size: 14px; line-height: 2;
+            color: var(--bzy-ash); opacity: .75;
+            max-width: 440px;
+        }
+
+        /* ============ 页脚 ============ */
+        .bzy_footer {
+            padding: 40px;
+            text-align: center;
+            background: var(--bzy-paper);
+            border-top: 1px solid var(--bzy-line);
+            font-family: "PingFang SC", sans-serif;
+            font-size: 12px; letter-spacing: 3px;
+            color: var(--bzy-sienna); text-transform: uppercase;
+        }
+        .bzy_footer span { color: var(--bzy-gold-deep); margin: 0 10px; }
+
+        /* ============ 响应式 ============ */
+        @media (max-width: 800px) {
+            .bzy_feature { grid-template-columns: 1fr; gap: 40px; padding: 48px 24px; text-align: center; }
+            .bzy_feature p { margin: 0 auto; }
+            .bzy_brand { padding: 48px 24px 32px; }
+            .bzy_gallery { padding: 48px 20px 64px; }
+            .bzy_grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 返回首页 -->
+    <a id="bzy_homeLink" class="bzy-home-link" href="index.html">← 返回首页</a>
+
+    <!-- 顶部装饰线 -->
+    <div class="bzy_topline"></div>
+
+    <!-- 品牌头 -->
+    <header class="bzy_brand">
+        <div class="bzy_brand__mark"><i class="fa-solid fa-feather-pointed"></i></div>
+        <h1>Atelier <em>Icône</em></h1>
+        <p>Font&nbsp;&nbsp;Awesome&nbsp;&nbsp;Gallery · 字体图标画廊</p>
+    </header>
+
+    <!-- 画廊 -->
+    <main class="bzy_gallery">
+        <div class="bzy_gallery__label"><span>Exhibition · 01</span></div>
+        <h2 class="bzy_gallery__title">古典图形</h2>
+        <p class="bzy_gallery__sub">一组从装饰艺术传统中提取的形状，承载着工作室的美学根源。</p>
+
+        <div class="bzy_grid">
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-feather"></i><div class="bzy_tile__name">Plume</div><div class="bzy_tile__label">· feather</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-palette"></i><div class="bzy_tile__name">Palette</div><div class="bzy_tile__label">· palette</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-paintbrush"></i><div class="bzy_tile__name">Pinceau</div><div class="bzy_tile__label">· paintbrush</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-pen-nib"></i><div class="bzy_tile__name">Plume</div><div class="bzy_tile__label">· pen-nib</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-compass"></i><div class="bzy_tile__name">Boussole</div><div class="bzy_tile__label">· compass</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-crown"></i><div class="bzy_tile__name">Couronne</div><div class="bzy_tile__label">· crown</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-gem"></i><div class="bzy_tile__name">Gemmes</div><div class="bzy_tile__label">· gem</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-bell"></i><div class="bzy_tile__name">Cloche</div><div class="bzy_tile__label">· bell</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-moon"></i><div class="bzy_tile__name">Lune</div><div class="bzy_tile__label">· moon</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-sun"></i><div class="bzy_tile__name">Soleil</div><div class="bzy_tile__label">· sun</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-star"></i><div class="bzy_tile__name">Étoile</div><div class="bzy_tile__label">· star</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-heart"></i><div class="bzy_tile__name">Cœur</div><div class="bzy_tile__label">· heart</div></div>
+        </div>
+
+        <div class="bzy_gallery__label" style="margin-top:80px"><span>Exhibition · 02</span></div>
+        <h2 class="bzy_gallery__title">品牌与符号</h2>
+        <p class="bzy_gallery__sub">工作室合作过的品牌脉络，每一枚都是一次审美协商。</p>
+
+        <div class="bzy_grid">
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-behance"></i><div class="bzy_tile__name">Behance</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-dribbble"></i><div class="bzy_tile__name">Dribbble</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-instagram"></i><div class="bzy_tile__name">Instagram</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-pinterest"></i><div class="bzy_tile__name">Pinterest</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-github"></i><div class="bzy_tile__name">GitHub</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-linkedin"></i><div class="bzy_tile__name">LinkedIn</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-twitter"></i><div class="bzy_tile__name">Twitter</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-youtube"></i><div class="bzy_tile__name">YouTube</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-figma"></i><div class="bzy_tile__name">Figma</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-sketch"></i><div class="bzy_tile__name">Sketch</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-adobe"></i><div class="bzy_tile__name">Adobe</div><div class="bzy_tile__label">· brand</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-brands fa-apple"></i><div class="bzy_tile__name">Apple</div><div class="bzy_tile__label">· brand</div></div>
+        </div>
+
+        <div class="bzy_gallery__label" style="margin-top:80px"><span>Exhibition · 03</span></div>
+        <h2 class="bzy_gallery__title">日常物件</h2>
+        <p class="bzy_gallery__sub">设计从生活中提取形状，再交还给生活使用。</p>
+
+        <div class="bzy_grid">
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-mug-saucer"></i><div class="bzy_tile__name">Café</div><div class="bzy_tile__label">· coffee</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-wine-glass"></i><div class="bzy_tile__name">Vin</div><div class="bzy_tile__label">· wine</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-book-open"></i><div class="bzy_tile__name">Livre</div><div class="bzy_tile__label">· book</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-clock"></i><div class="bzy_tile__name">Temps</div><div class="bzy_tile__label">· clock</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-camera"></i><div class="bzy_tile__name">Camera</div><div class="bzy_tile__label">· camera</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-music"></i><div class="bzy_tile__name">Musique</div><div class="bzy_tile__label">· music</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-plane"></i><div class="bzy_tile__name">Envol</div><div class="bzy_tile__label">· plane</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-umbrella"></i><div class="bzy_tile__name">Parapluie</div><div class="bzy_tile__label">· umbrella</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-key"></i><div class="bzy_tile__name">Clef</div><div class="bzy_tile__label">· key</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-scissors"></i><div class="bzy_tile__name">Ciseaux</div><div class="bzy_tile__label">· scissors</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-at"></i><div class="bzy_tile__name">Courriel</div><div class="bzy_tile__label">· email</div></div>
+            <div class="bzy_tile"><i class="bzy_tile__icon fa-solid fa-phone"></i><div class="bzy_tile__name">Téléphone</div><div class="bzy_tile__label">· phone</div></div>
+        </div>
+    </main>
+
+    <!-- Feature 大图 -->
+    <section class="bzy_feature">
+        <div class="bzy_feature__icon"><i class="fa-solid fa-feather-pointed"></i></div>
+        <div>
+            <h2>Une <em>ligne</em>, une forme, une émotion.</h2>
+            <p>
+                每一枚图标都是一次取舍的练习——减去多余的笔画，留下最本质的轮廓。
+                Atelier Icône 相信好的图标是安静的：它不争夺注意力，却让界面的每一个角落都被仔细对待。
+            </p>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bzy_footer">
+        Atelier Icône <span>·</span> Font Awesome 6.5 <span>·</span> 字体方式渲染 <span>·</span> 2026
+    </footer>
+
+</body>
+</html>

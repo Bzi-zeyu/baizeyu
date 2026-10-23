@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS对象的应用</title>
+</head>
+<body>
+    <a id="bzy_homeLink" class="bzy-home-link" href="index.html" style="position:fixed;top:12px;right:12px;z-index:9999;background:#345ca8;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.15);">← 返回首页</a>
+    <!-- 个人名信片的案例:明信片中包含属性和方法,贴近大学生活 -->
+    <script>
+        const StudentCard = {
+            name: "白赞宇",
+            age: 20,
+            sex: "男",
+            hobby: ["编程", "篮球", "阅读"],
+            major: "计算机科学与技术",
+            university: "某某大学",
+            grade: "大三",
+            // 方法:介绍自己
+            introduce: function() {
+                // `反引号使用的地方可以嵌入表达式,this.name表示当前对象的name属性值,$这个就是嵌入的变量
+                return `大家好，我是${this.name}，今年${this.age}岁，专业是${this.major}，就读于${this.university}。我的兴趣爱好包括${this.hobby.join("、")}。`;
+            },
+           upgrade: function () {
+           const grades = ["大一", "大二", "大三", "大四"];
+           const index = grades.indexOf(this.grade);
+
+         if (index === -1) return this.grade;
+
+        if (index < grades.length - 1) {
+        this.grade = grades[index + 1];
+        console.log(`升级成功，当前年级为：${this.grade}`);
+        } else {
+        this.grade = "毕业";
+        console.log(`恭喜你，已毕业`);
+        }
+         return this.grade;
+        }
+
+        };
+
+        document.write("<div>" + StudentCard.introduce() + "</div>");
+        document.write("<div>当前年级: " + StudentCard.grade + "</div>");
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iconfont-4 · Lucide SVG · 移动端下导航</title>
+    <!-- Lucide 本地化 -->
+    <script src="../../../cdn/lucide/lucide.min.js"></script>
+    <style>
+        /* ==================== 设计令牌 ==================== */
+        :root {
+            --bzy-primary:   #2b8f6e;     /* 主绿（与上一个页面形成差异） */
+            --bzy-primary-soft:#e4f4ed;
+            --bzy-text:      #1f1f1f;
+            --bzy-text-soft: #8d8d8d;
+            --bzy-line:      #ececec;
+            --bzy-bg:        #fafafa;
+            --bzy-white:     #ffffff;
+            --bzy-red:       #ff3b30;     /* 红点/徽章 */
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html, body { height: 100%; }
+        body {
+            font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background: var(--bzy-bg);
+            color: var(--bzy-text);
+            display: flex; justify-content: center; align-items: flex-start;
+            padding: 24px 0;
+        }
+
+        /* ============ 返回首页 ============ */
+        #bzy_homeLink {
+            position: fixed; top: 14px; right: 14px; z-index: 9999;
+            background: var(--bzy-primary); color: #fff;
+            padding: 7px 14px; border-radius: 16px;
+            text-decoration: none; font-size: 12px; font-weight: 600;
+            box-shadow: 0 3px 10px rgba(43,143,110,.35);
+        }
+
+        /* ============ 手机模拟框 ============ */
+        .bzy_phone {
+            width: 390px; max-width: 100%;
+            min-height: 100vh;
+            background: var(--bzy-bg);
+            position: relative;
+            box-shadow: 0 0 0 1px var(--bzy-line), 0 20px 60px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        /* ============ 顶部状态栏 ============ */
+        .bzy_status {
+            height: 44px; padding: 0 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--bzy-white);
+            font-size: 14px; font-weight: 600;
+        }
+
+        /* ============ 顶部标题 ============ */
+        .bzy_header {
+            background: var(--bzy-white);
+            padding: 14px 20px 16px;
+            border-bottom: 1px solid var(--bzy-line);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .bzy_header__icon { width: 20px; height: 20px; stroke: var(--bzy-primary); }
+        .bzy_header h1 {
+            font-size: 18px; font-weight: 700;
+        }
+        .bzy_header h1 small {
+            font-size: 12px; font-weight: 400;
+            color: var(--bzy-text-soft); margin-left: 8px;
+        }
+
+        /* ============ 内容区 ============ */
+        .bzy_content {
+            padding: 20px 16px 120px;
+        }
+        .bzy_hero {
+            background: linear-gradient(135deg, var(--bzy-primary), #1e6f53);
+            border-radius: 14px;
+            padding: 24px 20px;
+            color: #fff; margin-bottom: 20px;
+            position: relative; overflow: hidden;
+        }
+        .bzy_hero::after {
+            content: ""; position: absolute;
+            top: -30px; right: -30px;
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.12);
+        }
+        .bzy_hero h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .bzy_hero p { font-size: 13px; opacity: .85; }
+        .bzy_hero i {
+            position: absolute; top: 20px; right: 20px;
+            width: 48px; height: 48px; opacity: .5;
+        }
+
+        .bzy_section__title {
+            font-size: 16px; font-weight: 700;
+            margin: 20px 0 12px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .bzy_section__title::before {
+            content: ""; width: 3px; height: 16px;
+            background: var(--bzy-primary); border-radius: 2px;
+        }
+
+        .bzy_grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .bzy_grid__item {
+            background: var(--bzy-white);
+            border-radius: 10px;
+            padding: 18px 8px;
+            text-align: center;
+        }
+        .bzy_grid__item .lucide {
+            width: 28px; height: 28px; stroke: var(--bzy-primary);
+            margin-bottom: 6px;
+        }
+        .bzy_grid__item span {
+            font-size: 11px; color: var(--bzy-text-soft);
+        }
+
+        /* ============ 底部 TabBar（固定） ============ */
+        .bzy_tabbar {
+            position: fixed; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 390px; max-width: 100%;
+            background: var(--bzy-white);
+            border-top: 1px solid var(--bzy-line);
+            display: flex;
+            padding-bottom: env(safe-area-inset-bottom, 0);
+            z-index: 100;
+        }
+        .bzy_tabbar__item {
+            flex: 1;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 8px 0 calc(6px + env(safe-area-inset-bottom, 0));
+            cursor: pointer; position: relative;
+            color: var(--bzy-text-soft);
+            text-decoration: none;
+            transition: color .2s ease;
+        }
+        .bzy_tabbar__item--on { color: var(--bzy-primary); }
+
+        /* SVG 图标 */
+        .bzy_tabbar__icon {
+            width: 24px; height: 24px;
+            stroke: currentColor;
+            position: relative;    /* 给徽章一个定位锚点 */
+        }
+
+        /* 数字徽章（购物车） */
+        .bzy_tabbar__badge {
+            position: absolute;
+            top: -8px; right: -18px;
+            min-width: 18px; height: 18px;
+            padding: 0 5px;
+            background: var(--bzy-red);
+            color: #fff;
+            font-size: 11px; font-weight: 700;
+            border-radius: 9px;
+            display: inline-flex; align-items: center; justify-content: center;
+            line-height: 1;
+            box-shadow: 0 1px 3px rgba(255,59,48,.4);
+        }
+
+        /* 红点徽章（点赞） */
+        .bzy_tabbar__dot {
+            position: absolute;
+            top: -6px; right: -12px;
+            width: 9px; height: 9px;
+            background: var(--bzy-red);
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px var(--bzy-white);
+        }
+
+        /* 标签文字 */
+        .bzy_tabbar__label { font-size: 11px; margin-top: 2px; }
+
+        /* ============ 响应式 ============ */
+        @media (max-width: 420px) {
+            body { padding: 0; }
+            .bzy_phone { width: 100%; box-shadow: none; }
+            .bzy_tabbar { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 返回首页 -->
+    <a id="bzy_homeLink" class="bzy-home-link" href="index.html">← 返回首页</a>
+
+    <!-- 手机框 -->
+    <div class="bzy_phone">
+
+        <!-- 状态栏 -->
+        <div class="bzy_status">
+            <span>9:41</span>
+            <div style="font-size:12px">●●● 📶 🔋</div>
+        </div>
+
+        <!-- 标题 -->
+        <header class="bzy_header">
+            <i class="bzy_header__icon" data-lucide="shopping-bag"></i>
+            <h1>Lucide Shop <small>· SVG 图标版</small></h1>
+        </header>
+
+        <!-- 内容 -->
+        <main class="bzy_content">
+
+            <!-- Hero -->
+            <section class="bzy_hero">
+                <i data-lucide="sparkles"></i>
+                <h2>每日精选好物</h2>
+                <p>Lucide SVG 图标 · 线条清晰 · 风格统一</p>
+            </section>
+
+            <!-- 快捷分类 -->
+            <div class="bzy_section__title">快捷分类</div>
+            <div class="bzy_grid">
+                <div class="bzy_grid__item"><i data-lucide="home"></i><span>首页</span></div>
+                <div class="bzy_grid__item"><i data-lucide="heart"></i><span>点赞</span></div>
+                <div class="bzy_grid__item"><i data-lucide="shopping-cart"></i><span>购物车</span></div>
+                <div class="bzy_grid__item"><i data-lucide="user"></i><span>我的</span></div>
+            </div>
+
+            <!-- 提示 -->
+            <div class="bzy_section__title">关于本页</div>
+            <div style="background:var(--bzy-white);border-radius:10px;padding:16px 18px;font-size:13px;line-height:1.9;color:var(--bzy-text-soft)">
+                <p style="margin-bottom:8px">✅ 使用 Lucide <strong>SVG 内联方式</strong>渲染图标（data-lucide + createIcons）</p>
+                <p style="margin-bottom:8px">✅ 底部 4 tab：<strong>首页 / 点赞 / 购物车 / 我的</strong></p>
+                <p style="margin-bottom:8px">✅ 购物车右上角 <strong>数字徽章 "12"</strong></p>
+                <p>✅ 点赞右上角 <strong>红点徽章</strong></p>
+            </div>
+
+        </main>
+
+        <!-- 底部 TabBar（固定） -->
+        <nav class="bzy_tabbar">
+            <!-- Tab 1: 首页（激活） -->
+            <div class="bzy_tabbar__item bzy_tabbar__item--on">
+                <i class="bzy_tabbar__icon" data-lucide="home"></i>
+                <span class="bzy_tabbar__label">首页</span>
+            </div>
+
+            <!-- Tab 2: 点赞（红点） -->
+            <div class="bzy_tabbar__item" data-bzy-tab="heart">
+                <div style="position:relative">
+                    <i class="bzy_tabbar__icon" data-lucide="heart"></i>
+                    <span class="bzy_tabbar__dot"></span>
+                </div>
+                <span class="bzy_tabbar__label">点赞</span>
+            </div>
+
+            <!-- Tab 3: 购物车（数字徽章） -->
+            <div class="bzy_tabbar__item" data-bzy-tab="cart">
+                <div style="position:relative">
+                    <i class="bzy_tabbar__icon" data-lucide="shopping-cart"></i>
+                    <span class="bzy_tabbar__badge">12</span>
+                </div>
+                <span class="bzy_tabbar__label">购物车</span>
+            </div>
+
+            <!-- Tab 4: 我的 -->
+            <div class="bzy_tabbar__item" data-bzy-tab="mine">
+                <i class="bzy_tabbar__icon" data-lucide="user"></i>
+                <span class="bzy_tabbar__label">我的</span>
+            </div>
+        </nav>
+
+    </div>
+
+    <!-- Lucide 初始化（必须在 DOM 渲染完后调用） -->
+    <script>
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+        // Tab 点击交互
+        (function() {
+            var bzy_tabs = document.querySelectorAll('.bzy_tabbar__item');
+            bzy_tabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    bzy_tabs.forEach(function(t) { t.classList.remove('bzy_tabbar__item--on'); });
+                    tab.classList.add('bzy_tabbar__item--on');
+                });
+            });
+        })();
+    </script>
+
+</body>
+</html>

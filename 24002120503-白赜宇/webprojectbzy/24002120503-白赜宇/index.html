@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>白赜宇的《高级网页设计》课堂实践</title>
+    <style>
+        :root {
+            --page-bg: #eef4f8;
+            --text: #24344d;
+            --text-soft: #526071;
+            --muted: #6b7187;
+            --line: #ccd6e6;
+            --paper: #ffffff;
+            --card: #f8fafc;
+            --primary: #345ca8;
+            --primary-deep: #233e73;
+            --primary-light: #dce9ff;
+            --secondary: #7aa47d;
+            --accent: #e8b86d;
+            --shadow: rgba(21, 38, 74, 0.12);
+            --max-width: 1180px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: var(--text);
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 75% 8%, rgba(105, 156, 220, 0.16), transparent 16%),
+                radial-gradient(circle at 20% 78%, rgba(122, 164, 125, 0.12), transparent 15%),
+                linear-gradient(135deg, var(--page-bg), #eef7f7);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -80px;
+            background-image: radial-gradient(var(--line) 1px, transparent 1px);
+            background-size: 30px 30px;
+            transform: rotate(-8deg);
+            pointer-events: none;
+            opacity: 0.55;
+        }
+
+        .page {
+            width: min(var(--max-width), calc(100vw - 80px));
+            margin: 0 auto;
+            padding: 26px 0 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-radius: 18px 18px 0 0;
+            background: rgba(255,255,255,0.88);
+            border-bottom: 1px solid rgba(204,214,230,0.9);
+            box-shadow: 0 12px 34px var(--shadow);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-mark {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            box-shadow: 0 8px 16px var(--shadow);
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: clamp(30px, 3vw, 40px);
+            line-height: 1.2;
+            letter-spacing: 1px;
+            color: var(--primary-deep);
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 14px;
+            color: var(--muted);
+            letter-spacing: 2px;
+        }
+
+        .topbar .course-tag {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: var(--primary-deep);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 7px 14px var(--shadow);
+            white-space: nowrap;
+        }
+
+        .hero {
+            position: relative;
+            background: linear-gradient(130deg, var(--paper), #eef5f9);
+            border-radius: 0 0 18px 18px;
+            box-shadow: 0 14px 36px var(--shadow);
+            border-left: 1px solid rgba(204,214,230,0.8);
+            border-right: 1px solid rgba(204,214,230,0.8);
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 0.8fr;
+            gap: 30px;
+            padding: 54px 40px 40px;
+            align-items: center;
+        }
+
+        .hero-copy {
+            position: relative;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--primary-light);
+            border: 1px solid rgba(52,92,168,0.2);
+        }
+
+        .hero-copy h2 {
+            margin: 20px 0 16px;
+            color: var(--primary-deep);
+            font-size: clamp(46px, 4vw, 58px);
+            line-height: 1.15;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .hero-copy .subtitle {
+            color: var(--text-soft);
+            font-size: 18px;
+            line-height: 1.85;
+            margin: 0 0 20px;
+            max-width: 680px;
+        }
+
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .hero-stats .stat {
+            min-width: 150px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            box-shadow: 0 12px 24px var(--shadow);
+        }
+
+        .hero-stats .stat strong {
+            display: block;
+            color: var(--primary);
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        .hero-stats .stat span {
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .hero-panel {
+            background: linear-gradient(150deg, var(--primary), var(--primary-deep));
+            border-radius: 24px;
+            padding: 26px;
+            color: #fff;
+            box-shadow: 0 22px 40px var(--shadow);
+            border: 1px solid rgba(255,255,255,0.2);
+            min-height: 340px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-panel::before,
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero-panel::before {
+            width: 180px;
+            height: 180px;
+            left: -38px;
+            top: -36px;
+        }
+
+        .hero-panel::after {
+            width: 260px;
+            height: 260px;
+            right: -60px;
+            bottom: -50px;
+        }
+
+        .hero-panel .panel-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .hero-panel .date-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 144px;
+            height: 144px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.9);
+            margin: 24px auto 20px;
+            background: rgba(255,255,255,0.08);
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .hero-panel .panel-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .hero-panel .panel-list li {
+            padding: 10px 0;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .hero-panel .panel-list li:first-child {
+            border-top: none;
+        }
+
+        .hero-panel .panel-list li span {
+            color: rgba(255,255,255,0.82);
+        }
+
+        .hero-panel .panel-list li strong {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px minmax(440px, 1fr);
+            gap: 30px;
+            padding: 30px 40px 40px;
+            background: var(--paper);
+        }
+
+        .sidebar {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 22px 20px;
+            border: 1px solid var(--line);
+            box-shadow: 0 12px 22px var(--shadow);
+        }
+
+        .sidebar h3 {
+            margin: 0 0 18px;
+            font-size: 24px;
+            color: var(--primary-deep);
+        }
+
+        .sidebar .course-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar .course-list li {
+            padding: 13px 14px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            background: #fff;
+            margin-bottom: 12px;
+            color: var(--text-soft);
+            font-weight: 700;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .sidebar .course-list li:nth-child(2) {
+            border-left-color: var(--secondary);
+        }
+
+        .sidebar .course-list li:nth-child(3) {
+            border-left-color: var(--accent);
+        }
+
+        .sidebar .course-list li:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 16px var(--shadow);
+        }
+
+        .sidebar .course-list li a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .sidebar .course-list li .dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .sidebar .course-list li:nth-child(2) .dot {
+            background: var(--secondary);
+        }
+
+        .sidebar .course-list li:nth-child(3) .dot {
+            background: var(--accent);
+        }
+
+        .modules {
+            padding: 0;
+        }
+
+        .modules-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .modules-header h2 {
+            margin: 0;
+            font-size: 30px;
+            color: var(--primary-deep);
+        }
+
+        .modules-header .view-all {
+            background: var(--primary-deep);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 7px 16px var(--shadow);
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .module-card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            box-shadow: 0 9px 18px var(--shadow);
+        }
+
+        .module-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 16px 24px var(--shadow);
+        }
+
+        .module-card a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .module-card .icon-pill {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-light);
+            color: var(--primary-deep);
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .module-card:nth-child(2) .icon-pill {
+            background: #e8f4e8;
+            color: var(--secondary);
+        }
+
+        .module-card:nth-child(3) .icon-pill {
+            background: #fff4df;
+            color: var(--accent);
+        }
+
+        .module-card .module-title {
+            margin: 0 0 8px;
+            font-size: 20px;
+            color: var(--primary-deep);
+        }
+
+        .module-card .module-desc {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .prompt-box {
+            background: #fffaf1;
+            border-left: 4px solid var(--accent);
+            border-radius: 14px;
+            padding: 18px;
+            margin-top: 20px;
+            color: var(--text-soft);
+            box-shadow: 0 8px 16px var(--shadow);
+        }
+
+        .prompt-box h3 {
+            margin: 0 0 12px;
+            color: var(--primary-deep);
+            font-size: 20px;
+        }
+
+        .prompt-box .prompt-text {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--text-soft);
+        }
+
+        .footer {
+            background: var(--primary-deep);
+            color: rgba(255,255,255,0.82);
+            border-radius: 0 0 18px 18px;
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            box-shadow: 0 14px 36px var(--shadow);
+        }
+
+        .footer .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer .footer-left .footer-mark {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: inline-block;
+        }
+
+        .footer .footer-links {
+            display: flex;
+            gap: 14px;
+        }
+
+        .footer .footer-links a {
+            color: rgba(255,255,255,0.82);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        @media screen and (max-width: 900px) {
+            .hero-grid,
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer {
+                flex-wrap: wrap;
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">A</div>
+                <div>
+                    <h1>高级网页设计</h1>
+                    <p>白赜宇课堂实践</p>
+                </div>
+            </div>
+            <div class="course-tag">课程目录</div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-grid">
+                <section class="hero-copy">
+                    <span class="section-label">Web Design Studio</span>
+                    <h2>白赜宇的《高级网页设计》课堂实践</h2>
+                    <p class="subtitle">
+                        课程以 HTML、CSS 与交互页面构建为核心，完成布局复习、字体图标、课程实践模块的整合与展示。
+                    </p>
+
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <strong>04</strong>
+                            <span>课堂模块</span>
+                        </div>
+                        <div class="stat">
+                            <strong>01</strong>
+                            <span>课程首页</span>
+                        </div>
+                        <div class="stat">
+                            <strong>+</strong>
+                            <span>持续更新</span>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="hero-panel">
+                    <div class="panel-title">
+                        <span>课堂实践</span>
+                        <span>2026</span>
+                    </div>
+                    <div class="date-box">WEB</div>
+                    <ul class="panel-list">
+                        <li><span>课程主题</span><strong>高级网页设计</strong></li>
+                        <li><span>结构安排</span><strong>目录导航</strong></li>
+                        <li><span>课后延展</span><strong>模块增加</strong></li>
+                    </ul>
+                </aside>
+            </div>
+
+            <section class="main-content">
+                <aside class="sidebar">
+                    <h3>课堂目录</h3>
+                    <ul class="course-list">
+                        <li><span class="dot"></span><a href="review-flex.html">flex复习</a></li>
+                        <li><span class="dot"></span><a href="svg.html">字体图标</a></li>
+                        <li><span class="dot"></span><a href="function005.html">JS函数</a></li>
+                        <li><span class="dot"></span><a href="function_apply.html">抓小球游戏</a></li>
+                        <li><span class="dot"></span>其余模块后续在增加</li>
+                    </ul>
+                </aside>
+
+                <main class="modules">
+                    <section class="modules-header">
+                        <h2>课程内容</h2>
+                        <a class="view-all" href="#prompt">查看提示词</a>
+                    </section>
+
+                    <section class="module-grid">
+                        <article class="module-card">
+                            <a href="review-flex.html">
+                                <div class="icon-pill">F</div>
+                                <div>
+                                    <h3 class="module-title">Flex复习</h3>
+                                    <p class="module-desc">布局复习、页面结构与响应式案例演示。</p>
+                                </div>
+                            </a>
+                        </article>
+
+                        <article class="module-card">
+                            <a href="svg.html">
+                                <div class="icon-pill">I</div>
+                                <div>
+                                    <h3 class="module-title">字体图标</h3>
+                                    <p class="module-desc">图标交互、符号导航与前端展示单元。</p>
+                                </div>
+                            </a>
+                        </article>
+
+                        <article class="module-card">
+                            <a href="font/demo_index.html">
+                                <div class="icon-pill">U</div>
+                                <div>
+                                    <h3 class="module-title">字体图标演示</h3>
+                                    <p class="module-desc">阿里字体图标演示页面与图标资源。</p>
+                                </div>
+                            </a>
+                        </article>
+
+                        <article class="module-card">
+                            <a href="function005.html">
+                                <div class="icon-pill">J</div>
+                                <div>
+                                    <h3 class="module-title">JS函数</h3>
+                                    <p class="module-desc">使用 JavaScript 函数实现随机猜数字游戏。</p>
+                                </div>
+                            </a>
+                        </article>
+
+                        <article class="module-card">
+                            <a href="function_apply.html">
+                                <div class="icon-pill">B</div>
+                                <div>
+                                    <h3 class="module-title">抓小球游戏</h3>
+                                    <p class="module-desc">通过点击小球和空白区域进行分数交互的 JavaScript 实践。</p>
+                                </div>
+                            </a>
+                        </article>
+
+                        <article class="module-card">
+                            <a href="#">
+                                <div class="icon-pill">+</div>
+                                <div>
+                                    <h3 class="module-title">后续模块</h3>
+                                    <p class="module-desc">其余模块后续在增加，持续完善课程实践。</p>
+                                </div>
+                            </a>
+                        </article>
+                    </section>
+
+                    <section class="prompt-box" id="prompt">
+                        <h3>本提示词</h3>
+                        <p class="prompt-text">
+                            创建一个新页面，包括本目录下的所有网页的超链接，使用原生代码，不使用cdn，新页面名称为index.html，主题为王垚的《高级网页设计》课堂实践，美化页面，课堂目录中包含flex复习、字体图标、其余模块后续在增加。页面中包括本提示词。
+                        </p>
+                    </section>
+                </main>
+            </section>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-left">
+                <span class="footer-mark"></span>
+                <span>白赜宇《高级网页设计》课堂实践</span>
+            </div>
+            <nav class="footer-links">
+                <a href="review-flex.html">Flex复习</a>
+                <a href="svg.html">字体图标</a>
+                <a href="font/demo_index.html">图标演示</a>
+                <a href="function005.html">JS函数</a>
+                <a href="function_apply.html">抓小球游戏</a>
+            </nav>
+        </footer>
+    </div>
+</body>
+</html>
+</body>
+</html>
