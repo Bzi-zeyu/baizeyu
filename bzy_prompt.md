@@ -77,4 +77,9 @@
 - **时间**: 2026-10-30
 - **模型**: Trae AI Assistant
 - **提示词**: 用户提供新 PAT（ghp_8K3k...），之前旧 PAT 只有 repo_deployment 权限，新的应该有完整 repo scope
+- **执行结果**: 推送成功！GitHub Pages 已 built 但根目录无 index.html → 404；创建根目录重定向 index.html
+---
+- **时间**: 2026-10-30
+- **模型**: Trae AI Assistant
+- **提示词**: GitHub Pages 404，根目录缺 index.html，创建重定向页并推送
 ---
