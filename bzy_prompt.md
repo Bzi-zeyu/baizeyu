@@ -76,5 +76,5 @@
 ---
 - **时间**: 2026-10-30
 - **模型**: Trae AI Assistant
-- **提示词**: 试一下 A 方案（管理员权限改 hosts 临时屏蔽 github 条目，推完恢复）
+- **提示词**: 用户提供新 PAT（ghp_8K3k...），之前旧 PAT 只有 repo_deployment 权限，新的应该有完整 repo scope
 ---
