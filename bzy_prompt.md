@@ -59,3 +59,17 @@
 - **提示词**: 以后上传到 master 分支
 - **执行结果**: 更新 push.ps1 默认分支为 master；本地 main 重命名为 master；推送到远程 origin/master
 ---
+- **时间**: 2026-10-23
+- **模型**: Trae AI Assistant
+- **提示词**: 清理远程旧的 main 分支，只保留 master
+---
+
+- **时间**: 2026-10-30
+- **模型**: Trae AI Assistant
+- **提示词**: 创建 skill——提交到 GitHub，仓库 https://github.com/Bzi-zeyu/baizeyu.git，使用已生成的 SSH 公钥（ed25519），默认 master 分支
+- **执行结果**: SSH 22 端口被防火墙拦截 + hosts 屏蔽 github.com；改用方案 B：HTTPS + Personal Access Token（待用户生成）
+---
+- **时间**: 2026-10-30
+- **模型**: Trae AI Assistant
+- **提示词**: 用户提供 GitHub PAT，填入 push.ps1 并首次推送
+---
