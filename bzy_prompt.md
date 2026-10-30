@@ -72,4 +72,9 @@
 - **时间**: 2026-10-30
 - **模型**: Trae AI Assistant
 - **提示词**: 用户提供 GitHub PAT，填入 push.ps1 并首次推送
+- **执行结果**: 修复中文路径编码（Get-Location）；PAT 推送 403（可能权限不足）；改用 A 方案——管理员改 hosts + HTTPS PAT 再试
+---
+- **时间**: 2026-10-30
+- **模型**: Trae AI Assistant
+- **提示词**: 试一下 A 方案（管理员权限改 hosts 临时屏蔽 github 条目，推完恢复）
 ---
