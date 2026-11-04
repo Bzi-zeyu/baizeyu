@@ -15,6 +15,27 @@
 - 每个新建 HTML 必须加入指向首页的入口 `<a id="bzy_homeLink" ...>← 返回首页</a>`，`href` 按页面深度指向对应 `index.html`；样式参考现有页面。
 - 例外：`1/starter-level*.html` 是照课堂 `target.html` 还原的模板，类名和 DOM id 必须保持原样，不要改成 `bzy_`。
 
+## 注释规范
+- **新建 HTML 文件头部**必须加入文件级注释，放在 `<!DOCTYPE html>` 之后、`<html>` 之前，使用 HTML 注释 `<!-- -->`，包含四项：
+  ```html
+  <!--
+  作者: 白赜宇
+  创建时间: YYYY-MM-DD HH:MM
+  使用模型: Trae AI Assistant
+  功能: <一句话描述该页面做什么>
+  -->
+  ```
+- **JavaScript 函数上方**必须加入 JSDoc 风格的函数注释，简要说明函数功能；多参数的写清参数含义，有返回值的写清返回内容：
+  ```javascript
+  /**
+   * 实现的主要功能是什么
+   * @param {类型} paramName - 参数说明
+   * @returns {类型} 返回说明
+   */
+  function bzy_xxx(paramName) { ... }
+  ```
+- 修改旧文件时：如果原文件已有注释风格（如课堂模板 `1/`），跟随原风格，不强行加新注释；如果原文件无注释，按上述规范补齐。
+
 ## 编辑注意
 - 路径和内容含中文，统一用 UTF-8；PowerShell 控制台可能显示乱码，不代表文件损坏。
 - 无打包器，全部使用相对路径。改完 HTML 后确认引用的 CSS/JS/字体确实存在（目前 `24002120503-白赜宇/webprojectbzy/24002120503-白赜宇/svg.html` 引用的 `./css/bzy-reset.css` 就缺失）。

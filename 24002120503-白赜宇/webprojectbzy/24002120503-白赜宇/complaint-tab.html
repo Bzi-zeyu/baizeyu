@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!--
+作者: 白赜宇
+创建时间: 2026-11-04
+使用模型: Trae AI Assistant
+功能: 旅游投诉新闻 Tab 聚合页，一比一还原截图，三个分类（最新投诉/官方回应/追踪调查），复用 js/news-tab.js
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅游投诉 - 白赜宇</title>
+    <style>
+        /* ===== 首页入口 ===== */
+        #bzy_homeLink {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 9999;
+            padding: 8px 16px;
+            background: #345ca8;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,.18);
+        }
+        #bzy_homeLink:hover { background: #274787; }
+
+        /* ===== 基础重置 ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", "SimSun", sans-serif;
+            background: #fff;
+            color: #333;
+            padding: 30px 20px;
+        }
+
+        .bzy_container {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        /* ===== Tab 栏（一比一还原截图：红字+红色下划线） ===== */
+        .bzy_tabbar {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 16px;
+        }
+
+        .bzy_tab-item {
+            padding: 10px 18px;
+            font-size: 15px;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: color .15s, border-color .15s;
+            user-select: none;
+        }
+
+        .bzy_tab-item:hover { color: #c00; }
+
+        /* 选中态：红字 + 红色下划线（一比一还原） */
+        .bzy_tab-item.bzy_active {
+            color: #c00;
+            font-weight: 500;
+            border-bottom-color: #c00;
+        }
+
+        /* ===== 新闻列表 ===== */
+        .bzy_tab-panel { display: none; }
+        .bzy_tab-panel.bzy_active { display: block; }
+
+        .bzy_news-list { list-style: none; }
+
+        .bzy_news-list li {
+            padding: 10px 0;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            border-bottom: 1px dashed #f0f0f0;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .bzy_news-list li:last-child { border-bottom: none; }
+
+        .bzy_news-list li::before {
+            content: "·";
+            color: #c00;
+            font-weight: bold;
+            margin-right: 8px;
+            flex-shrink: 0;
+            line-height: 1.6;
+        }
+
+        .bzy_news-list li:hover { color: #c00; }
+    </style>
+</head>
+<body>
+
+    <!-- 首页入口（规则要求） -->
+    <a id="bzy_homeLink" href="index.html">← 返回首页</a>
+
+    <div class="bzy_container">
+
+        <!-- Tab 按钮栏 -->
+        <div class="bzy_tabbar">
+            <div class="bzy_tab-item">最新投诉</div>
+            <div class="bzy_tab-item">官方回应</div>
+            <div class="bzy_tab-item">追踪调查</div>
+        </div>
+
+        <!-- 内容面板 -->
+        <div class="bzy_panels">
+
+            <!-- 最新投诉（截图 1） -->
+            <div class="bzy_tab-panel">
+                <ul class="bzy_news-list">
+                    <li>北京火车站出租车乱象调查 司机计价器怀...</li>
+                    <li>公园盲人游客“纵容” 网友建议被驳回</li>
+                    <li>昆明明湖游客“棘手碰瓷” 同行游客立...</li>
+                    <li>四川一星级公园遭曝光 今年未“荣膺”</li>
+                    <li>北京北海金棕酒柱遭莫文英签名“破坏”</li>
+                    <li>北京动物园门票现猫腻 低价门票“雪藏”</li>
+                    <li>不子女不满“无购物”投诉旅行社 东西一再议</li>
+                    <li>老年人参团旅游权益受损 旅行社被吸老人</li>
+                </ul>
+            </div>
+
+            <!-- 官方回应（截图 2） -->
+            <div class="bzy_tab-panel">
+                <ul class="bzy_news-list">
+                    <li>大绿鸭、温情鸿腾热闹 法官解读"山寨鸭"是</li>
+                    <li>中国旅游局回应："团队价格体系正常"</li>
+                    <li>国家旅游局应新《旅游法》实施旅行社</li>
+                    <li>出游纠纷可依《旅游法》 明确旅游投诉</li>
+                    <li>解读新旅游法"三高" 自费或获可安心</li>
+                    <li>《旅游法》将抑制"零负团费"和"门票经"</li>
+                    <li>文明旅游将入旅游合同 行为指南和公约将作</li>
+                    <li>天津二季度旅行社服务质量发布 投诉涉及</li>
+                    <li>教理：国家法定节假日有景区景点免收</li>
+                </ul>
+            </div>
+
+            <!-- 追踪调查（截图 3） -->
+            <div class="bzy_tab-panel">
+                <ul class="bzy_news-list">
+                    <li>《旅游法》实施半月 自费景区遭正规一日游</li>
+                    <li>追踪香格里拉投诉："住客参" 沙事导游已</li>
+                    <li>导导游转型升级"攻略" 旅行社自行让己</li>
+                    <li>九寨沟何时变成"无购物"？——数千游客</li>
+                    <li>九寨沟为何仍现消费陷阱？</li>
+                    <li>旅游之尴尬："整容"博物馆、女士隐性进</li>
+                    <li>记者暗访兵马俑景区：玉器店买 过期门票</li>
+                    <li>假冒游客潜客长城 玉买怒女士怒发文字</li>
+                    <li>39家旅游单位违法被罚1800万 购物结盟统</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 外部 JS：复用可复用的 bzy_Tab 构造器 -->
+    <script src="js/news-tab.js"></script>
+    <script>
+        /**
+         * 页面加载完成后初始化三个 Tab
+         * 默认激活下标 0（最新投诉）
+         * @returns {void}
+         */
+        document.addEventListener('DOMContentLoaded', function () {
+            new bzy_Tab({
+                tabSelector:   '.bzy_tab-item',
+                panelSelector: '.bzy_tab-panel',
+                defaultIndex:  0,
+                activeClass:   'bzy_active'
+            });
+        });
+    </script>
+</body>
+</html>

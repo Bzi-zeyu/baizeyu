@@ -83,3 +83,28 @@
 - **模型**: Trae AI Assistant
 - **提示词**: GitHub Pages 404，根目录缺 index.html，创建重定向页并推送
 ---
+- **时间**: 2026-11-04
+- **模型**: Trae AI Assistant
+- **提示词**: 新建 news-tab.html 新闻 tab 选项卡页面，四个 tab（国内/省内/国际/最热），默认国内；JS 单独放 js 文件夹，要求可复用（监听事件 + 先清除所有选中态 + 再设置当前选中态）
+- **功能**: 新建 HTML（带文件头注释 + bzy_homeLink），新建 js/news-tab.js（带 JSDoc 函数注释）
+---
+- **时间**: 2026-11-04
+- **模型**: Trae AI Assistant
+- **提示词**: 根据三张截图（d:\桌面\课堂测试\9\1.jpg~3.jpg）一比一还原旅游投诉新闻 Tab 页面，三个 tab（最新投诉/官方回应/追踪调查），选中态红字+红色下划线，内容区新闻列表。严格遵守 bzy_ 前缀规则、HTML 文件头注释、JS JSDoc 注释、bzy_homeLink 首页入口
+- **功能**: 新建 complaint-tab.html，复用 js/news-tab.js 的 bzy_Tab 构造器
+---
+- **时间**: 2026-11-04
+- **模型**: Trae AI Assistant
+- **提示词**: 修改规则文件 AGENTS.md，追加两条注释规范：1) 新建 HTML 文件头部必须加作者/时间/模型/功能四项注释；2) JS 函数上方必须加 JSDoc 风格功能注释
+- **执行结果**: AGENTS.md 新增「注释规范」一节，含 HTML 文件头注释模板 + JSDoc 函数注释模板 + 旧文件修改规则（跟随原风格）
+---
+- **时间**: 2026-11-04
+- **模型**: Trae AI Assistant
+- **提示词**: 将 complaint-tab.html 和 news-tab.html 加入 index.html 的 sidebar 课程目录、module-grid 课程卡片、footer 底部链接
+- **执行结果**: 三处都加上入口链接，同时修复 index.html 末尾重复的 </body></html> 闭合标签
+---
+- **时间**: 2026-11-04
+- **模型**: Trae AI Assistant
+- **提示词**: 将本次改动推送到 GitHub 仓库（同名文件覆盖）
+- **改动文件**: news-tab.html、complaint-tab.html、js/news-tab.js、index.html、AGENTS.md、bzy_prompt.md
+---

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<!--
+作者: 白赜宇
+创建时间: 2026-11-04
+使用模型: Trae AI Assistant
+功能: 新闻 Tab 选项卡演示页，四个分类（国内/省内/国际/最热），默认激活国内新闻，JS 可复用逻辑放 js/news-tab.js
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻 Tab 选项卡 - 白赜宇</title>
+    <style>
+        /* ===== 首页入口按钮 ===== */
+        #bzy_homeLink {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 9999;
+            padding: 8px 16px;
+            background: #345ca8;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,.18);
+        }
+        #bzy_homeLink:hover { background: #274787; }
+
+        /* ===== 页面基础 ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f4f5f7;
+            color: #222;
+            padding: 40px 20px;
+        }
+
+        .bzy_container {
+            max-width: 720px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        }
+
+        .bzy_title {
+            padding: 20px 24px 8px;
+            font-size: 22px;
+            color: #345ca8;
+            font-weight: 600;
+        }
+
+        /* ===== Tab 栏 ===== */
+        .bzy_tabbar {
+            display: flex;
+            border-bottom: 2px solid #eaecef;
+            padding: 0 8px;
+        }
+
+        .bzy_tab-item {
+            flex: 1;
+            padding: 14px 10px;
+            text-align: center;
+            font-size: 15px;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: color .2s, border-color .2s;
+            user-select: none;
+        }
+
+        .bzy_tab-item:hover { color: #345ca8; }
+
+        /* 选中态 */
+        .bzy_tab-item.bzy_active {
+            color: #345ca8;
+            font-weight: 600;
+            border-bottom-color: #345ca8;
+        }
+
+        /* ===== 内容面板 ===== */
+        .bzy_content { padding: 20px 24px 28px; }
+
+        .bzy_tab-panel { display: none; }
+        .bzy_tab-panel.bzy_active { display: block; }
+
+        .bzy_news-item {
+            padding: 14px 0;
+            border-bottom: 1px dashed #eaecef;
+        }
+        .bzy_news-item:last-child { border-bottom: none; }
+
+        .bzy_news-title {
+            font-size: 15px;
+            color: #222;
+            margin-bottom: 4px;
+        }
+        .bzy_news-meta {
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 首页入口（规则要求） -->
+    <a id="bzy_homeLink" href="index.html">← 返回首页</a>
+
+    <div class="bzy_container">
+        <div class="bzy_title">📰 新闻 Tab 选项卡</div>
+
+        <!-- Tab 按钮栏 -->
+        <div class="bzy_tabbar">
+            <div class="bzy_tab-item">国内新闻</div>
+            <div class="bzy_tab-item">省内新闻</div>
+            <div class="bzy_tab-item">国际新闻</div>
+            <div class="bzy_tab-item">最热新闻</div>
+        </div>
+
+        <!-- 内容面板 -->
+        <div class="bzy_content">
+            <!-- 国内新闻（默认显示） -->
+            <div class="bzy_tab-panel">
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">我国成功发射新一代遥感卫星</div>
+                    <div class="bzy_news-meta">新华社 · 2026-11-04 10:30</div>
+                </div>
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">全国铁路冬季调图 新增大批高铁班次</div>
+                    <div class="bzy_news-meta">人民日报 · 2026-11-04 09:12</div>
+                </div>
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">多地出台新政支持人工智能产业发展</div>
+                    <div class="bzy_news-meta">科技日报 · 2026-11-03 16:45</div>
+                </div>
+            </div>
+
+            <!-- 省内新闻 -->
+            <div class="bzy_tab-panel">
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">我省启动冬季文旅促销活动</div>
+                    <div class="bzy_news-meta">省台新闻 · 2026-11-04 08:00</div>
+                </div>
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">省内三座城市入选国家智慧城市试点</div>
+                    <div class="bzy_news-meta">省人民政府网 · 2026-11-03 14:20</div>
+                </div>
+            </div>
+
+            <!-- 国际新闻 -->
+            <div class="bzy_tab-panel">
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">联合国气候变化大会达成新框架协议</div>
+                    <div class="bzy_news-meta">环球时报 · 2026-11-04 07:10</div>
+                </div>
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">多国领导人出席全球科技峰会</div>
+                    <div class="bzy_news-meta">参考消息 · 2026-11-03 22:55</div>
+                </div>
+            </div>
+
+            <!-- 最热新闻 -->
+            <div class="bzy_tab-panel">
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">热搜第一：某明星低调出席科技论坛引热议</div>
+                    <div class="bzy_news-meta">微博热搜 · 🔥 热度 982 万</div>
+                </div>
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">全国多地降温 网友晒雪景合集</div>
+                    <div class="bzy_news-meta">抖音热点 · 🔥 热度 756 万</div>
+                </div>
+                <div class="bzy_news-item">
+                    <div class="bzy_news-title">国产新机型试飞成功 军迷沸腾</div>
+                    <div class="bzy_news-meta">B站热门 · 🔥 热度 523 万</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 外部 JS：可复用 Tab 逻辑 -->
+    <script src="js/news-tab.js"></script>
+    <script>
+        // 页面加载完成后初始化 Tab，默认激活下标 0（国内新闻）
+        document.addEventListener('DOMContentLoaded', function () {
+            new bzy_Tab({
+                tabSelector:   '.bzy_tab-item',
+                panelSelector: '.bzy_tab-panel',
+                defaultIndex:  0,
+                activeClass:   'bzy_active'
+            });
+        });
+    </script>
+</body>
+</html>
