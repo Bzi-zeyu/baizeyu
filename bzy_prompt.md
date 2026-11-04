@@ -108,3 +108,8 @@
 - **提示词**: 将本次改动推送到 GitHub 仓库（同名文件覆盖）
 - **改动文件**: news-tab.html、complaint-tab.html、js/news-tab.js、index.html、AGENTS.md、bzy_prompt.md
 ---
+- **时间**: 2026-11-04
+- **模型**: Trae AI Assistant
+- **提示词**: 修复 complaint-tab.html Tab 选中态样式（三面红线+粗红下划线 vs 未选中蓝底线）；检查首页跳转完整性并推送 GitHub
+- **推送 commit**: complaint-tab 样式修正 + 首页跳转验证通过
+---

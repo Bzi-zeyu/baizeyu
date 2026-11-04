@@ -41,31 +41,36 @@
             margin: 0 auto;
         }
 
-        /* ===== Tab 栏（一比一还原截图：红字+红色下划线） ===== */
+        /* ===== Tab 栏（一比一还原截图：选中=三面红线+粗红下划线；未选中=底部蓝线） ===== */
         .bzy_tabbar {
             display: flex;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 16px;
+            border-bottom: 2px solid #345ca8; /* 整体蓝底线 */
         }
 
         .bzy_tab-item {
-            padding: 10px 18px;
+            padding: 10px 22px;
             font-size: 15px;
             color: #666;
             cursor: pointer;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
-            transition: color .15s, border-color .15s;
             user-select: none;
+            font-weight: 400;
+            /* 未选中：底部蓝线（覆盖 tabbar 的蓝底，不重复） */
+            border-bottom: 2px solid #345ca8;
+            margin-bottom: -2px; /* 让自身蓝底线盖在 tabbar 蓝底线上 */
+            transition: color .15s, border-color .15s;
         }
 
         .bzy_tab-item:hover { color: #c00; }
 
-        /* 选中态：红字 + 红色下划线（一比一还原） */
+        /* 选中态：上+左+右 三面红线 + 底部粗红下划线（覆盖蓝线） */
         .bzy_tab-item.bzy_active {
             color: #c00;
-            font-weight: 500;
-            border-bottom-color: #c00;
+            font-weight: bold;
+            border-top: 3px solid #c00;
+            border-left: 3px solid #c00;
+            border-right: 3px solid #c00;
+            border-bottom: 3px solid #c00;
+            margin-bottom: -3px; /* 红下划线厚度覆盖 tabbar 蓝底线 */
         }
 
         /* ===== 新闻列表 ===== */
