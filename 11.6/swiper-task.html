@@ -234,95 +234,85 @@
 </div>
 
 <script>
-  // ══════════════════════════════════════════════════════════
-  //  ✍️ 学生作答区：把 4 个轮播全部救活（参考各演示台上方的绿色任务卡）
-  // ══════════════════════════════════════════════════════════
+/*
+ * 作者: 白赜宇
+ * 创建时间: 2026-11-06
+ * 使用模型: Trae AI Assistant
+ * 功能: Swiper 轮播组件课堂任务 - 四大任务全部救活
+ *       任务1: 最小轮播（可拖动）
+ *       任务2: 循环 + 600ms + 圆点可点 + 箭头切换
+ *       任务3: 循环 + 2.6秒自动翻页 + 拖动后不停 + 圆点
+ *       任务4: 循环 + 3.2秒自动播放 + 六种 effect 按钮实时切换
+ */
+document.addEventListener('DOMContentLoaded', function () {
 
   // ── 任务 1：初始化 #wySw1，让它至少可以拖动 ──
-  // TODO: 在这里写你的代码
-var swiper = new Swiper("#wySw1", {});
+  // 最基础写法，空配置对象即可
+  var bzy_sw1 = new Swiper('#wySw1', {});
+
 
   // ── 任务 2：初始化 #wySw2，循环 + 600ms + 圆点可点 + 箭头切换 ──
-  // TODO: 在这里写你的代码
-var swiper = new Swiper("#wySw2", {
-      speed: 600,
-      loop: true,
-      pagination: {
-        el: "#wyPag2",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: "#wyNext2",
-        prevEl: "#wyPrev2",
-      },
-    });
+  // loop无缝循环；speed=切换动画时长(ms)；pagination圆点可点击；navigation两侧箭头
+  var bzy_sw2 = new Swiper('#wySw2', {
+    loop: true,
+    speed: 600,
+    pagination: { el: '#wyPag2', clickable: true },
+    navigation: { prevEl: '#wyPrev2', nextEl: '#wyNext2' }
+  });
+
 
   // ── 任务 3：初始化 #wySw3，循环 + 2.6 秒自动翻页 + 拖动后不停 + 圆点 ──
-  // TODO: 在这里写你的代码
-var swiper = new Swiper("#wySw3", {
-      speed: 2600,
-      loop: true,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      autoplay: {
-        delay: 2600,
-      },
-    });
-
+  // autoplay.delay=每张停留毫秒数；disableOnInteraction:false 表示拖动后自动播放继续
+  var bzy_sw3 = new Swiper('#wySw3', {
+    loop: true,
+    speed: 600,
+    pagination: { el: '#wyPag3', clickable: true },
+    autoplay: { delay: 2600, disableOnInteraction: false }
+  });
 
 
   // ── 任务 4：初始化 #wySw4，循环 + 3.2 秒自动播放 + 圆点 + 初始 effect ──
-  // TODO: 在这里写你的代码
-var swiper = new Swiper("#wySw4", {
-      speed: 3200,
-      loop: true,
-      pagination: {
-        el: "#wyPag4",
-        clickable: true,
-      },
-      autoplay: {
-        delay: 3200,
-      },
-    });
-
+  // effect: 切换效果（slide/fade/cube/coverflow/flip/cards）
+  // 后续按钮会 destroy + new 重建实例来换 effect，这里先留 let 声明可变
+  let bzy_sw4 = new Swiper('#wySw4', {
+    loop: true,
+    speed: 800,
+    effect: 'slide',
+    pagination: { el: '#wyPag4', clickable: true },
+    autoplay: { delay: 3200, disableOnInteraction: false }
+  });
 
 
   // ── 任务 4 进阶：补全按钮点击事件，实现六种效果实时切换 ──
   // 提示 1：动态换 effect 只改参数是无效的，必须销毁旧实例再重建（destroy + new）
   // 提示 2：按钮上已有 data-fx 属性，用 btn.dataset.fx 读取要切换的效果名
-  document.querySelectorAll('.wy-fx button').forEach(function(btn){
-    btn.addEventListener('click', function(){
+  document.querySelectorAll('.wy-fx button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+
       // TODO 1：先给当前按钮加 wy-on 类、其余按钮去掉 wy-on（高亮当前按钮）
-      btn.classList.add('wy-on');
-      document.querySelectorAll('.wy-fx button').forEach(function(btn){
-        btn.classList.remove('wy-on');
+      document.querySelectorAll('.wy-fx button').forEach(function (b) {
+        b.classList.remove('wy-on');
       });
+      btn.classList.add('wy-on');
 
 
-
-      // TODO 2：销毁旧的 wySw4 实例
-      swiper.destroy();
-
+      // TODO 2：销毁旧的 swiper 实例
+      bzy_sw4.destroy();
 
 
       // TODO 3：用新 effect 重建实例（把其它配置原样保留）
-      swiper = new Swiper("#wySw4", {
-        speed: 3200,
+      bzy_sw4 = new Swiper('#wySw4', {
         loop: true,
-        pagination: {
-          el: "#wyPag4",
-          clickable: true,
-        },
-        autoplay: {
-          delay: 3200,
-        },
+        speed: 800,
         effect: btn.dataset.fx,
-      }); 
+        pagination: { el: '#wyPag4', clickable: true },
+        autoplay: { delay: 3200, disableOnInteraction: false }
+      });
 
     });
   });
+
+});
 </script>
 </body>
 </html>
