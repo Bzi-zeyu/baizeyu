@@ -113,3 +113,8 @@
 - **提示词**: 修复 complaint-tab.html Tab 选中态样式（三面红线+粗红下划线 vs 未选中蓝底线）；检查首页跳转完整性并推送 GitHub
 - **推送 commit**: complaint-tab 样式修正 + 首页跳转验证通过
 ---
+- **时间**: 2026-11-06
+- **模型**: Trae AI Assistant
+- **提示词**: 将 11.6/swiper-task.html 加入 index.html 三处入口（sidebar/module-grid/footer），修正 swiper-task.html 返回链接，推送到 GitHub
+- **推送 commit**: 新增 Swiper 轮播组件入口（任务1-4全部救活）
+---
