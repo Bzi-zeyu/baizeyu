@@ -118,3 +118,13 @@
 - **提示词**: 将 11.6/swiper-task.html 加入 index.html 三处入口（sidebar/module-grid/footer），修正 swiper-task.html 返回链接，推送到 GitHub
 - **推送 commit**: 新增 Swiper 轮播组件入口（任务1-4全部救活）
 ---
+- **时间**: 2026-11-10
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 根据要求帮我做完（Swiper 课堂任务三合一）：任务一 提示词工程——迭代 2 轮提示词生成 `new Swiper('#wySw4', {...})` 配置（无缝循环 / 3.2s 自动翻页且手动后不停 / 圆点可点击 / 初始 cube）；任务二 仿写第 7 种 effect creative（上一张缩小左移带角度、下一张放大右移进场，电影选片墙）；任务三 超纲加分——新增第六件展品爱达·魔都号（AI 生成 16:9 图）+ 任选一项课堂没讲的能力（keyboard 键盘控制），并整理关键对话记录与答辩材料
+- **执行结果**: swiper-task.html 四个演示各加第六件展品；演示四新增 creative 按钮 + bzy_getSw4Config()/bzy_applySw4()；初始效果改 cube；keyboard 键盘控制生效；新增 11.6/swiper-ai-dialog.md（两轮提示词往返 + 答辩四连问 + 验证清单）
+---
+- **时间**: 2026-11-10
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 好的，推送到 GitHub
+- **执行结果**: Swiper 三项任务改动 + AI 协作记录文档推送至 GitHub master
+---
