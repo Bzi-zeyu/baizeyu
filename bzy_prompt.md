@@ -128,3 +128,33 @@
 - **提示词**: 好的，推送到 GitHub
 - **执行结果**: Swiper 三项任务改动 + AI 协作记录文档推送至 GitHub master
 ---
+- **时间**: 2026-11-11
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 首先在此页面上增加第五种，可以直接把上面的大部分复制过来，要求 `Swiper('#BzySw4', {...})` 配置：① 无缝循环 ② 3.2 秒自动翻页且手动操作后不停止 ③ 圆点分页器可点击 ④ 初始效果为 cube
+- **执行结果**: swiper-task.html 新增「演示五 · 复制改造」区块，独立实例 #BzySw4（分页器 #BzyPag4），6 张幻灯片复制自演示四，JS 按四条要求配置 loop / autoplay(delay 3200, disableOnInteraction:false) / pagination(clickable) / effect cube
+---
+- **时间**: 2026-11-11
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 然后在此页面上增加第六种，用 creative（自定义变换）效果要求：上一张缩小左移并带角度、下一张放大右移进场（参数自定，但要"像电影选片墙"）
+- **执行结果**: swiper-task.html 新增「任务 6 · 电影选片墙」区块，独立实例 #BzySw6（分页器 #BzyPag6），6 张幻灯片复制自演示四，JS 使用 effect:'creative' + creativeEffect（prev 缩小左移带 -18° 角度并后退压暗，next 放大右移带 8° 角度进场，limitProgress 3 + shadowPerProgress）
+---
+- **时间**: 2026-11-11
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 这个图片展示不全啊（附截图：演示六 creative 轮播中，右侧下一张卡片压住当前大图右半部分，且被容器右边缘裁掉）
+- **执行结果**: 调整演示六：两侧卡片改为退到当前大图背后（translateZ 负值）、缩小并降低重叠，舞台宽度改为 520px 使画面回到 16:9 不再上下裁切，容器 overflow 改为 visible 让两侧卡片完整露出，limitProgress 调为 1 避免远处卡片溢出
+---
+- **时间**: 2026-11-11
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 接下来在此页面上增加第七种，用 zoom 双击缩放图片来实现
+- **执行结果**: swiper-task.html 新增「任务 7 · 双击放大看细节」区块，独立实例 #BzySw7（分页器 #BzyPag7），幻灯片内使用 .swiper-zoom-container 包裹图片，JS 配置 zoom: { enabled: true, maxRatio: 3, minRatio: 1, toggle: true } 实现双击放大 / 再双击还原
+---
+- **时间**: 2026-11-11
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 你这个部分的要求有圆点分页器可以点击的，为什么没有给我实现，现在补上圆点分页器可点击（pagination + clickable）而且仅在5里实现
+- **执行结果**: 排查演示五 #BzySw4 圆点是否真正可点，修正分页器点击；按要求只在演示五保留可点击圆点分页器，演示六移除 pagination
+---
+- **时间**: 2026-11-11
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 帮我把新的推送到 GitHub
+- **执行结果**: 使用 git-push-github 技能提交并推送 swiper-task.html 等改动到 GitHub master
+---

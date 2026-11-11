@@ -78,6 +78,13 @@
   /* 作者: 白赜宇 · 2026-11-10 · 演示四补充说明（任务一 cube 初始效果 / 任务三键盘控制） */
   .bzy_fx-note{margin:10px 0 0;font-size:13px;line-height:1.9;color:#5b6b85}
   .bzy_fx-note b{color:#0f2b5b}
+  /* 作者: 白赜宇 · 2026-11-11 · 演示六：舞台收窄到 16:9 并允许溢出，两侧选片卡才能完整露出而不被裁切 */
+  .bzy_wall{max-width:520px}
+  .bzy_wall .swiper{overflow:visible}
+  /* 作者: 白赜宇 · 2026-11-11 · 演示七：图片说明层不拦截双击，双击图片才能触发 zoom 缩放 */
+  .bzy_zoom .wy-cap{pointer-events:none}
+  .bzy_zoom .swiper-slide{cursor:zoom-in}
+  .bzy_zoom .swiper-slide-zoomed{cursor:move}
 
   .wy-back{text-align:center;margin-top:28px}
   .wy-back a{display:inline-block;text-decoration:none;color:#0f2b5b;font-size:14.5px;font-weight:bold;background:#fff;border:1px solid #dbe4ff;border-radius:999px;padding:10px 26px;transition:transform .2s,box-shadow .2s}
@@ -93,8 +100,8 @@
     <span class="wy-badge">高 职 · 高 级 网 页 设 计 · 课 堂 操 作 任 务</span>
     <h1>Swiper 轮播组件 · <b>大国重器光影展（学生版）</b></h1>
     <p>HTML 骨架和 CSS 样式已经全部搭好，图片也备齐了——但这个页面的轮播<b>一个都不会动</b>！
-    因为所有 <b>&lt;script&gt; 里的 JS 初始化代码都被抽走了</b>。你的任务：把 4 个轮播全部"救活"。</p>
-    <div class="wy-goals"><i>任务 1 · 救活最小轮播</i><i>任务 2 · 装上圆点和箭头</i><i>任务 3 · 让它自己翻页</i><i>任务 4 · 六种效果随心换</i></div>
+    因为所有 <b>&lt;script&gt; 里的 JS 初始化代码都被抽走了</b>。你的任务：把 7 个轮播全部"救活"。</p>
+    <div class="wy-goals"><i>任务 1 · 救活最小轮播</i><i>任务 2 · 装上圆点和箭头</i><i>任务 3 · 让它自己翻页</i><i>任务 4 · 六种效果随心换</i><i>任务 5 · 复制改造第五种</i><i>任务 6 · creative 电影选片墙</i><i>任务 7 · 双击放大看细节</i></div>
   </div>
 
   <div class="wy-rule">
@@ -237,6 +244,96 @@
     </div>
   </div>
 
+  <!-- 任务 5 -->
+  <div class="wy-sec">
+    <div class="wy-sec-head">
+      <span class="wy-no">5</span>
+      <h2>复制改造 · 第五种轮播<small>复用演示四结构 · 独立实例 #BzySw4</small></h2>
+    </div>
+    <p class="wy-txt">把演示四的结构整体复制一份，只把 id 换掉，再重新初始化一个新实例：<code>#BzySw4</code>。同一个页面里可以有多个轮播，关键是<b>每个实例用独立的 id 和独立的变量</b>，互不干扰。</p>
+    <div class="wy-req">
+      <h3>✍️ 任务 5 要求</h3>
+      <p>初始化 <code>Swiper('#BzySw4', { ... })</code>：<b>① 无缝循环</b>（loop）<b>② 3.2 秒自动翻页且手动操作后不停止</b>（autoplay.delay 3200 + disableOnInteraction:false）<b>③ 圆点分页器可点击</b>（pagination + clickable）<b>④ 初始效果为 cube</b>（effect:'cube'）。</p>
+      <span class="wy-star">⭐ 验证标准：刷新即 3D 立方体翻转、约 3.2 秒自动翻页、拖一下松手仍继续翻、点圆点能跳转</span>
+    </div>
+    <div class="wy-demo">
+      <span class="wy-demo-tag">🎛️ 演示五 · 复制自演示四（#BzySw4 · 初始 cube + 3.2 秒自动播放）</span>
+      <div class="wy-swiper">
+        <div class="swiper" id="BzySw4">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="wy-cap"><h3>天宫空间站</h3><p>复制演示四 · 换成新实例</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>同一组照片，新的一套配置</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>3.2 秒自动翻页</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>初始效果 cube</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>圆点可点击跳转</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aida_modu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>拖一下松手，自动播放不停止</p></div></div>
+          </div>
+          <div class="swiper-pagination" id="BzyPag4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 任务 6 -->
+  <div class="wy-sec">
+    <div class="wy-sec-head">
+      <span class="wy-no">6</span>
+      <h2>电影选片墙<small>effect: 'creative' 自定义变换 · 独立实例 #BzySw6</small></h2>
+    </div>
+    <p class="wy-txt">前六种 effect 都是 Swiper 写好的"成品"，<code>creative</code> 则把变换交给你自己定义：<code>prev</code> 控制上一张的位置，<code>next</code> 控制下一张的位置，每一侧都能单独设置 <code>translate</code>、<code>scale</code>、<code>rotate</code>、<code>opacity</code>。像电影选片墙一样——当前这张正对观众，左边一张缩小侧过去，右边一张放大压过来。</p>
+    <div class="wy-req">
+      <h3>✍️ 任务 6 要求</h3>
+      <p>初始化 <code>Swiper('#BzySw6', { ... })</code>：<b>① 上一张缩小左移并带角度</b>（prev：负向 translate + 更小的 scale + rotate）<b>② 下一张放大右移进场</b>（next：正向 translate + 比上一张更大的 scale，切换时放大到 1）<b>③ 整体像电影选片墙</b>（配合 shadowPerProgress 景深与透明度）。</p>
+      <span class="wy-star">⭐ 验证标准：拖动或点圆点时，左侧卡片缩小倾斜退到背后、右侧卡片更大且向右探出，切换时被放大推到正中</span>
+    </div>
+    <p class="bzy_fx-note">🎬 与演示四的 creative 按钮相比，这里把舞台收窄成 16:9、并让两侧卡片<b>退到当前大图背后</b>（translateZ 取负值），所以当前这张不会被遮住、两侧选片卡也能完整露出，不会被容器边缘裁掉。</p>
+    <div class="wy-demo">
+      <span class="wy-demo-tag">🎛️ 演示六 · creative 电影选片墙（#BzySw6 · 上一张缩小左倾 / 下一张放大右移）</span>
+      <div class="wy-swiper bzy_wall">
+        <div class="swiper" id="BzySw6">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="wy-cap"><h3>天宫空间站</h3><p>选片墙 · 第 1 帧</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>选片墙 · 第 2 帧</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>选片墙 · 第 3 帧</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>选片墙 · 第 4 帧</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>选片墙 · 第 5 帧</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aida_modu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>选片墙 · 第 6 帧</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 任务 7 -->
+  <div class="wy-sec">
+    <div class="wy-sec-head">
+      <span class="wy-no">7</span>
+      <h2>双击放大看细节<small>zoom 缩放模块 · 独立实例 #BzySw7</small></h2>
+    </div>
+    <p class="wy-txt">前六种都是"整张换"，这一种是"不换、只放大"：Swiper 自带的 <code>zoom</code> 模块能让图片原地缩放。结构上要多一层——把图片包进 <code>.swiper-zoom-container</code>，再打开 <code>zoom</code> 配置，<b>双击图片</b>就放大看细节，再双击还原。</p>
+    <div class="wy-req">
+      <h3>✍️ 任务 7 要求</h3>
+      <p>初始化 <code>Swiper('#BzySw7', { ... })</code>：<b>① 开启 zoom</b>（<code>enabled: true</code>）<b>② 最大放大 3 倍</b>（<code>maxRatio: 3</code>）<b>③ 双击来回切换放大 / 还原</b>（<code>toggle: true</code>）。</p>
+      <span class="wy-star">⭐ 验证标准：双击图片放大 3 倍、放大后可拖动查看细节，再双击恢复原样</span>
+    </div>
+    <p class="bzy_fx-note">🔍 关键在 <b>.swiper-zoom-container</b>：zoom 要靠它计算缩放基点，少了这一层双击没反应；<b>toggle: true</b> 才是"双击放大、再双击还原"，不写就只能放大不能收回。</p>
+    <div class="wy-demo">
+      <span class="wy-demo-tag">🎛️ 演示七 · 双击图片放大（#BzySw7 · zoom + toggle）</span>
+      <div class="wy-swiper bzy_zoom">
+        <div class="swiper" id="BzySw7">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><div class="swiper-zoom-container"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"></div><div class="wy-cap"><h3>天宫空间站</h3><p>双击图片，放大看舱段细节</p></div></div>
+            <div class="swiper-slide"><div class="swiper-zoom-container"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"></div><div class="wy-cap"><h3>复兴号动车组</h3><p>双击放大，看清车头流线</p></div></div>
+            <div class="swiper-slide"><div class="swiper-zoom-container"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"></div><div class="wy-cap"><h3>C919 大飞机</h3><p>双击放大，再双击还原</p></div></div>
+            <div class="swiper-slide"><div class="swiper-zoom-container"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"></div><div class="wy-cap"><h3>奋斗者号</h3><p>放大后拖动，查看任意角落</p></div></div>
+            <div class="swiper-slide"><div class="swiper-zoom-container"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"></div><div class="wy-cap"><h3>中国天眼 FAST</h3><p>最大可放大到 3 倍</p></div></div>
+            <div class="swiper-slide"><div class="swiper-zoom-container"><img src="swiper-imgs/aida_modu_1.jpg" alt="爱达·魔都号"></div><div class="wy-cap"><h3>爱达·魔都号</h3><p>双击缩放 · 细节看得更清楚</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="wy-back"><a href="../24002120503-白赜宇/webprojectbzy/24002120503-白赜宇/index.html">← 返回课堂实践中心</a></div>
 
   <footer>Swiper 课堂操作任务 · 大国重器光影展（学生版） · 高级网页设计 · 2026-2027-1</footer>
@@ -255,6 +352,9 @@
  *       任务一（提示词工程）: wySw4 初始 effect 按新要求设为 cube
  *       任务二（creative）: 新增第 7 个按钮「creative 电影墙」自定义变换
  *       任务三（超纲）: 演示四加入 keyboard 键盘 ← → 控制
+ *       任务5: 演示五 #BzySw4 复制改造（loop + 3.2秒自动 + 圆点可点 + cube）
+ *       任务6: 演示六 #BzySw6 creative 电影选片墙（上一张缩小左倾 / 下一张放大右移）
+ *       任务7: 演示七 #BzySw7 zoom 双击缩放（swiper-zoom-container + toggle）
  */
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -353,6 +453,64 @@ document.addEventListener('DOMContentLoaded', function () {
       // 销毁旧实例 → 用新 effect 重建（配置全部由 bzy_getSw4Config 统一提供）
       bzy_applySw4(bzyBtn.dataset.fx);
     });
+  });
+
+
+  // ── 任务 5：复制演示四改造，独立实例 #BzySw4 ──
+  // ① loop 无缝循环；③ pagination+clickable 圆点可点；④ effect:'cube' 初始即为 3D 立方体
+  var bzy_sw5 = new Swiper('#BzySw4', {
+    loop: true,
+    speed: 800,
+    effect: 'cube',
+    pagination: { el: '#BzyPag4', clickable: true },
+    // ② 每 3.2 秒自动翻页；disableOnInteraction:false 让手动拖动后自动播放继续
+    autoplay: { delay: 3200, disableOnInteraction: false }
+  });
+
+  // 任务 5 补充：点圆点后重置自动播放计时，避免刚跳过去又被自动翻页抢走（自动播放本身不停止）
+  document.querySelectorAll('#BzyPag4 .swiper-pagination-bullet').forEach(function (bzyDot) {
+    bzyDot.addEventListener('click', function () {
+      bzy_sw5.autoplay.stop();
+      bzy_sw5.autoplay.start();
+    });
+  });
+
+
+  // ── 任务 6：creative 电影选片墙，独立实例 #BzySw6 ──
+  // 上一张：缩小 + 左移 + 逆时针倾斜 + 退到背后；下一张：更大一号 + 右移 + 顺时针倾斜
+  var bzy_sw6 = new Swiper('#BzySw6', {
+    loop: true,
+    speed: 900,
+    effect: 'creative',
+    creativeEffect: {
+      limitProgress: 1,          // 只让紧邻的前后两张参与变换，再远的卡片叠在其后不溢出
+      shadowPerProgress: true,   // 按层级叠加阴影，强化景深
+      prev: {
+        shadow: true,
+        origin: 'right center',
+        translate: ['-70%', 0, -280],  // 向左移出更多并沿 Z 轴后退，压到当前大图背后
+        scale: 0.7,                    // 上一张更小
+        rotate: [0, 0, -12],           // 逆时针带角度侧过去
+        opacity: 0.85
+      },
+      next: {
+        shadow: true,
+        origin: 'left center',
+        translate: ['57%', 0, -200],   // 向右探出更多（不遮住当前大图）
+        scale: 0.82,                   // 比上一张大一号，切换时再放大到 1 进场
+        rotate: [0, 0, 10],            // 顺时针带角度
+        opacity: 0.9
+      }
+    }
+  });
+
+
+  // ── 任务 7：zoom 双击缩放，独立实例 #BzySw7 ──
+  // ① zoom.enabled 开启缩放；② maxRatio 最大放大 3 倍；③ toggle 让双击在放大 / 还原之间切换
+  var bzy_sw7 = new Swiper('#BzySw7', {
+    loop: true,
+    speed: 600,
+    zoom: { enabled: true, maxRatio: 3, minRatio: 1, toggle: true }
   });
 
 });
