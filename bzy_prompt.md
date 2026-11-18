@@ -216,5 +216,20 @@
 - **时间**: 2026-11-18 14:07
 - **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
 - **提示词**: 为什么我的github页面还没出来
+- **执行结果**: 排查发现 GitHub Pages 最新构建状态为 errored（Page build failed.），站点 404；已保留 .nojekyll，将 Pages 恢复为 master 分支部署并通过 API 重新触发构建，最新状态 built，首页与 11.18 五个页面均返回 200
+---
+- **时间**: 2026-11-18 14:12
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: `C:\Users\Bzy13\Documents\WXWork\1688856772582044\Cache\Video\2026-11\video(15).mp4`把这个视频嵌入到`d:/桌面/网页开发与设计/11.18/task3.html`网页的最下面
+- **执行结果**: 视频复制为 11.18/task3-demo.mp4（16.8MB，MP4/mp42），task3.html 底部新增"操作演示"区块，使用原生 video 标签嵌入并支持播放控制
+---
+- **时间**: 2026-11-18 14:13
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: `C:\Users\Bzy13\Documents\WXWork\1688856772582044\Cache\Video\2026-11\video(16).mp4`把这个视频嵌入到`d:/桌面/网页开发与设计/11.18/task4.html`网页的最下面
+- **执行结果**: 视频复制为 11.18/task4-demo.mp4（27.1MB，MP4/mp42），task4.html 底部新增"操作演示"区块，使用原生 video 标签嵌入并支持播放控制
+---
+- **时间**: 2026-11-18 14:14
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 好的，发布到 GitHub
 - **执行结果**: （执行中）
 ---

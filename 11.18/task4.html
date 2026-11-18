@@ -79,6 +79,20 @@
     box-shadow:0 6px 18px rgba(31,41,55,.06);margin-top:8px;
   }
   .bzy_note b{color:#0f2b5b}
+
+  /* 操作演示视频 */
+  .bzy_demo{
+    margin-top:26px;background:#fff;border:1px solid #e8ecf5;border-radius:18px;
+    padding:24px 28px;box-shadow:0 6px 18px rgba(31,41,55,.06);
+  }
+  .bzy_demo h2{font-size:18px;color:#0f2b5b;letter-spacing:1px;margin-bottom:14px}
+  .bzy_video{
+    display:block;width:100%;max-height:560px;border-radius:12px;
+    background:#0d1220;outline:none;
+  }
+  @media (max-width:640px){
+    .bzy_demo{padding:18px}
+  }
 </style>
 </head>
 <body>
@@ -110,6 +124,14 @@
       <b>为什么必须做降级？</b><br>
       传感器事件只在真机上可靠：电脑浏览器多数收不到 devicemotion，部分机型或隐私设置下也没有权限。如果不做降级，这些用户只会看到一片空白，不知道是坏了还是没反应。所以这里在收不到数据时提示"当前设备不支持"，并保留"点我抽一次"按钮，保证功能在任何设备上都能走通。
     </div>
+  </section>
+
+  <section class="bzy_demo">
+    <h2>操作演示</h2>
+    <video class="bzy_video" controls playsinline preload="metadata">
+      <source src="task4-demo.mp4" type="video/mp4">
+      你的浏览器不支持 HTML5 视频播放。
+    </video>
   </section>
 </div>
 
