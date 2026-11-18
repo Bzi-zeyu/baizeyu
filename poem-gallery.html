@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!--
+作者: 白赜宇
+创建时间: 2026-11-13 14:01
+使用模型: Trae AI Assistant
+功能: 诗词图鉴页——以"上图下文"卡片展示 db/db.json 中 poems 的图片、标题与正文，数据由本地 server.js 提供
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>诗词图鉴 · 上图下文</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    color:#1f2937;min-height:100vh;
+    background:
+      radial-gradient(circle at 82% 6%,rgba(29,91,191,.10),transparent 32%),
+      radial-gradient(circle at 12% 92%,rgba(232,137,12,.08),transparent 30%),
+      #f6f8fc;
+  }
+
+  /* 首页入口 */
+  .bzy-home-link{
+    position:fixed;left:22px;top:20px;z-index:10;text-decoration:none;
+    font-size:14px;font-weight:bold;color:#0f2b5b;background:#fff;
+    border:1px solid #dbe4ff;border-radius:999px;padding:9px 20px;
+    box-shadow:0 6px 16px rgba(15,43,91,.10);transition:transform .2s,box-shadow .2s;
+  }
+  .bzy-home-link:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(15,43,91,.16)}
+
+  .bzy-page{max-width:1080px;margin:0 auto;padding:52px 22px 60px}
+
+  /* 页头 */
+  .bzy-head{
+    background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;
+    border-radius:20px;padding:34px 36px;margin-bottom:26px;
+    box-shadow:0 14px 32px rgba(15,43,91,.28);
+  }
+  .bzy-head .bzy-badge{
+    display:inline-block;padding:5px 14px;border-radius:999px;font-size:13px;letter-spacing:2px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);margin-bottom:14px;
+  }
+  .bzy-head h1{font-size:30px;letter-spacing:1px;line-height:1.4}
+  .bzy-head h1 b{color:#ffd166}
+  .bzy-head p{margin-top:12px;font-size:14.5px;line-height:2;color:#d9e3f5}
+  .bzy-head code{
+    background:rgba(255,255,255,.16);border-radius:5px;padding:1px 7px;
+    font-family:Consolas,monospace;font-size:13px;color:#ffe9b0;
+  }
+
+  /* 卡片网格：每张卡片上图下文 */
+  .bzy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+  .bzy-card{
+    background:#fff;border-radius:18px;overflow:hidden;border:1px solid #e8ecf5;
+    box-shadow:0 6px 18px rgba(31,41,55,.07);
+    transition:transform .25s,box-shadow .25s;
+  }
+  .bzy-card:hover{transform:translateY(-5px);box-shadow:0 16px 32px rgba(15,43,91,.16)}
+
+  /* 上半部分：图片 */
+  .bzy-pic{position:relative;aspect-ratio:4/3;overflow:hidden;background:#eef2f9}
+  .bzy-pic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s}
+  .bzy-card:hover .bzy-pic img{transform:scale(1.06)}
+  .bzy-no{
+    position:absolute;left:12px;top:12px;width:30px;height:30px;border-radius:10px;
+    background:rgba(15,43,91,.78);color:#fff;font-size:14px;font-weight:bold;
+    display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);
+  }
+
+  /* 下半部分：标题 + 正文 */
+  .bzy-body{padding:18px 20px 22px}
+  .bzy-body h2{font-size:18px;color:#0f2b5b;letter-spacing:.5px;margin-bottom:10px}
+  .bzy-body p{font-size:14px;line-height:1.9;color:#5b6b85}
+  .bzy-body .bzy-line{width:34px;height:3px;border-radius:3px;background:#e8890c;margin-bottom:12px}
+
+  /* ===== 本次新增内容统一用橙色标明 ===== */
+  .bzy-card-new{border-color:#f3c184;box-shadow:0 8px 22px rgba(232,137,12,.16)}
+  .bzy-card-new:hover{box-shadow:0 16px 32px rgba(232,137,12,.24)}
+  .bzy-new-tag{
+    position:absolute;right:12px;top:12px;font-size:12px;font-weight:bold;color:#fff;
+    background:linear-gradient(135deg,#f59e0b,#e8890c);border-radius:999px;padding:4px 12px;
+    box-shadow:0 4px 10px rgba(232,137,12,.35);
+  }
+  .bzy-author{margin-top:8px;font-size:13px;font-weight:bold;color:#c26a00;letter-spacing:.5px}
+
+  /* 作者列表：新增接口 /api/authors */
+  .bzy-authors{
+    display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+    background:#fff7ea;border:1px solid #fbd9a5;border-radius:16px;
+    padding:16px 20px;margin-bottom:26px;
+  }
+  .bzy-authors .bzy-authors-label{font-size:14px;font-weight:bold;color:#b45309}
+  .bzy-chip{
+    display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #f0b26b;
+    color:#9a3412;border-radius:999px;padding:6px 14px;font-size:13px;
+  }
+  .bzy-chip b{color:#e8890c;font-size:12px}
+
+  /* 搜索与排序工具栏 */
+  .bzy-toolbar{
+    display:flex;flex-wrap:wrap;align-items:center;gap:12px;
+    background:#fff;border:1px solid #e8ecf5;border-radius:16px;
+    padding:14px 16px;margin-bottom:18px;box-shadow:0 6px 18px rgba(31,41,55,.06);
+  }
+  .bzy-search{
+    flex:1;min-width:220px;display:flex;align-items:center;
+    background:#f4f7fc;border:1.5px solid #dbe4ff;border-radius:999px;
+    padding:10px 18px;transition:border-color .2s,background .2s;
+  }
+  .bzy-search:focus-within{border-color:#1d5bbf;background:#fff}
+  .bzy-search input{
+    flex:1;border:0;background:transparent;outline:none;
+    font-size:14px;font-family:inherit;color:#1f2937;
+  }
+  .bzy-search input::placeholder{color:#9aa7bd}
+  .bzy-sort{
+    border:1.5px solid #c7d8f8;background:#fff;color:#1d5bbf;font-size:14px;
+    padding:10px 20px;border-radius:999px;cursor:pointer;font-family:inherit;transition:all .2s;
+  }
+  .bzy-sort:hover{background:#eef4ff}
+  .bzy-count{font-size:13px;color:#6b7187}
+
+  /* 加载 / 出错提示 */
+  .bzy-tip{
+    grid-column:1/-1;text-align:center;font-size:14px;line-height:2;
+    color:#6b7187;background:#fff;border:1px dashed #c7d8f8;border-radius:16px;padding:38px 20px;
+  }
+  .bzy-tip.bzy-error{color:#b42318;background:#fef3f2;border-color:#fda29b}
+  .bzy-tip code{
+    background:#eef2ff;color:#1d4ed8;border-radius:5px;padding:1px 7px;
+    font-family:Consolas,monospace;font-size:13px;
+  }
+
+  footer{text-align:center;margin-top:36px;color:#9ca3af;font-size:13px;line-height:2}
+
+  @media (max-width:560px){
+    .bzy-home-link{left:14px;top:14px;padding:8px 16px;font-size:13px}
+    .bzy-page{padding:64px 16px 44px}
+    .bzy-head{padding:26px 22px}
+    .bzy-head h1{font-size:24px}
+    .bzy-grid{gap:16px}
+  }
+</style>
+</head>
+<body>
+
+<a id="bzy_homeLink" class="bzy-home-link" href="index.html">← 返回首页</a>
+
+<div class="bzy-page">
+
+  <header class="bzy-head">
+    <span class="bzy-badge">本 地 数 据 · NODE 服 务</span>
+    <h1>诗词图鉴 · <b>上图下文</b></h1>
+    <p>本页的图片、标题和正文全部来自项目中的 <code>db/db.json</code> → <code>poems</code>，
+    由本地数据服务器 <code>db/server.js</code>（端口 3004）通过接口 <code>/api/poems</code> 提供。</p>
+    <p>启动方式：在项目根目录执行 <code>node db/server.js</code>，再访问
+    <code>http://localhost:3004/poem-gallery.html</code>。</p>
+  </header>
+
+  <!-- 搜索与排序工具栏：数据已缓存在内存，筛选/排序不再请求服务器 -->
+  <div class="bzy-toolbar">
+    <label class="bzy-search">
+      <input id="bzy_searchInput" type="search" placeholder="输入关键字，搜索标题或内容">
+    </label>
+    <button id="bzy_sortBtn" class="bzy-sort" type="button">按标题长度 ↑</button>
+    <span class="bzy-count" id="bzy_count">共 0 首</span>
+  </div>
+
+  <!-- 作者列表：来自新增接口 /api/authors，用橙色标明为本次新增 -->
+  <section class="bzy-authors" id="bzy_authors">
+    <span class="bzy-authors-label">作者列表 /api/authors</span>
+    <span class="bzy-chip">正在加载…</span>
+  </section>
+
+  <main class="bzy-grid" id="bzy_poemList">
+    <p class="bzy-tip" id="bzy_status">正在从本地服务器加载数据…</p>
+  </main>
+
+  <footer>数据源 db/db.json · 接口 /api/poems · /api/authors · 图片代理 /api/pic</footer>
+</div>
+
+<script>
+  // 数据接口地址
+  var BZY_API_URL = 'http://localhost:3004/api/poems';
+  // 作者列表接口地址（新增）
+  var BZY_AUTHORS_URL = 'http://localhost:3004/api/authors';
+  // 图片代理接口：图片统一由本地服务器代取，避免 Gitee 图床按 Referer 拦截
+  var BZY_PIC_PROXY = 'http://localhost:3004/api/pic?url=';
+  // 页面级状态：fetch 一次后缓存在内存，搜索与排序都在本地处理
+  var bzy_allPoems = [];
+  var bzy_sortOn = false;
+  var bzy_sortDesc = false;
+
+  /**
+   * 在列表区域显示提示文字（加载中 / 出错）
+   * @param {string} bzyText - 提示文案
+   * @param {boolean} bzyIsError - 是否为错误提示
+   * @returns {void}
+   */
+  function bzy_showStatus(bzyText, bzyIsError) {
+    var bzyStatus = document.getElementById('bzy_status');
+    bzyStatus.className = bzyIsError ? 'bzy-tip bzy-error' : 'bzy-tip';
+    bzyStatus.textContent = bzyText;
+  }
+
+  /**
+   * 创建单张"上图下文"卡片
+   * @param {Object} bzyPoem - 单条诗词数据，包含 pic / title / content
+   * @param {number} bzyIndex - 序号，从 0 开始，用于左上角编号
+   * @returns {HTMLElement} 组装好的卡片元素
+   */
+  function bzy_createCard(bzyPoem, bzyIndex) {
+    var bzyCard = document.createElement('article');
+    // isNew 为 true 的条目用橙色边框标注（本次新增的诗词）
+    bzyCard.className = bzyPoem.isNew ? 'bzy-card bzy-card-new' : 'bzy-card';
+
+    // 上半部分：图片
+    var bzyPic = document.createElement('div');
+    bzyPic.className = 'bzy-pic';
+
+    var bzyImg = document.createElement('img');
+    // 走本地代理接口取图，db.json 里仍保存原始外链
+    bzyImg.src = BZY_PIC_PROXY + encodeURIComponent(bzyPoem.pic);
+    bzyImg.alt = bzyPoem.title || '诗词配图';
+    bzyImg.loading = 'lazy';
+
+    var bzyNo = document.createElement('span');
+    bzyNo.className = 'bzy-no';
+    bzyNo.textContent = bzyIndex + 1;
+
+    bzyPic.appendChild(bzyImg);
+    bzyPic.appendChild(bzyNo);
+
+    // 新增条目右上角加橙色"新增"角标
+    if (bzyPoem.isNew) {
+      var bzyNewTag = document.createElement('span');
+      bzyNewTag.className = 'bzy-new-tag';
+      bzyNewTag.textContent = '新增';
+      bzyPic.appendChild(bzyNewTag);
+    }
+
+    // 下半部分：标题 + 正文
+    var bzyBody = document.createElement('div');
+    bzyBody.className = 'bzy-body';
+
+    var bzyLine = document.createElement('div');
+    bzyLine.className = 'bzy-line';
+
+    var bzyTitle = document.createElement('h2');
+    bzyTitle.textContent = bzyPoem.title || '未命名';
+
+    var bzyAuthor = document.createElement('p');
+    bzyAuthor.className = 'bzy-author';
+    bzyAuthor.textContent = '作者 · ' + (bzyPoem.author || '佚名');
+
+    var bzyContent = document.createElement('p');
+    bzyContent.textContent = bzyPoem.content || '';
+
+    bzyBody.appendChild(bzyLine);
+    bzyBody.appendChild(bzyTitle);
+    bzyBody.appendChild(bzyAuthor);
+    bzyBody.appendChild(bzyContent);
+
+    bzyCard.appendChild(bzyPic);
+    bzyCard.appendChild(bzyBody);
+    return bzyCard;
+  }
+
+  /**
+   * 把诗词数组渲染成卡片列表
+   * @param {Array} bzyPoems - 要显示的诗词数组，每项包含 pic / title / content
+   * @param {string} [bzyEmptyText] - 数组为空时的提示文案
+   * @returns {void}
+   */
+  function bzy_renderPoems(bzyPoems, bzyEmptyText) {
+    var bzyList = document.getElementById('bzy_poemList');
+    bzyList.innerHTML = '';
+
+    if (!bzyPoems.length) {
+      var bzyEmpty = document.createElement('p');
+      bzyEmpty.className = 'bzy-tip';
+      bzyEmpty.textContent = bzyEmptyText || 'db/db.json 里暂时没有 poems 数据。';
+      bzyList.appendChild(bzyEmpty);
+      return;
+    }
+
+    for (var bzyI = 0; bzyI < bzyPoems.length; bzyI++) {
+      bzyList.appendChild(bzy_createCard(bzyPoems[bzyI], bzyI));
+    }
+  }
+
+  /**
+   * 按关键字筛选 + 按标题长度排序，然后重新渲染（全部在内存中完成，不请求服务器）
+   * @returns {void}
+   */
+  function bzy_applyFilter() {
+    var bzyKeyword = document.getElementById('bzy_searchInput').value.trim();
+    var bzyList = bzy_allPoems.filter(function (bzyPoem) {
+      var bzyTitle = bzyPoem.title || '';
+      var bzyContent = bzyPoem.content || '';
+      return bzyTitle.indexOf(bzyKeyword) !== -1 || bzyContent.indexOf(bzyKeyword) !== -1;
+    });
+
+    if (bzy_sortOn) {
+      bzyList = bzyList.slice().sort(function (bzyA, bzyB) {
+        var bzyDiff = (bzyA.title || '').length - (bzyB.title || '').length;
+        return bzy_sortDesc ? -bzyDiff : bzyDiff;
+      });
+    }
+
+    bzy_renderPoems(bzyList, '没有找到匹配的诗词，换个关键字试试。');
+    document.getElementById('bzy_count').textContent = '共 ' + bzyList.length + ' 首';
+  }
+
+  /**
+   * 从本地服务器请求 poems 数据并渲染页面
+   * @returns {Promise<void>} 加载与渲染完成后结束
+   */
+  async function bzy_loadPoems() {
+    try {
+      var bzyRes = await fetch(BZY_API_URL, { cache: 'no-store' });
+      if (!bzyRes.ok) {
+        throw new Error('HTTP ' + bzyRes.status);
+      }
+      var bzyPoems = await bzyRes.json();
+      bzy_allPoems = Array.isArray(bzyPoems) ? bzyPoems : [];
+      bzy_applyFilter();
+    } catch (bzyErr) {
+      bzy_showStatus('数据加载失败：' + bzyErr.message +
+        '。请先在项目根目录运行 node db/server.js，再通过 http://localhost:3004/poem-gallery.html 访问本页。', true);
+    }
+  }
+
+  /**
+   * 把作者数组渲染成橙色标签（数据来自 /api/authors 接口）
+   * @param {Array} bzyAuthors - 作者数组，每项包含 name 与 count
+   * @returns {void}
+   */
+  function bzy_renderAuthors(bzyAuthors) {
+    var bzyBox = document.getElementById('bzy_authors');
+    bzyBox.innerHTML = '';
+
+    var bzyLabel = document.createElement('span');
+    bzyLabel.className = 'bzy-authors-label';
+    bzyLabel.textContent = '作者列表 /api/authors';
+    bzyBox.appendChild(bzyLabel);
+
+    if (!bzyAuthors.length) {
+      var bzyNone = document.createElement('span');
+      bzyNone.className = 'bzy-chip';
+      bzyNone.textContent = '暂无作者数据';
+      bzyBox.appendChild(bzyNone);
+      return;
+    }
+
+    for (var bzyI = 0; bzyI < bzyAuthors.length; bzyI++) {
+      var bzyChip = document.createElement('span');
+      bzyChip.className = 'bzy-chip';
+      bzyChip.textContent = bzyAuthors[bzyI].name;
+
+      var bzyCount = document.createElement('b');
+      bzyCount.textContent = bzyAuthors[bzyI].count + ' 首';
+      bzyChip.appendChild(bzyCount);
+      bzyBox.appendChild(bzyChip);
+    }
+  }
+
+  /**
+   * 请求 /api/authors 接口并渲染作者列表
+   * @returns {Promise<void>} 加载与渲染完成后结束
+   */
+  async function bzy_loadAuthors() {
+    try {
+      var bzyRes = await fetch(BZY_AUTHORS_URL, { cache: 'no-store' });
+      if (!bzyRes.ok) {
+        throw new Error('HTTP ' + bzyRes.status);
+      }
+      var bzyData = await bzyRes.json();
+      bzy_renderAuthors(Array.isArray(bzyData.authors) ? bzyData.authors : []);
+    } catch (bzyErr) {
+      var bzyBox = document.getElementById('bzy_authors');
+      bzyBox.innerHTML = '';
+      var bzyLabel = document.createElement('span');
+      bzyLabel.className = 'bzy-authors-label';
+      bzyLabel.textContent = '作者列表 /api/authors';
+      var bzyFail = document.createElement('span');
+      bzyFail.className = 'bzy-chip';
+      bzyFail.textContent = '加载失败：' + bzyErr.message;
+      bzyBox.appendChild(bzyLabel);
+      bzyBox.appendChild(bzyFail);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    bzy_loadPoems();
+    bzy_loadAuthors();
+
+    // 输入即筛选：只处理内存里的 bzy_allPoems，不重新请求接口
+    document.getElementById('bzy_searchInput').addEventListener('input', bzy_applyFilter);
+
+    // 排序按钮：第一次按标题升序，再点一次切降序
+    document.getElementById('bzy_sortBtn').addEventListener('click', function () {
+      if (bzy_sortOn) {
+        bzy_sortDesc = !bzy_sortDesc;
+      } else {
+        bzy_sortOn = true;
+        bzy_sortDesc = false;
+      }
+      this.textContent = bzy_sortDesc ? '按标题长度 ↓' : '按标题长度 ↑';
+      bzy_applyFilter();
+    });
+  });</script>
+</body>
+</html>

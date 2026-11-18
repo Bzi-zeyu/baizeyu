@@ -158,3 +158,58 @@
 - **提示词**: 帮我把新的推送到 GitHub
 - **执行结果**: 使用 git-push-github 技能提交并推送 swiper-task.html 等改动到 GitHub master
 ---
+- **时间**: 2026-11-13 14:01
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 给我新建一个html文件，显示上图下文的结构，图片和文字通过本地启动服务器获取当前文件夹下面的db里面db.json的poems里面的图片，title和content。并给我生成server.js数据服务器文件，server.js放在db文件夹中。其中端口号为3004。
+- **执行结果**: 新建 poem-gallery.html（上图下文卡片，fetch localhost:3004/api/poems 渲染）；新建 db/server.js（纯 Node http，端口 3004，提供 /api/poems 接口 + 托管项目根目录静态文件）
+---
+- **时间**: 2026-11-13 14:10
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 请帮我生成 server.js 的图片代理接口代码
+- **执行结果**: db/server.js 新增 GET /api/pic?url= 图片代理：服务端无 Referer 拉取远程图片、跟随最多 3 次重定向、校验 content-type 为 image/*、带 8 秒超时与 1 天缓存，实测返回真实 image/jpeg
+---
+- **时间**: 2026-11-13 14:12
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 请帮我更新 HTML 文件，将图片源切换为代理接口
+- **执行结果**: poem-gallery.html 新增 BZY_PIC_PROXY 常量，img.src 改为 /api/pic?url=+encodeURIComponent(pic)，移除不再需要的 referrerPolicy；浏览器实测 4 张图片经代理正常显示
+---
+- **时间**: 2026-11-13 14:20
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 你没有把 poem-gallery.html 这个上传到 index 里啊，以后记住要是有新增的 html 就要加到 index 里
+- **执行结果**: 课程首页 index.html 三处补充诗词图鉴入口（course-list / module-card / footer-links）；AGENTS.md 强制规则新增"新增 HTML 必须同步加入课程首页三处入口"
+---
+- **时间**: 2026-11-13 14:26
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 在 db.json 的 poems 数组里新增 2 条数据（找诗词与配图地址）；再给 server.js 增加第二个接口 app.get('/api/authors', ...)，返回作者列表。然后这个部分的东西用颜色标明出来
+- **执行结果**: db.json 新增《望庐山瀑布》李白、《江雪》柳宗元（配图 img/1.jpg、img/5.jpg，均实测 200 image/jpeg）并给 6 首补 author 字段；server.js 新增 GET /api/authors（按作品数降序返回 { total, authors:[{name,count}] }）；poem-gallery.html 新增橙色作者标签栏、卡片作者行、新增卡片橙色边框与"新增"角标
+---
+- **时间**: 2026-11-13 14:32
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 页面顶部加一个搜索框，输入关键字后只显示标题或内容匹配的诗词（数据仍来自 fetch，不重新请求也可以）；再加一个"按标题长度排序"按钮
+- **执行结果**: poem-gallery.html 顶部新增搜索工具栏（bzy-searchInput）与按标题长度排序按钮（bzy_sortBtn，可切升序/降序），fetch 结果缓存到 bzy_allPoems，筛选与排序均在本地完成、不重复请求；空结果时提示"没有找到匹配的诗词"
+---
+- **时间**: 2026-11-18 13:44
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 现在帮我做一个'11.18日任务的网页'，然后将这个网页链接到index里，网页里先不做任何东西
+- **执行结果**: 新建 11.18/task.html（空壳页面，含首页返回入口与基础样式，暂不放置任何任务内容）；课程首页 index.html 三处补充"11.18 任务"入口（course-list / module-card / footer-links）
+---
+- **时间**: 2026-11-18 13:46
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 分析这个网页 https://spontaneous-valkyrie-4e4229.netlify.app/mobile-events-lesson ，回答三个问题：① 一次拖动里 touchmove 大约触发多少次、和距离有什么关系？② click 出现在 touchend 之前还是之后？③ 如果把 touchend 换成 touchcancel，会发生什么？，这个问题和答案放到他task里
+- **执行结果**: 抓取并分析课程页 https://spontaneous-valkyrie-4e4229.netlify.app/mobile-events-lesson ，在 11.18/task.html 中补充"任务一 事件侦探"的三问三答（touchmove 次数与距离、click 在 touchend 之后、touchend 换 touchcancel 的后果），附事件顺序条与提示；同步把首页卡片描述改为已含内容
+---
+- **时间**: 2026-11-18 13:51
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 然后还有三个任务我要把每个task都做一个网页，像task1这样命名，然后这4个任务在放到11.18任务的网页上，这个11.18任务的网页要链接到index上
+- **执行结果**: 11.18 目录新增 task1.html（原 task.html 重命名）、task2.html（滑动美食卡片）、task3.html（双指缩放查看器）、task4.html（摇一摇+降级）与 index.html 总览页；课程首页三处入口改为指向 11.18/index.html；本地 8090 端口实测总览页四卡片、任务三图片加载、任务四降级抽取均正常
+---
+- **时间**: 2026-11-18 13:56
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: `d:/桌面/网页开发与设计/11.18/index.html`把这个重新命名一下，防止和`d:/桌面/网页开发与设计/index.html`重复，以后生成网页也要注意
+- **执行结果**: 将 11.18/index.html 重命名为 11.18/tasks.html，课程首页三处入口同步更新；并把"新建页面不要命名为 index.html"写入项目记忆
+---
+- **时间**: 2026-11-18 13:57
+- **模型**: Trae AI Assistant（DeepSeek-V4.1-Flash）
+- **提示词**: 提交到github上，并且发布
+- **执行结果**: （执行中）
+---

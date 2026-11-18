@@ -13,6 +13,7 @@
 - **执行用户提示前**，先向 `bzy_prompt.md` 追加一条记录（时间、模型、提示词，有结果也记）。该文件是日志，不要删改历史条目。
 - 新写的 CSS 类名、id、JS 变量统一用 `bzy_` 前缀；修改旧文件时沿用该文件现有风格（仓库中大量类名实际用 `bzy-` 前缀）。
 - 每个新建 HTML 必须加入指向首页的入口 `<a id="bzy_homeLink" ...>← 返回首页</a>`，`href` 按页面深度指向对应 `index.html`；样式参考现有页面。
+- 每个新建 HTML 还必须同步在课程首页 `24002120503-白赜宇/webprojectbzy/24002120503-白赜宇/index.html` 的三处加入入口：侧边栏 `course-list`、模块卡片 `module-card`、页脚 `footer-links`，路径按层级用相对路径。
 - 例外：`1/starter-level*.html` 是照课堂 `target.html` 还原的模板，类名和 DOM id 必须保持原样，不要改成 `bzy_`。
 
 ## 注释规范

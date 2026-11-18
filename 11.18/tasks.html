@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!--
+作者: 白赜宇
+创建时间: 2026-11-18 13:51
+使用模型: Trae AI Assistant
+功能: 11.18 任务总览页，汇总四个移动端触摸交互任务并链到各自页面
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11.18 任务 · 移动端触摸交互</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    color:#1f2937;min-height:100vh;
+    background:
+      radial-gradient(circle at 82% 6%,rgba(29,91,191,.10),transparent 32%),
+      radial-gradient(circle at 12% 92%,rgba(232,137,12,.08),transparent 30%),
+      #f6f8fc;
+  }
+
+  /* 首页入口 */
+  .bzy_homeLink{
+    position:fixed;left:22px;top:20px;z-index:10;text-decoration:none;
+    font-size:14px;font-weight:bold;color:#0f2b5b;background:#fff;
+    border:1px solid #dbe4ff;border-radius:999px;padding:9px 20px;
+    box-shadow:0 6px 16px rgba(15,43,91,.10);transition:transform .2s,box-shadow .2s;
+  }
+  .bzy_homeLink:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(15,43,91,.16)}
+
+  .bzy_page{max-width:960px;margin:0 auto;padding:52px 22px 60px}
+
+  .bzy_head{
+    background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;
+    border-radius:20px;padding:34px 36px;margin-bottom:26px;
+    box-shadow:0 14px 32px rgba(15,43,91,.28);
+  }
+  .bzy_head .bzy_badge{
+    display:inline-block;padding:5px 14px;border-radius:999px;font-size:13px;letter-spacing:2px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);margin-bottom:14px;
+  }
+  .bzy_head h1{font-size:30px;letter-spacing:1px;line-height:1.4}
+  .bzy_head h1 b{color:#ffd166}
+  .bzy_head p{margin-top:12px;font-size:14.5px;line-height:2;color:#d9e3f5}
+
+  .bzy_grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+  .bzy_taskCard{
+    display:block;text-decoration:none;color:inherit;background:#fff;
+    border:1px solid #e8ecf5;border-radius:18px;padding:24px;
+    box-shadow:0 6px 18px rgba(31,41,55,.06);
+    transition:transform .2s,box-shadow .2s,border-color .2s;
+  }
+  .bzy_taskCard:hover{transform:translateY(-5px);box-shadow:0 16px 32px rgba(15,43,91,.16);border-color:#c9d8ff}
+
+  .bzy_taskTop{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .bzy_taskTag{font-size:13px;font-weight:bold;color:#1d5bbf;letter-spacing:1px}
+  .bzy_stars{font-size:12px;color:#f0a92b;letter-spacing:1px}
+  .bzy_taskCard h2{font-size:19px;color:#0f2b5b;margin-bottom:10px}
+  .bzy_taskCard p{font-size:13.5px;line-height:1.9;color:#5b6b85}
+  .bzy_enter{
+    display:inline-block;margin-top:16px;font-size:13.5px;font-weight:bold;color:#1d5bbf;
+  }
+  .bzy_taskCard:hover .bzy_enter{color:#0f2b5b}
+
+  .bzy_footer{text-align:center;font-size:13px;color:#8894a8;line-height:1.9;margin-top:26px}
+</style>
+</head>
+<body>
+
+<a id="bzy_homeLink" class="bzy_homeLink" href="../index.html">← 返回首页</a>
+
+<div class="bzy_page">
+  <header class="bzy_head">
+    <span class="bzy_badge">11.18 · 移动端触摸交互</span>
+    <h1>11.18 任务：<b>按下 · 滑动 · 缩放</b></h1>
+    <p>四个递进任务：观察记录 → 手势实现 → 综合交互 → 设备能力与降级。手机打开体验最佳，桌面可用 DevTools 设备模式。</p>
+  </header>
+
+  <section class="bzy_grid">
+    <a class="bzy_taskCard" href="task1.html">
+      <div class="bzy_taskTop"><span class="bzy_taskTag">任务一 · 事件侦探</span><span class="bzy_stars">⭐</span></div>
+      <h2>一次拖动到底发生了什么</h2>
+      <p>观察 touch 事件触发顺序，回答 touchmove 次数、click 时序与 touchcancel 三个问题。</p>
+      <span class="bzy_enter">进入任务 →</span>
+    </a>
+
+    <a class="bzy_taskCard" href="task2.html">
+      <div class="bzy_taskTop"><span class="bzy_taskTag">任务二 · 手势卡片</span><span class="bzy_stars">⭐⭐</span></div>
+      <h2>左右滑动切换美食</h2>
+      <p>4 道中华美食卡片，40px 阈值识别滑动，0.3s 过渡动画与 300ms 冷却防连跳。</p>
+      <span class="bzy_enter">进入任务 →</span>
+    </a>
+
+    <a class="bzy_taskCard" href="task3.html">
+      <div class="bzy_taskTop"><span class="bzy_taskTag">任务三 · 图片查看器</span><span class="bzy_stars">⭐⭐⭐</span></div>
+      <h2>双指缩放 + 双击放大 + 拖动</h2>
+      <p>1x～4x 以两指中点缩放，双击切换 1x/2x，放大后单指拖动并限制在边界内。</p>
+      <span class="bzy_enter">进入任务 →</span>
+    </a>
+
+    <a class="bzy_taskCard" href="task4.html">
+      <div class="bzy_taskTop"><span class="bzy_taskTag">任务四 · 摇一摇彩蛋</span><span class="bzy_stars">⭐⭐⭐⭐</span></div>
+      <h2>摇一摇抽今日菜谱</h2>
+      <p>devicemotion 合成加速度判定摇动，1.5s 冷却，含 iOS 权限申请与无传感器降级。</p>
+      <span class="bzy_enter">进入任务 →</span>
+    </a>
+  </section>
+
+  <p class="bzy_footer">白赜宇 · 高级网页设计课堂实践 · 2026-2027-1</p>
+</div>
+
+</body>
+</html>

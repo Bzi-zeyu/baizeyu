@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<!--
+作者: 白赜宇
+创建时间: 2026-11-18 13:51
+使用模型: Trae AI Assistant
+功能: 11.18 任务二——中华美食手势卡片，左右滑动切换 4 道菜
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11.18 任务二 · 手势卡片</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    color:#1f2937;min-height:100vh;
+    background:
+      radial-gradient(circle at 82% 6%,rgba(29,91,191,.10),transparent 32%),
+      radial-gradient(circle at 12% 92%,rgba(232,137,12,.08),transparent 30%),
+      #f6f8fc;
+  }
+
+  /* 首页入口 */
+  .bzy_homeLink{
+    position:fixed;left:22px;top:20px;z-index:10;text-decoration:none;
+    font-size:14px;font-weight:bold;color:#0f2b5b;background:#fff;
+    border:1px solid #dbe4ff;border-radius:999px;padding:9px 20px;
+    box-shadow:0 6px 16px rgba(15,43,91,.10);transition:transform .2s,box-shadow .2s;
+  }
+  .bzy_homeLink:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(15,43,91,.16)}
+
+  .bzy_page{max-width:960px;margin:0 auto;padding:52px 22px 60px}
+
+  .bzy_head{
+    background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;
+    border-radius:20px;padding:30px 34px;margin-bottom:24px;
+    box-shadow:0 14px 32px rgba(15,43,91,.28);
+  }
+  .bzy_head .bzy_badge{
+    display:inline-block;padding:5px 14px;border-radius:999px;font-size:13px;letter-spacing:1px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);margin-bottom:12px;
+  }
+  .bzy_head h1{font-size:26px;letter-spacing:1px;line-height:1.4}
+  .bzy_head h1 b{color:#ffd166}
+  .bzy_head p{margin-top:10px;font-size:14px;line-height:1.9;color:#d9e3f5}
+
+  /* 演示区 */
+  .bzy_stage{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .bzy_card{
+    width:min(92vw,360px);height:300px;border-radius:22px;
+    display:flex;flex-direction:column;justify-content:flex-end;
+    padding:28px;color:#fff;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#f6b26b,#d35400);
+    box-shadow:0 18px 38px rgba(15,43,91,.20);
+    touch-action:pan-y;user-select:none;-webkit-user-select:none;
+    transition:background .3s;
+  }
+  .bzy_card::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 75% 18%,rgba(255,255,255,.32),transparent 55%);
+  }
+  .bzy_card .bzy_cardIndex{
+    position:absolute;top:20px;left:24px;font-size:13px;letter-spacing:1px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
+    border-radius:999px;padding:4px 12px;
+  }
+  .bzy_card .bzy_dishName{font-size:26px;letter-spacing:2px;position:relative}
+  .bzy_card .bzy_dishDesc{margin-top:8px;font-size:13.5px;line-height:1.8;color:rgba(255,255,255,.9);position:relative}
+  .bzy_card.bzy_inLeft{animation:bzy_cardInLeft .3s ease}
+  .bzy_card.bzy_inRight{animation:bzy_cardInRight .3s ease}
+  @keyframes bzy_cardInLeft{from{transform:translateX(36px);opacity:0}to{transform:translateX(0);opacity:1}}
+  @keyframes bzy_cardInRight{from{transform:translateX(-36px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+  .bzy_counter{font-size:14px;color:#5b6b85;letter-spacing:1px}
+  .bzy_hint{
+    min-height:22px;font-size:14px;font-weight:bold;color:#c0392b;
+    transition:opacity .2s;opacity:0;
+  }
+  .bzy_hint.bzy_show{opacity:1}
+  .bzy_help{font-size:13px;color:#8894a8;text-align:center;line-height:1.9}
+</style>
+</head>
+<body>
+
+<a id="bzy_homeLink" class="bzy_homeLink" href="../index.html">← 返回首页</a>
+
+<div class="bzy_page">
+  <header class="bzy_head">
+    <span class="bzy_badge">11.18 任务 · 任务二 · ⭐⭐</span>
+    <h1>手势卡片：<b>左右滑动切换美食</b></h1>
+    <p>在卡片上左右滑动切换上一道 / 下一道。阈值 40px，切换带 0.3s 过渡，并有 300ms 冷却防止一次滑动跳两张。</p>
+  </header>
+
+  <section class="bzy_stage">
+    <article class="bzy_card" id="bzy_card">
+      <span class="bzy_cardIndex" id="bzy_cardIndex">第 1/4 张</span>
+      <h2 class="bzy_dishName" id="bzy_dishName">宫保鸡丁</h2>
+      <p class="bzy_dishDesc" id="bzy_dishDesc">鸡丁滑嫩、花生酥脆，酸甜微辣的经典川味。</p>
+    </article>
+    <p class="bzy_counter" id="bzy_counter">第 1/4 张</p>
+    <p class="bzy_hint" id="bzy_hint"></p>
+    <p class="bzy_help">手机打开体验最佳；桌面可在 DevTools 设备模式下用鼠标拖动。</p>
+  </section>
+</div>
+
+<script>
+  /**
+   * 菜品数据：名称、简介与卡片渐变主题
+   * @type {Array<{name:string, desc:string, theme:string}>}
+   */
+  var bzy_dishes = [
+    { name: '宫保鸡丁', desc: '鸡丁滑嫩、花生酥脆，酸甜微辣的经典川味。', theme: 'linear-gradient(135deg,#f6b26b,#d35400)' },
+    { name: '麻婆豆腐', desc: '麻辣鲜香、豆腐嫩滑，一勺红油拌饭最下饭。', theme: 'linear-gradient(135deg,#e57373,#b71c1c)' },
+    { name: '西湖醋鱼', desc: '鱼肉细嫩、芡汁酸甜，带着江南水乡的清雅。', theme: 'linear-gradient(135deg,#4fc3f7,#1565c0)' },
+    { name: '北京烤鸭', desc: '皮脆肉嫩、荷叶饼卷起葱丝甜面酱，一口满足。', theme: 'linear-gradient(135deg,#a1887f,#4e342e)' }
+  ];
+
+  var bzy_card = document.getElementById('bzy_card');
+  var bzy_cardIndex = document.getElementById('bzy_cardIndex');
+  var bzy_dishName = document.getElementById('bzy_dishName');
+  var bzy_dishDesc = document.getElementById('bzy_dishDesc');
+  var bzy_counter = document.getElementById('bzy_counter');
+  var bzy_hint = document.getElementById('bzy_hint');
+
+  var bzy_current = 0;          // 当前卡片下标
+  var bzy_locked = false;       // 冷却中，防止快速连滑跳两张
+  var bzy_startX = 0;           // 按下时的横坐标
+  var bzy_startY = 0;           // 按下时的纵坐标
+  var bzy_hintTimer = null;
+
+  /**
+   * 渲染当前卡片内容，并按滑动方向播放进入动画
+   * @param {number} step - 1 表示下一张，-1 表示上一张
+   */
+  function bzy_renderCard(step) {
+    var bzy_dish = bzy_dishes[bzy_current];
+    bzy_dishName.textContent = bzy_dish.name;
+    bzy_dishDesc.textContent = bzy_dish.desc;
+    bzy_card.style.background = bzy_dish.theme;
+    bzy_cardIndex.textContent = '第 ' + (bzy_current + 1) + '/' + bzy_dishes.length + ' 张';
+    bzy_counter.textContent = '第 ' + (bzy_current + 1) + '/' + bzy_dishes.length + ' 张';
+
+    bzy_card.classList.remove('bzy_inLeft', 'bzy_inRight');
+    void bzy_card.offsetWidth; // 强制重排，让动画可以重复播放
+    bzy_card.classList.add(step > 0 ? 'bzy_inLeft' : 'bzy_inRight');
+  }
+
+  /**
+   * 在卡片下方显示一条提示文字，1.2 秒后自动淡出
+   * @param {string} text - 提示内容
+   */
+  function bzy_showHint(text) {
+    bzy_hint.textContent = text;
+    bzy_hint.classList.add('bzy_show');
+    clearTimeout(bzy_hintTimer);
+    bzy_hintTimer = setTimeout(function () {
+      bzy_hint.classList.remove('bzy_show');
+    }, 1200);
+  }
+
+  /**
+   * 切换到上一张或下一张，处理边界提示与 300ms 冷却
+   * @param {number} step - 1 表示下一张，-1 表示上一张
+   */
+  function bzy_switchCard(step) {
+    if (bzy_locked) return;
+    var bzy_next = bzy_current + step;
+
+    if (bzy_next < 0) {
+      bzy_showHint('已经是第一张了');
+      return;
+    }
+    if (bzy_next >= bzy_dishes.length) {
+      bzy_showHint('已经是最后一张了');
+      return;
+    }
+
+    bzy_locked = true;
+    bzy_current = bzy_next;
+    bzy_renderCard(step);
+    setTimeout(function () {
+      bzy_locked = false;
+    }, 300);
+  }
+
+  bzy_card.addEventListener('touchstart', function (e) {
+    var bzy_t = e.touches[0];
+    bzy_startX = bzy_t.clientX;
+    bzy_startY = bzy_t.clientY;
+  }, { passive: true });
+
+  bzy_card.addEventListener('touchend', function (e) {
+    var bzy_t = e.changedTouches[0];
+    var bzy_dx = bzy_t.clientX - bzy_startX;
+    var bzy_dy = bzy_t.clientY - bzy_startY;
+
+    // 横向位移超过 40px 且明显大于纵向，才算一次滑动
+    if (Math.abs(bzy_dx) < 40 || Math.abs(bzy_dx) <= Math.abs(bzy_dy)) return;
+
+    if (bzy_dx < 0) {
+      bzy_switchCard(1);  // 左滑：下一张
+    } else {
+      bzy_switchCard(-1); // 右滑：上一张
+    }
+  });
+</script>
+
+</body>
+</html>

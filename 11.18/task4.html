@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<!--
+作者: 白赜宇
+创建时间: 2026-11-18 13:51
+使用模型: Trae AI Assistant
+功能: 11.18 任务四——摇一摇抽今日菜谱，监听 devicemotion，含冷却、权限申请与不支持设备的降级方案
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11.18 任务四 · 摇一摇彩蛋</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    color:#1f2937;min-height:100vh;
+    background:
+      radial-gradient(circle at 82% 6%,rgba(29,91,191,.10),transparent 32%),
+      radial-gradient(circle at 12% 92%,rgba(232,137,12,.08),transparent 30%),
+      #f6f8fc;
+  }
+
+  /* 首页入口 */
+  .bzy_homeLink{
+    position:fixed;left:22px;top:20px;z-index:10;text-decoration:none;
+    font-size:14px;font-weight:bold;color:#0f2b5b;background:#fff;
+    border:1px solid #dbe4ff;border-radius:999px;padding:9px 20px;
+    box-shadow:0 6px 16px rgba(15,43,91,.10);transition:transform .2s,box-shadow .2s;
+  }
+  .bzy_homeLink:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(15,43,91,.16)}
+
+  .bzy_page{max-width:960px;margin:0 auto;padding:52px 22px 60px}
+
+  .bzy_head{
+    background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;
+    border-radius:20px;padding:30px 34px;margin-bottom:24px;
+    box-shadow:0 14px 32px rgba(15,43,91,.28);
+  }
+  .bzy_head .bzy_badge{
+    display:inline-block;padding:5px 14px;border-radius:999px;font-size:13px;letter-spacing:1px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);margin-bottom:12px;
+  }
+  .bzy_head h1{font-size:26px;letter-spacing:1px;line-height:1.4}
+  .bzy_head h1 b{color:#ffd166}
+  .bzy_head p{margin-top:10px;font-size:14px;line-height:1.9;color:#d9e3f5}
+
+  .bzy_stage{display:flex;flex-direction:column;align-items:center;gap:18px}
+  .bzy_resultCard{
+    width:min(92vw,360px);min-height:230px;border-radius:22px;
+    background:linear-gradient(135deg,#1d5bbf,#0f2b5b);color:#fff;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:30px 26px;text-align:center;
+    box-shadow:0 18px 38px rgba(15,43,91,.24);
+  }
+  .bzy_resultCard .bzy_emoji{font-size:44px;line-height:1;margin-bottom:14px}
+  .bzy_resultCard .bzy_resultName{font-size:25px;letter-spacing:2px;font-weight:bold;color:#ffd166}
+  .bzy_resultCard .bzy_resultDesc{margin-top:12px;font-size:13.5px;line-height:1.9;color:#d9e3f5}
+  .bzy_resultCard .bzy_idleText{font-size:16px;line-height:1.9;color:#d9e3f5}
+  .bzy_resultCard.bzy_pop{animation:bzy_pop .45s ease}
+  @keyframes bzy_pop{
+    0%{transform:scale(.92);opacity:.4}
+    60%{transform:scale(1.03)}
+    100%{transform:scale(1);opacity:1}
+  }
+
+  .bzy_btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .bzy_btn{
+    border:none;border-radius:999px;padding:11px 24px;font-size:14px;font-weight:bold;
+    cursor:pointer;transition:transform .15s;
+  }
+  .bzy_btn:active{transform:translateY(1px)}
+  .bzy_btnPrimary{background:#1d5bbf;color:#fff;box-shadow:0 8px 20px rgba(29,91,191,.3)}
+  .bzy_btnGhost{background:#fff;color:#0f2b5b;border:1px solid #dbe4ff;box-shadow:0 6px 16px rgba(15,43,91,.08)}
+  .bzy_status{font-size:13.5px;color:#5b6b85;text-align:center;line-height:1.8;min-height:24px}
+  .bzy_note{
+    max-width:640px;font-size:13.5px;line-height:2;color:#5b6b85;
+    background:#fff;border:1px solid #e8ecf5;border-radius:16px;padding:20px 24px;
+    box-shadow:0 6px 18px rgba(31,41,55,.06);margin-top:8px;
+  }
+  .bzy_note b{color:#0f2b5b}
+</style>
+</head>
+<body>
+
+<a id="bzy_homeLink" class="bzy_homeLink" href="../index.html">← 返回首页</a>
+
+<div class="bzy_page">
+  <header class="bzy_head">
+    <span class="bzy_badge">11.18 任务 · 任务四 · ⭐⭐⭐⭐</span>
+    <h1>摇一摇彩蛋：<b>抽今日菜谱</b></h1>
+    <p>监听 devicemotion，用 accelerationIncludingGravity 计算合成加速度，超过阈值约 18 判定为摇动，触发后进入 1.5 秒冷却。</p>
+  </header>
+
+  <section class="bzy_stage">
+    <div class="bzy_resultCard" id="bzy_resultCard">
+      <span class="bzy_emoji" id="bzy_emoji">🍜</span>
+      <p class="bzy_idleText" id="bzy_resultText">摇一摇手机，抽今日菜谱</p>
+      <p class="bzy_resultDesc" id="bzy_resultDesc"></p>
+    </div>
+
+    <div class="bzy_btns">
+      <button class="bzy_btn bzy_btnPrimary" id="bzy_permissionBtn" type="button" hidden>开启传感器</button>
+      <button class="bzy_btn bzy_btnGhost" id="bzy_fallbackBtn" type="button">点我抽一次（降级）</button>
+    </div>
+
+    <p class="bzy_status" id="bzy_status">正在检测设备传感器…</p>
+
+    <div class="bzy_note">
+      <b>为什么必须做降级？</b><br>
+      传感器事件只在真机上可靠：电脑浏览器多数收不到 devicemotion，部分机型或隐私设置下也没有权限。如果不做降级，这些用户只会看到一片空白，不知道是坏了还是没反应。所以这里在收不到数据时提示"当前设备不支持"，并保留"点我抽一次"按钮，保证功能在任何设备上都能走通。
+    </div>
+  </section>
+</div>
+
+<script>
+  /**
+   * 菜谱池：抽中的菜品名称、描述与图标
+   * @type {Array<{name:string, desc:string, emoji:string}>}
+   */
+  var bzy_recipes = [
+    { name: '番茄牛腩面', desc: '牛腩炖到软烂，番茄汤底酸甜开胃。', emoji: '🍜' },
+    { name: '扬州炒饭', desc: '粒粒分明，虾仁、火腿与青豆配色鲜亮。', emoji: '🍚' },
+    { name: '酸菜鱼', desc: '鱼片滑嫩，酸辣汤底配一碗白饭刚刚好。', emoji: '🐟' },
+    { name: '小笼包', desc: '皮薄汁多，蘸点香醋一口一个。', emoji: '🥟' },
+    { name: '宫保鸡丁', desc: '酸甜微辣，花生酥脆，下饭首选。', emoji: '🍗' },
+    { name: '麻辣香锅', desc: '想吃什么加什么，麻辣过瘾。', emoji: '🌶️' }
+  ];
+
+  var bzy_resultCard = document.getElementById('bzy_resultCard');
+  var bzy_resultText = document.getElementById('bzy_resultText');
+  var bzy_resultDesc = document.getElementById('bzy_resultDesc');
+  var bzy_emoji = document.getElementById('bzy_emoji');
+  var bzy_status = document.getElementById('bzy_status');
+  var bzy_permissionBtn = document.getElementById('bzy_permissionBtn');
+  var bzy_fallbackBtn = document.getElementById('bzy_fallbackBtn');
+
+  var bzy_cooling = false;      // 1.5 秒冷却
+  var bzy_hasData = false;      // 是否收到过传感器数据
+  var bzy_sensorReady = false;
+
+  /**
+   * 随机抽取一道菜并渲染到结果卡片
+   */
+  function bzy_drawRecipe() {
+    var bzy_item = bzy_recipes[Math.floor(Math.random() * bzy_recipes.length)];
+    bzy_emoji.textContent = bzy_item.emoji;
+    bzy_resultText.textContent = bzy_item.name;
+    bzy_resultDesc.textContent = bzy_item.desc;
+
+    bzy_resultCard.classList.remove('bzy_pop');
+    void bzy_resultCard.offsetWidth;
+    bzy_resultCard.classList.add('bzy_pop');
+  }
+
+  /**
+   * 判定摇动后的统一入口：冷却期内忽略，冷却结束后允许再次触发
+   */
+  function bzy_onShake() {
+    if (bzy_cooling) return;
+    bzy_cooling = true;
+    bzy_status.textContent = '已摇动，1.5 秒后可再抽一次';
+    bzy_drawRecipe();
+    setTimeout(function () {
+      bzy_cooling = false;
+      bzy_status.textContent = '再摇一摇，换一道菜';
+    }, 1500);
+  }
+
+  /**
+   * 显示"当前设备不支持"提示，并保留降级按钮
+   */
+  function bzy_markUnsupported() {
+    if (bzy_hasData) return;
+    bzy_status.textContent = '当前设备不支持传感器，请用手机打开，或点下方按钮抽取';
+    bzy_permissionBtn.hidden = true;
+  }
+
+  /**
+   * devicemotion 处理：合成加速度超过阈值 18 视为一次摇动
+   * @param {DeviceMotionEvent} e - 设备运动事件
+   */
+  function bzy_onMotion(e) {
+    var bzy_acc = e.accelerationIncludingGravity || e.acceleration;
+    if (!bzy_acc || bzy_acc.x === null || bzy_acc.x === undefined) return;
+
+    bzy_hasData = true;
+    var bzy_magnitude = Math.sqrt(
+      bzy_acc.x * bzy_acc.x + bzy_acc.y * bzy_acc.y + bzy_acc.z * bzy_acc.z
+    );
+
+    if (bzy_magnitude > 18) {
+      bzy_onShake();
+    }
+  }
+
+  /**
+   * 开始监听传感器，并在 2 秒内收不到数据时走降级提示
+   */
+  function bzy_startSensor() {
+    if (bzy_sensorReady) return;
+    if (typeof DeviceMotionEvent === 'undefined') {
+      bzy_markUnsupported();
+      return;
+    }
+
+    bzy_sensorReady = true;
+    window.addEventListener('devicemotion', bzy_onMotion);
+    bzy_status.textContent = '正在等待摇动…';
+
+    setTimeout(function () {
+      if (!bzy_hasData) {
+        bzy_markUnsupported();
+      }
+    }, 2000);
+  }
+
+  /**
+   * 兼容 iOS 13+ 的传感器权限：必须在用户点击中申请
+   */
+  function bzy_requestPermission() {
+    if (typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(function (bzy_state) {
+        if (bzy_state === 'granted') {
+          bzy_permissionBtn.hidden = true;
+          bzy_startSensor();
+        } else {
+          bzy_status.textContent = '未获得传感器权限，可点下方按钮抽取';
+        }
+      }).catch(function () {
+        bzy_status.textContent = '权限申请失败，可点下方按钮抽取';
+      });
+    } else {
+      bzy_startSensor();
+    }
+  }
+
+  bzy_permissionBtn.addEventListener('click', bzy_requestPermission);
+  bzy_fallbackBtn.addEventListener('click', bzy_onShake);
+
+  // 初始化：iOS 需要先点按钮授权，其他设备直接开始监听
+  if (typeof DeviceMotionEvent !== 'undefined' &&
+      typeof DeviceMotionEvent.requestPermission === 'function') {
+    bzy_permissionBtn.hidden = false;
+    bzy_status.textContent = 'iOS 设备请先点击"开启传感器"';
+  } else {
+    bzy_startSensor();
+  }
+</script>
+
+</body>
+</html>

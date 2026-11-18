@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!--
+作者: 白赜宇
+创建时间: 2026-11-18 13:44
+使用模型: Trae AI Assistant
+功能: 11.18 日任务页面——记录"任务一 事件侦探"的三个问题与答案
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11.18 任务 · 事件侦探</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    color:#1f2937;min-height:100vh;
+    background:
+      radial-gradient(circle at 82% 6%,rgba(29,91,191,.10),transparent 32%),
+      radial-gradient(circle at 12% 92%,rgba(232,137,12,.08),transparent 30%),
+      #f6f8fc;
+  }
+
+  /* 首页入口 */
+  .bzy_homeLink{
+    position:fixed;left:22px;top:20px;z-index:10;text-decoration:none;
+    font-size:14px;font-weight:bold;color:#0f2b5b;background:#fff;
+    border:1px solid #dbe4ff;border-radius:999px;padding:9px 20px;
+    box-shadow:0 6px 16px rgba(15,43,91,.10);transition:transform .2s,box-shadow .2s;
+  }
+  .bzy_homeLink:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(15,43,91,.16)}
+
+  .bzy_page{max-width:960px;margin:0 auto;padding:52px 22px 60px}
+
+  /* 页头 */
+  .bzy_head{
+    background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;
+    border-radius:20px;padding:34px 36px;margin-bottom:24px;
+    box-shadow:0 14px 32px rgba(15,43,91,.28);
+  }
+  .bzy_head .bzy_badge{
+    display:inline-block;padding:5px 14px;border-radius:999px;font-size:13px;letter-spacing:1px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);margin-bottom:14px;
+  }
+  .bzy_head h1{font-size:27px;letter-spacing:1px;line-height:1.4}
+  .bzy_head h1 b{color:#ffd166}
+  .bzy_head p{margin-top:12px;font-size:14.5px;line-height:1.9;color:#d9e3f5}
+
+  /* 事件顺序条 */
+  .bzy_flow{
+    display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+    background:#fff;border:1px solid #e8ecf5;border-radius:16px;
+    padding:16px 20px;margin-bottom:22px;box-shadow:0 6px 18px rgba(31,41,55,.06);
+  }
+  .bzy_flow .bzy_step{
+    padding:6px 14px;border-radius:999px;font-size:13.5px;font-weight:bold;
+    background:#eef3ff;color:#1d5bbf;font-family:Consolas,monospace;
+  }
+  .bzy_flow .bzy_step.bzy_key{background:#fff3dc;color:#b26a00}
+  .bzy_flow .bzy_arrow{color:#9aa7bd;font-size:13px}
+
+  /* 问答卡片 */
+  .bzy_qa{
+    background:#fff;border:1px solid #e8ecf5;border-radius:18px;
+    padding:26px 28px;margin-bottom:18px;
+    box-shadow:0 6px 18px rgba(31,41,55,.06);
+  }
+  .bzy_qa .bzy_q{display:flex;gap:12px;align-items:flex-start}
+  .bzy_qa .bzy_num{
+    flex:none;width:30px;height:30px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:#1d5bbf;color:#fff;font-size:15px;font-weight:bold;
+  }
+  .bzy_qa .bzy_q h2{font-size:17.5px;line-height:1.6;color:#0f2b5b;padding-top:3px}
+  .bzy_qa .bzy_a{
+    margin-top:14px;padding-left:42px;font-size:14.5px;line-height:2;color:#374151;
+  }
+  .bzy_qa .bzy_a strong{color:#0f2b5b}
+  .bzy_qa .bzy_a code{
+    background:#f1f4fa;border-radius:5px;padding:1px 6px;
+    font-family:Consolas,monospace;font-size:13px;color:#b23c00;
+  }
+  .bzy_qa .bzy_tip{
+    margin-top:14px;margin-left:42px;padding:12px 16px;border-radius:10px;
+    background:#fff8e8;border-left:4px solid #f0a92b;
+    font-size:13.5px;line-height:1.9;color:#7a5200;
+  }
+
+  @media (max-width:640px){
+    .bzy_page{padding:70px 16px 44px}
+    .bzy_head{padding:26px 22px}
+    .bzy_head h1{font-size:22px}
+    .bzy_qa{padding:20px 18px}
+    .bzy_qa .bzy_a,.bzy_qa .bzy_tip{margin-left:0;padding-left:0}
+    .bzy_qa .bzy_tip{padding:12px 14px}
+  }
+</style>
+</head>
+<body>
+
+<a id="bzy_homeLink" class="bzy_homeLink" href="../index.html">← 返回首页</a>
+
+<div class="bzy_page">
+  <header class="bzy_head">
+    <span class="bzy_badge">11.18 任务 · 任务一</span>
+    <h1>事件侦探：<b>一次拖动到底发生了什么</b></h1>
+    <p>基于移动端触摸事件课程页的观察记录。用手机（或 DevTools 设备模式）在事件探针区域按下、拖动、抬起，对照日志回答下面三个问题。</p>
+  </header>
+
+  <div class="bzy_flow">
+    <span class="bzy_step">touchstart</span>
+    <span class="bzy_arrow">→</span>
+    <span class="bzy_step">touchmove × N</span>
+    <span class="bzy_arrow">→</span>
+    <span class="bzy_step">touchend</span>
+    <span class="bzy_arrow">→</span>
+    <span class="bzy_step bzy_key">click</span>
+  </div>
+
+  <section class="bzy_qa">
+    <div class="bzy_q">
+      <span class="bzy_num">①</span>
+      <h2>一次拖动里 touchmove 大约触发多少次、和距离有什么关系？</h2>
+    </div>
+    <div class="bzy_a">
+      次数主要由<strong>拖动的持续时间 × 设备刷新/采样率</strong>决定，而不是由移动了多少像素决定。主流手机约 60Hz，也就是每 16ms 左右触发一次：拖 1 秒大约 60 次，拖 0.5 秒大约 30 次，一次普通拖动通常是几十次；120Hz 屏幕会更密。
+      <br>
+      与距离的关系是<strong>间接的</strong>：拖得越远通常耗时越久，move 也就越多；但快速一甩虽然距离大，事件反而很少，慢慢挪几厘米也能产生很多次。每个 move 携带的是"这一帧手指的位置"，相邻两点的间距就是该帧的位移——事件越密，轨迹越平滑（跟手），越稀就越像"跳点"。
+    </div>
+    <div class="bzy_tip">观察结论：距离变大时 move 变多，本质是"拖动时间变长"；判断手势时不要假设每像素一次，按帧处理坐标即可。</div>
+  </section>
+
+  <section class="bzy_qa">
+    <div class="bzy_q">
+      <span class="bzy_num">②</span>
+      <h2>click 出现在 touchend 之前还是之后？</h2>
+    </div>
+    <div class="bzy_a">
+      <strong>之后。</strong>完整顺序是 <code>touchstart</code> → 若干次 <code>touchmove</code> → <code>touchend</code> → <code>click</code>。click 并不是手指事件，而是浏览器在触摸结束后<strong>补发</strong>的合成事件；历史上会等约 300ms 判断是不是双击，加 <code>touch-action: manipulation</code> 后可接近立即触发，但顺序始终排在 touchend 后面。
+      <br>
+      如果拖动距离较大，或触屏逻辑里调用了 <code>preventDefault()</code>，浏览器可能干脆不再补发 click。
+    </div>
+    <div class="bzy_tip">踩坑提醒：touch 与 click 两套逻辑同时写，会出现"点一次执行两次"，记得二选一，或在 touch 处理里阻止默认行为。</div>
+  </section>
+
+  <section class="bzy_qa">
+    <div class="bzy_q">
+      <span class="bzy_num">③</span>
+      <h2>如果把 touchend 换成 touchcancel，会发生什么？</h2>
+    </div>
+    <div class="bzy_a">
+      正常抬手<strong>不会触发 touchcancel</strong>，所以"抬手结算"这一步永远不会执行：滑动距离算不出来、方向判断失效、长按定时器不会被清除、拖拽状态一直卡着，页面看起来像"卡死"。
+      <br>
+      <code>touchcancel</code> 只在系统打断触摸时触发——来电、消息横幅、系统手势返回、浏览器接管滚动或缩放。此时 <code>changedTouches</code> 里放的是被取消的那根手指，可以用来复位。
+      <br>
+      正确做法：<code>touchend</code> 负责正常收尾（算距离、判方向、清定时器），<code>touchcancel</code> 复用同一套清理逻辑，避免"接个电话回来状态卡住"。
+    </div>
+    <div class="bzy_tip">一句话：touchend 是"用户抬起了手"，touchcancel 是"手势被系统抢走了"，两者语义不同，不能互相替代。</div>
+  </section>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<!--
+作者: 白赜宇
+创建时间: 2026-11-18 13:51
+使用模型: Trae AI Assistant
+功能: 11.18 任务三——移动端图片查看器，支持双指缩放、双击放大与放大后拖动
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>11.18 任务三 · 图片查看器</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    color:#1f2937;min-height:100vh;
+    background:
+      radial-gradient(circle at 82% 6%,rgba(29,91,191,.10),transparent 32%),
+      radial-gradient(circle at 12% 92%,rgba(232,137,12,.08),transparent 30%),
+      #f6f8fc;
+  }
+
+  /* 首页入口 */
+  .bzy_homeLink{
+    position:fixed;left:22px;top:20px;z-index:10;text-decoration:none;
+    font-size:14px;font-weight:bold;color:#0f2b5b;background:#fff;
+    border:1px solid #dbe4ff;border-radius:999px;padding:9px 20px;
+    box-shadow:0 6px 16px rgba(15,43,91,.10);transition:transform .2s,box-shadow .2s;
+  }
+  .bzy_homeLink:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(15,43,91,.16)}
+
+  .bzy_page{max-width:960px;margin:0 auto;padding:52px 22px 60px}
+
+  .bzy_head{
+    background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;
+    border-radius:20px;padding:30px 34px;margin-bottom:24px;
+    box-shadow:0 14px 32px rgba(15,43,91,.28);
+  }
+  .bzy_head .bzy_badge{
+    display:inline-block;padding:5px 14px;border-radius:999px;font-size:13px;letter-spacing:1px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);margin-bottom:12px;
+  }
+  .bzy_head h1{font-size:26px;letter-spacing:1px;line-height:1.4}
+  .bzy_head h1 b{color:#ffd166}
+  .bzy_head p{margin-top:10px;font-size:14px;line-height:1.9;color:#d9e3f5}
+
+  .bzy_stageWrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .bzy_stage{
+    width:min(92vw,380px);height:min(62vh,520px);
+    background:#0d1220;border-radius:20px;overflow:hidden;position:relative;
+    box-shadow:0 18px 38px rgba(15,43,91,.22);
+    touch-action:none;user-select:none;-webkit-user-select:none;
+  }
+  .bzy_stage img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    transform-origin:center center;will-change:transform;
+    -webkit-user-drag:none;user-select:none;
+  }
+  .bzy_stage img.bzy_animating{transition:transform .25s ease}
+  .bzy_scaleTag{
+    position:absolute;right:14px;bottom:14px;
+    background:rgba(0,0,0,.55);color:#fff;font-size:12.5px;
+    border-radius:999px;padding:4px 12px;letter-spacing:1px;
+  }
+  .bzy_ctrlRow{display:flex;gap:12px;align-items:center}
+  .bzy_resetBtn{
+    border:1px solid #dbe4ff;background:#fff;color:#0f2b5b;font-weight:bold;
+    font-size:13.5px;border-radius:999px;padding:9px 20px;cursor:pointer;
+    box-shadow:0 6px 16px rgba(15,43,91,.08);
+  }
+  .bzy_resetBtn:active{transform:translateY(1px)}
+  .bzy_help{font-size:13px;color:#8894a8;text-align:center;line-height:1.9}
+</style>
+</head>
+<body>
+
+<a id="bzy_homeLink" class="bzy_homeLink" href="../index.html">← 返回首页</a>
+
+<div class="bzy_page">
+  <header class="bzy_head">
+    <span class="bzy_badge">11.18 任务 · 任务三 · ⭐⭐⭐</span>
+    <h1>图片查看器：<b>双指缩放 + 双击放大 + 拖动</b></h1>
+    <p>双指缩放范围 1x～4x，以两指中点为缩放基准；双击在 1x 与 2x 之间切换；放大后单指拖动，松手自动限制在边界内。</p>
+  </header>
+
+  <section class="bzy_stageWrap">
+    <div class="bzy_stage" id="bzy_stage">
+      <img id="bzy_img"
+           src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=steaming%20bowl%20of%20Chinese%20braised%20beef%20noodle%20soup%2C%20rich%20red%20broth%2C%20fresh%20cilantro%2C%20chili%20oil%2C%20dark%20rustic%20table%2C%20warm%20cinematic%20lighting%2C%20high%20detail%20food%20photography&image_size=portrait_4_3"
+           alt="一碗热气腾腾的红烧牛肉面">
+      <span class="bzy_scaleTag" id="bzy_scaleTag">1.0x</span>
+    </div>
+    <div class="bzy_ctrlRow">
+      <button class="bzy_resetBtn" id="bzy_resetBtn" type="button">重置视图</button>
+    </div>
+    <p class="bzy_help">双指缩放请用手机打开；桌面可在 DevTools 设备模式模拟双指。<br>双击切换 1x / 2x，放大后可单指拖动查看细节。</p>
+  </section>
+</div>
+
+<script>
+  var bzy_stage = document.getElementById('bzy_stage');
+  var bzy_img = document.getElementById('bzy_img');
+  var bzy_scaleTag = document.getElementById('bzy_scaleTag');
+  var bzy_resetBtn = document.getElementById('bzy_resetBtn');
+
+  var bzy_scale = 1;   // 当前缩放倍数
+  var bzy_tx = 0;      // 当前横向位移
+  var bzy_ty = 0;      // 当前纵向位移
+  var bzy_mode = null; // 当前手势：pinch / drag
+
+  var bzy_pinchStartDist = 0;   // 双指初始间距
+  var bzy_pinchStartScale = 1;  // 双指开始时的缩放倍数
+  var bzy_pinchStartTx = 0;
+  var bzy_pinchStartTy = 0;
+  var bzy_pinchCx = 0;          // 两指中点相对容器中心
+  var bzy_pinchCy = 0;
+
+  var bzy_dragStartX = 0;
+  var bzy_dragStartY = 0;
+  var bzy_dragStartTx = 0;
+  var bzy_dragStartTy = 0;
+
+  var bzy_tapStartX = 0;
+  var bzy_tapStartY = 0;
+  var bzy_tapStartTime = 0;
+  var bzy_lastTapTime = 0;
+  var bzy_moved = false;
+
+  /**
+   * 计算两根手指之间的直线距离
+   * @param {Touch} t1 - 第一根手指
+   * @param {Touch} t2 - 第二根手指
+   * @returns {number} 两指间距（像素）
+   */
+  function bzy_distance(t1, t2) {
+    return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+  }
+
+  /**
+   * 把位移限制在图片边界内，避免放大后拖出黑边
+   */
+  function bzy_clamp() {
+    var bzy_rect = bzy_stage.getBoundingClientRect();
+    var bzy_maxX = Math.max(0, (bzy_rect.width * bzy_scale - bzy_rect.width) / 2);
+    var bzy_maxY = Math.max(0, (bzy_rect.height * bzy_scale - bzy_rect.height) / 2);
+    bzy_tx = Math.min(bzy_maxX, Math.max(-bzy_maxX, bzy_tx));
+    bzy_ty = Math.min(bzy_maxY, Math.max(-bzy_maxY, bzy_ty));
+  }
+
+  /**
+   * 应用当前缩放与位移，并刷新比例指示
+   */
+  function bzy_apply() {
+    bzy_img.style.transform = 'translate(' + bzy_tx + 'px,' + bzy_ty + 'px) scale(' + bzy_scale + ')';
+    bzy_scaleTag.textContent = bzy_scale.toFixed(1) + 'x';
+  }
+
+  /**
+   * 以指定点为基准缩放，保证该点在屏幕上位置不变（缩放不跳）
+   * @param {number} cx - 基准点相对容器中心的横向偏移
+   * @param {number} cy - 基准点相对容器中心的纵向偏移
+   * @param {number} nextScale - 目标缩放倍数
+   * @param {boolean} animate - 是否播放过渡动画
+   */
+  function bzy_zoomAt(cx, cy, nextScale, animate) {
+    var bzy_ratio = nextScale / bzy_scale;
+    bzy_tx = cx - (cx - bzy_tx) * bzy_ratio;
+    bzy_ty = cy - (cy - bzy_ty) * bzy_ratio;
+    bzy_scale = nextScale;
+    bzy_clamp();
+
+    if (animate) {
+      bzy_img.classList.add('bzy_animating');
+      setTimeout(function () {
+        bzy_img.classList.remove('bzy_animating');
+      }, 260);
+    }
+    bzy_apply();
+  }
+
+  /**
+   * 重置为 1x 居中状态
+   * @param {boolean} animate - 是否播放过渡动画
+   */
+  function bzy_resetView(animate) {
+    bzy_scale = 1;
+    bzy_tx = 0;
+    bzy_ty = 0;
+    if (animate) {
+      bzy_img.classList.add('bzy_animating');
+      setTimeout(function () {
+        bzy_img.classList.remove('bzy_animating');
+      }, 260);
+    }
+    bzy_apply();
+  }
+
+  bzy_stage.addEventListener('touchstart', function (e) {
+    bzy_moved = false;
+    bzy_tapStartTime = Date.now();
+
+    if (e.touches.length === 2) {
+      var bzy_rect = bzy_stage.getBoundingClientRect();
+      var bzy_t1 = e.touches[0];
+      var bzy_t2 = e.touches[1];
+
+      bzy_mode = 'pinch';
+      bzy_pinchStartDist = bzy_distance(bzy_t1, bzy_t2);
+      bzy_pinchStartScale = bzy_scale;
+      bzy_pinchStartTx = bzy_tx;
+      bzy_pinchStartTy = bzy_ty;
+      bzy_pinchCx = (bzy_t1.clientX + bzy_t2.clientX) / 2 - (bzy_rect.left + bzy_rect.width / 2);
+      bzy_pinchCy = (bzy_t1.clientY + bzy_t2.clientY) / 2 - (bzy_rect.top + bzy_rect.height / 2);
+    } else if (e.touches.length === 1) {
+      var bzy_t = e.touches[0];
+      bzy_mode = 'drag';
+      bzy_dragStartX = bzy_t.clientX;
+      bzy_dragStartY = bzy_t.clientY;
+      bzy_dragStartTx = bzy_tx;
+      bzy_dragStartTy = bzy_ty;
+      bzy_tapStartX = bzy_t.clientX;
+      bzy_tapStartY = bzy_t.clientY;
+      bzy_img.classList.remove('bzy_animating');
+    }
+  }, { passive: false });
+
+  bzy_stage.addEventListener('touchmove', function (e) {
+    e.preventDefault(); // 接管手势，阻止整页缩放与滚动
+
+    if (bzy_mode === 'pinch' && e.touches.length >= 2) {
+      var bzy_dist = bzy_distance(e.touches[0], e.touches[1]);
+      var bzy_nextScale = bzy_pinchStartScale * (bzy_dist / bzy_pinchStartDist);
+      bzy_nextScale = Math.min(4, Math.max(1, bzy_nextScale));
+
+      var bzy_ratio = bzy_nextScale / bzy_pinchStartScale;
+      bzy_scale = bzy_nextScale;
+      bzy_tx = bzy_pinchCx - (bzy_pinchCx - bzy_pinchStartTx) * bzy_ratio;
+      bzy_ty = bzy_pinchCy - (bzy_pinchCy - bzy_pinchStartTy) * bzy_ratio;
+      bzy_clamp();
+      bzy_apply();
+      bzy_moved = true;
+      return;
+    }
+
+    if (bzy_mode === 'drag' && e.touches.length === 1 && bzy_scale > 1) {
+      var bzy_t = e.touches[0];
+      bzy_tx = bzy_dragStartTx + (bzy_t.clientX - bzy_dragStartX);
+      bzy_ty = bzy_dragStartTy + (bzy_t.clientY - bzy_dragStartY);
+      bzy_clamp();
+      bzy_apply();
+
+      if (Math.abs(bzy_t.clientX - bzy_tapStartX) > 8 || Math.abs(bzy_t.clientY - bzy_tapStartY) > 8) {
+        bzy_moved = true;
+      }
+    }
+  }, { passive: false });
+
+  bzy_stage.addEventListener('touchend', function (e) {
+    // 双指中抬起一根：剩下的手指继续拖动，避免画面突然跳走
+    if (bzy_mode === 'pinch' && e.touches.length === 1) {
+      var bzy_t = e.touches[0];
+      bzy_mode = 'drag';
+      bzy_dragStartX = bzy_t.clientX;
+      bzy_dragStartY = bzy_t.clientY;
+      bzy_dragStartTx = bzy_tx;
+      bzy_dragStartTy = bzy_ty;
+      return;
+    }
+
+    if (e.touches.length > 0) return;
+
+    // 双击判定：位移很小、两次点击间隔小于 300ms
+    if (!bzy_moved && Date.now() - bzy_tapStartTime < 300) {
+      var bzy_now = Date.now();
+      if (bzy_now - bzy_lastTapTime < 300) {
+        bzy_lastTapTime = 0;
+        var bzy_rect = bzy_stage.getBoundingClientRect();
+        var bzy_cx = bzy_tapStartX - (bzy_rect.left + bzy_rect.width / 2);
+        var bzy_cy = bzy_tapStartY - (bzy_rect.top + bzy_rect.height / 2);
+        bzy_zoomAt(bzy_cx, bzy_cy, bzy_scale <= 1.01 ? 2 : 1, true);
+      } else {
+        bzy_lastTapTime = bzy_now;
+      }
+    }
+
+    // 缩回 1x 附近时自动居中
+    if (bzy_scale <= 1.01) {
+      bzy_resetView(true);
+    } else {
+      bzy_clamp();
+      bzy_apply();
+    }
+    bzy_mode = null;
+  });
+
+  bzy_resetBtn.addEventListener('click', function () {
+    bzy_resetView(true);
+  });
+
+  window.addEventListener('resize', function () {
+    // 旋转屏幕或窗口变化后只修正边界，保留当前缩放状态
+    bzy_clamp();
+    bzy_apply();
+  });
+</script>
+
+</body>
+</html>
