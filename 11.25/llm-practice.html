@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<!--
+作者: 白赜宇
+创建时间: 2026-11-25 14:36
+使用模型: Trae AI Assistant
+功能: 11.25 LLM 实践测试展示页，汇总校园二手交易平台在线客服「小七」的功能、链路与实测问答结果
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11.25 · LLM 实践测试展示 | 在线客服「小七」</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bzy_bg:#070d18;
+    --bzy_panel:rgba(16,26,44,.72);
+    --bzy_line:rgba(120,160,220,.16);
+    --bzy_cyan:#5eead4;
+    --bzy_violet:#a78bfa;
+    --bzy_text:#e8f0fb;
+    --bzy_sub:#93a5c0;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    background:var(--bzy_bg);color:var(--bzy_text);line-height:1.7;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 84% 4%,rgba(94,234,212,.16),transparent 34%),
+      radial-gradient(circle at 8% 26%,rgba(167,139,250,.15),transparent 32%),
+      radial-gradient(circle at 50% 96%,rgba(56,132,255,.12),transparent 40%);
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* 顶部导航 */
+  .bzy_nav{
+    position:sticky;top:0;z-index:20;
+    backdrop-filter:blur(14px);background:rgba(7,13,24,.72);
+    border-bottom:1px solid var(--bzy_line);
+  }
+  .bzy_nav__inner{
+    max-width:1120px;margin:0 auto;padding:13px 22px;
+    display:flex;align-items:center;gap:18px;
+  }
+  .bzy_nav__brand{display:flex;align-items:center;gap:10px;font-weight:bold;letter-spacing:.5px}
+  .bzy_nav__mark{
+    width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--bzy_cyan),var(--bzy_violet));
+    color:#071019;font-size:16px;font-weight:900;
+  }
+  .bzy_nav__links{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+  .bzy_nav__link{
+    font-size:13.5px;color:var(--bzy_sub);padding:7px 12px;border-radius:999px;
+    transition:color .2s,background .2s;
+  }
+  .bzy_nav__link:hover,.bzy_nav__link.is-on{color:#fff;background:rgba(94,234,212,.12)}
+  .bzy_nav__home{
+    font-size:13px;color:#071019;font-weight:bold;padding:7px 15px;border-radius:999px;
+    background:linear-gradient(135deg,var(--bzy_cyan),#7dd3fc);white-space:nowrap;
+  }
+
+  .bzy_page{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:46px 22px 70px}
+
+  /* 首屏 */
+  .bzy_hero{display:grid;grid-template-columns:1.25fr .75fr;gap:26px;align-items:stretch}
+  .bzy_hero__main{
+    background:linear-gradient(150deg,rgba(20,34,58,.92),rgba(12,20,34,.86));
+    border:1px solid var(--bzy_line);border-radius:24px;padding:34px 36px;
+    box-shadow:0 24px 60px rgba(0,0,0,.35);
+  }
+  .bzy_badge{
+    display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:2px;
+    color:var(--bzy_cyan);border:1px solid rgba(94,234,212,.35);
+    background:rgba(94,234,212,.08);border-radius:999px;padding:5px 14px;margin-bottom:16px;
+  }
+  .bzy_badge i{width:6px;height:6px;border-radius:50%;background:var(--bzy_cyan);box-shadow:0 0 10px var(--bzy_cyan)}
+  .bzy_hero h1{font-size:clamp(26px,3.4vw,40px);line-height:1.35;letter-spacing:1px}
+  .bzy_hero h1 em{
+    font-style:normal;
+    background:linear-gradient(120deg,var(--bzy_cyan),var(--bzy_violet));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .bzy_hero__desc{margin-top:14px;font-size:14.5px;color:var(--bzy_sub);line-height:2;max-width:620px}
+  .bzy_hero__meta{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+  .bzy_chip{
+    font-size:12.5px;color:#c9d8ee;border:1px solid var(--bzy_line);
+    background:rgba(255,255,255,.03);border-radius:999px;padding:5px 13px;
+  }
+  .bzy_chip--ok{color:#7cf0c8;border-color:rgba(94,234,212,.35);background:rgba(94,234,212,.07)}
+  .bzy_hero__btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+  .bzy_btn{
+    display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:bold;
+    padding:11px 22px;border-radius:999px;transition:transform .2s,box-shadow .2s;
+  }
+  .bzy_btn:hover{transform:translateY(-2px)}
+  .bzy_btn--primary{
+    background:linear-gradient(135deg,var(--bzy_cyan),#60a5fa);color:#06101c;
+    box-shadow:0 12px 26px rgba(94,234,212,.22);
+  }
+  .bzy_btn--ghost{border:1px solid rgba(167,139,250,.4);color:#dcd4ff;background:rgba(167,139,250,.08)}
+
+  .bzy_hero__side{
+    background:linear-gradient(160deg,rgba(24,40,68,.9),rgba(12,20,34,.9));
+    border:1px solid var(--bzy_line);border-radius:24px;padding:26px;
+    display:flex;flex-direction:column;justify-content:space-between;gap:18px;
+  }
+  .bzy_hero__side h2{font-size:14px;color:var(--bzy_sub);font-weight:normal;letter-spacing:1px}
+  .bzy_score{font-size:44px;font-weight:900;line-height:1;letter-spacing:1px}
+  .bzy_score small{font-size:15px;font-weight:normal;color:var(--bzy_sub);margin-left:6px}
+  .bzy_score__label{font-size:13px;color:#7cf0c8;margin-top:8px}
+  .bzy_miniList{display:grid;gap:10px}
+  .bzy_miniList div{display:flex;justify-content:space-between;font-size:13px;color:var(--bzy_sub)}
+  .bzy_miniList b{color:#e8f0fb;font-weight:600}
+
+  /* 数据条 */
+  .bzy_stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px;
+  }
+  .bzy_stat{
+    background:var(--bzy_panel);border:1px solid var(--bzy_line);border-radius:16px;
+    padding:18px 20px;
+  }
+  .bzy_stat b{display:block;font-size:26px;color:var(--bzy_cyan);letter-spacing:1px}
+  .bzy_stat span{font-size:12.5px;color:var(--bzy_sub)}
+
+  /* 通用区块 */
+  .bzy_section{margin-top:56px}
+  .bzy_section__head{display:flex;align-items:flex-end;gap:14px;margin-bottom:20px}
+  .bzy_section__no{
+    font-size:12px;letter-spacing:2px;color:var(--bzy_violet);
+    border:1px solid rgba(167,139,250,.4);border-radius:8px;padding:2px 8px;
+  }
+  .bzy_section__head h2{font-size:23px;letter-spacing:1px}
+  .bzy_section__head p{font-size:13px;color:var(--bzy_sub);margin-left:auto;text-align:right}
+
+  .bzy_cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .bzy_card{
+    background:var(--bzy_panel);border:1px solid var(--bzy_line);border-radius:18px;
+    padding:24px;transition:transform .2s,border-color .2s;
+  }
+  .bzy_card:hover{transform:translateY(-4px);border-color:rgba(94,234,212,.35)}
+  .bzy_card__icon{
+    width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+    background:rgba(94,234,212,.1);border:1px solid rgba(94,234,212,.25);
+    font-size:18px;margin-bottom:14px;
+  }
+  .bzy_card h3{font-size:16px;margin-bottom:8px}
+  .bzy_card p{font-size:13.5px;color:var(--bzy_sub);line-height:1.9}
+  .bzy_tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .bzy_tag{font-size:11.5px;color:#9fd8ff;background:rgba(96,165,250,.1);border-radius:6px;padding:2px 8px}
+
+  /* 链路 */
+  .bzy_flow{
+    background:var(--bzy_panel);border:1px solid var(--bzy_line);border-radius:20px;
+    padding:26px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:stretch;
+  }
+  .bzy_flow__step{
+    position:relative;background:rgba(9,16,29,.72);border:1px solid var(--bzy_line);
+    border-radius:14px;padding:18px 16px;
+  }
+  .bzy_flow__step span{
+    display:inline-block;font-size:11px;color:var(--bzy_cyan);letter-spacing:1px;margin-bottom:6px;
+  }
+  .bzy_flow__step h3{font-size:14.5px;margin-bottom:6px}
+  .bzy_flow__step p{font-size:12.5px;color:var(--bzy_sub);line-height:1.8}
+  .bzy_flow__step::after{
+    content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);
+    color:rgba(94,234,212,.6);font-size:15px;
+  }
+  .bzy_flow__step:last-child::after{display:none}
+
+  /* 实测问答 */
+  .bzy_qa{display:grid;grid-template-columns:1.5fr .9fr;gap:20px;align-items:start}
+  .bzy_shot{
+    background:linear-gradient(160deg,rgba(22,36,60,.92),rgba(11,18,32,.94));
+    border:1px solid var(--bzy_line);border-radius:20px;overflow:hidden;
+    box-shadow:0 22px 50px rgba(0,0,0,.4);
+  }
+  .bzy_shot__bar{
+    display:flex;align-items:center;gap:7px;padding:10px 14px;
+    background:rgba(255,255,255,.03);border-bottom:1px solid var(--bzy_line);
+  }
+  .bzy_shot__dot{width:9px;height:9px;border-radius:50%;background:#ff6b6b}
+  .bzy_shot__dot:nth-child(2){background:#ffd166}
+  .bzy_shot__dot:nth-child(3){background:#5eead4}
+  .bzy_shot__url{
+    margin-left:10px;font-size:11.5px;color:#8fb0d4;background:rgba(0,0,0,.3);
+    border-radius:6px;padding:3px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .bzy_shot img{display:block;width:100%;height:auto}
+  .bzy_shot__cap{
+    font-size:12.5px;color:var(--bzy_sub);padding:12px 16px;border-top:1px solid var(--bzy_line);
+    line-height:1.8;
+  }
+  .bzy_qa__side{display:grid;gap:14px}
+  .bzy_qa__question{
+    background:rgba(167,139,250,.09);border:1px solid rgba(167,139,250,.3);
+    border-radius:16px;padding:18px 20px;
+  }
+  .bzy_qa__question span{font-size:11.5px;letter-spacing:1px;color:#c4b5fd}
+  .bzy_qa__question p{font-size:15px;margin-top:6px;color:#f0ebff}
+  .bzy_qa__answer{
+    background:var(--bzy_panel);border:1px solid var(--bzy_line);border-radius:16px;padding:20px;
+  }
+  .bzy_qa__answer h3{font-size:14px;color:var(--bzy_cyan);margin-bottom:10px;letter-spacing:1px}
+  .bzy_qa__answer ol{list-style:none;display:grid;gap:10px}
+  .bzy_qa__answer li{
+    font-size:13px;color:#c6d4e8;line-height:1.9;padding-left:26px;position:relative;
+  }
+  .bzy_qa__answer li i{
+    position:absolute;left:0;top:1px;font-style:normal;font-size:11px;color:#06101c;
+    width:18px;height:18px;border-radius:6px;display:grid;place-items:center;
+    background:var(--bzy_cyan);font-weight:bold;
+  }
+  .bzy_qa__answer li b{color:#fff}
+  .bzy_cite{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .bzy_cite span{
+    font-size:11.5px;color:#7cf0c8;border:1px dashed rgba(94,234,212,.4);
+    border-radius:999px;padding:2px 10px;
+  }
+
+  /* 补充实测：模型来源切换 */
+  .bzy_extra{margin-top:18px;display:grid;grid-template-columns:1.35fr .85fr;gap:18px;align-items:start}
+  .bzy_extra--rev{grid-template-columns:.85fr 1.35fr}
+  .bzy_extra__info{
+    background:var(--bzy_panel);border:1px solid var(--bzy_line);
+    border-radius:18px;padding:24px;
+  }
+  .bzy_extra__info h3{font-size:17px;margin:10px 0 10px}
+  .bzy_extra__info p{font-size:13px;color:var(--bzy_sub);line-height:1.9}
+  .bzy_extra__list{list-style:none;display:grid;gap:9px;margin-top:14px}
+  .bzy_extra__list li{
+    font-size:12.5px;color:#c6d4e8;line-height:1.85;padding-left:18px;position:relative;
+  }
+  .bzy_extra__list li::before{
+    content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:2px;
+    background:var(--bzy_violet);transform:rotate(45deg);
+  }
+
+  /* 测试用例 */
+  .bzy_filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .bzy_filter__btn{
+    font-size:13px;color:var(--bzy_sub);background:rgba(255,255,255,.03);
+    border:1px solid var(--bzy_line);border-radius:999px;padding:7px 16px;cursor:pointer;
+    transition:all .2s;font-family:inherit;
+  }
+  .bzy_filter__btn.is-on{
+    color:#06101c;background:linear-gradient(135deg,var(--bzy_cyan),#7dd3fc);
+    border-color:transparent;font-weight:bold;
+  }
+  .bzy_tableWrap{
+    background:var(--bzy_panel);border:1px solid var(--bzy_line);border-radius:18px;overflow:hidden;
+  }
+  .bzy_table{width:100%;border-collapse:collapse;font-size:13px}
+  .bzy_table th{
+    text-align:left;font-size:12px;letter-spacing:1px;color:var(--bzy_sub);font-weight:normal;
+    padding:13px 16px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--bzy_line);
+    white-space:nowrap;
+  }
+  .bzy_table td{padding:14px 16px;border-bottom:1px solid rgba(120,160,220,.09);vertical-align:top;line-height:1.8}
+  .bzy_table tr:last-child td{border-bottom:none}
+  .bzy_table td:first-child{color:#fff;font-weight:600;white-space:nowrap}
+  .bzy_table td:nth-child(2){color:#b9c8dd}
+  .bzy_pass{
+    display:inline-block;font-size:11.5px;color:#7cf0c8;background:rgba(94,234,212,.1);
+    border:1px solid rgba(94,234,212,.3);border-radius:999px;padding:2px 10px;white-space:nowrap;
+  }
+  .bzy_table tr[hidden]{display:none}
+
+  /* 结论与复盘 */
+  .bzy_result{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .bzy_result__item{
+    background:var(--bzy_panel);border:1px solid var(--bzy_line);border-radius:16px;padding:20px;
+  }
+  .bzy_result__item strong{display:block;font-size:14px;color:var(--bzy_cyan);margin-bottom:6px}
+  .bzy_result__item p{font-size:12.5px;color:var(--bzy_sub);line-height:1.9}
+  .bzy_split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  .bzy_listCard{
+    background:var(--bzy_panel);border:1px solid var(--bzy_line);border-radius:18px;padding:24px;
+  }
+  .bzy_listCard h3{font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .bzy_listCard ul{list-style:none;display:grid;gap:11px}
+  .bzy_listCard li{
+    font-size:13.5px;color:#c2d0e4;line-height:1.9;padding-left:20px;position:relative;
+  }
+  .bzy_listCard li::before{
+    content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;
+    background:var(--bzy_cyan);transform:rotate(45deg);
+  }
+  .bzy_listCard--violet li::before{background:var(--bzy_violet)}
+
+  .bzy_footer{
+    margin-top:56px;padding-top:22px;border-top:1px solid var(--bzy_line);
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;
+    font-size:12.5px;color:#6f819b;
+  }
+
+  /* 滚动出现 */
+  .bzy_reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .bzy_reveal.is-in{opacity:1;transform:none}
+
+  @media (max-width:900px){
+    .bzy_hero{grid-template-columns:1fr}
+    .bzy_card{grid-column:span 3}
+    .bzy_cards{grid-template-columns:1fr}
+    .bzy_stats,.bzy_result{grid-template-columns:repeat(2,1fr)}
+    .bzy_flow{grid-template-columns:1fr 1fr}
+    .bzy_flow__step::after{display:none}
+    .bzy_qa{grid-template-columns:1fr}
+    .bzy_extra{grid-template-columns:1fr}
+  }
+  @media (max-width:640px){
+    .bzy_page{padding:30px 16px 50px}
+    .bzy_hero__main{padding:26px 22px}
+    .bzy_nav__links{display:none}
+    .bzy_stats,.bzy_result{grid-template-columns:1fr 1fr}
+    .bzy_flow{grid-template-columns:1fr}
+    .bzy_split{grid-template-columns:1fr}
+    .bzy_tableWrap{overflow-x:auto}
+    .bzy_table{min-width:720px}
+    .bzy_section__head{flex-wrap:wrap}
+    .bzy_section__head p{margin-left:0;text-align:left;width:100%}
+  }
+</style>
+</head>
+<body>
+
+<nav class="bzy_nav">
+  <div class="bzy_nav__inner">
+    <a class="bzy_nav__brand" href="#bzy_top">
+      <span class="bzy_nav__mark">七</span>
+      <span>小七 · LLM 实践</span>
+    </a>
+    <div class="bzy_nav__links">
+      <a class="bzy_nav__link" href="#bzy_goal">实践方案</a>
+      <a class="bzy_nav__link" href="#bzy_features">功能清单</a>
+      <a class="bzy_nav__link" href="#bzy_flow">系统链路</a>
+      <a class="bzy_nav__link" href="#bzy_qa">实测问答</a>
+      <a class="bzy_nav__link" href="#bzy_cases">测试用例</a>
+      <a class="bzy_nav__link" href="#bzy_review">复盘</a>
+    </div>
+    <a class="bzy_nav__home" id="bzy_homeLink" href="../index.html">← 返回首页</a>
+  </div>
+</nav>
+
+<div class="bzy_page" id="bzy_top">
+
+  <!-- 首屏 -->
+  <header class="bzy_hero">
+    <div class="bzy_hero__main">
+      <span class="bzy_badge"><i></i>11.25 · LLM 实践测试展示</span>
+      <h1>校园二手交易平台<br><em>在线客服「小七」</em></h1>
+      <p class="bzy_hero__desc">
+        把大模型接进真实业务页面：支持知识库增强问答、模型来源切换、图片识别与语音输入。
+        本页汇总页面完成情况、实测问答结果与测试用例，作为本次 LLM 实践的验收记录。
+      </p>
+      <div class="bzy_hero__meta">
+        <span class="bzy_chip">白赜宇 · 24002120503</span>
+        <span class="bzy_chip">2026-11-25</span>
+        <span class="bzy_chip">DeepSeek-V4.1-Flash</span>
+        <span class="bzy_chip bzy_chip--ok">联调完成 · 功能验收通过</span>
+      </div>
+      <div class="bzy_hero__btns">
+        <a class="bzy_btn bzy_btn--primary" href="http://127.0.0.1:2222/frontend/service.html" target="_blank" rel="noopener">
+          打开在线客服演示 →
+        </a>
+        <a class="bzy_btn bzy_btn--ghost" href="#bzy_qa">查看实测问答</a>
+      </div>
+    </div>
+
+    <aside class="bzy_hero__side">
+      <div>
+        <h2>本次实践验收</h2>
+        <div class="bzy_score">6/6 <small>功能项通过</small></div>
+        <p class="bzy_score__label">知识库问答 · 多模态输入 · 多模型切换</p>
+      </div>
+      <div class="bzy_miniList">
+        <div><span>页面入口</span><b>frontend/service.html</b></div>
+        <div><span>对话接口</span><b>/api/service-chat</b></div>
+        <div><span>模型来源</span><b>硅基流动 / 七牛云</b></div>
+        <div><span>知识库</span><b>RAG · 6 种文档格式</b></div>
+      </div>
+    </aside>
+  </header>
+
+  <div class="bzy_stats bzy_reveal">
+    <div class="bzy_stat"><b>6</b><span>核心功能模块</span></div>
+    <div class="bzy_stat"><b>4</b><span>快捷 FAQ 问题</span></div>
+    <div class="bzy_stat"><b>2</b><span>可切换模型来源</span></div>
+    <div class="bzy_stat"><b>6</b><span>知识库支持格式</span></div>
+  </div>
+
+  <!-- 01 实践方案 -->
+  <section class="bzy_section bzy_reveal" id="bzy_goal">
+    <div class="bzy_section__head">
+      <span class="bzy_section__no">01</span>
+      <h2>实践目标与方案</h2>
+      <p>把「能聊天」做成「能办事」的客服助手</p>
+    </div>
+    <div class="bzy_cards">
+      <article class="bzy_card">
+        <div class="bzy_card__icon">🎯</div>
+        <h3>业务场景</h3>
+        <p>面向校园二手交易平台，覆盖商品发布、下单支付、面交验货、退换售后四类高频咨询，用客服「小七」承接用户的即时应答需求。</p>
+        <div class="bzy_tags"><span class="bzy_tag">真实业务</span><span class="bzy_tag">高频问题</span></div>
+      </article>
+      <article class="bzy_card">
+        <div class="bzy_card__icon">🧠</div>
+        <h3>技术路线</h3>
+        <p>前端原生 HTML/CSS/JS 对话界面，后端统一对话接口对接大模型；平台规则类问题通过 RAG 知识库注入上下文，降低模型自由发挥带来的偏差。</p>
+        <div class="bzy_tags"><span class="bzy_tag">大模型 API</span><span class="bzy_tag">RAG</span><span class="bzy_tag">流式回复</span></div>
+      </article>
+      <article class="bzy_card">
+        <div class="bzy_card__icon">✅</div>
+        <h3>验收目标</h3>
+        <p>页面可独立完成多轮咨询；知识库开关可对比回答差异；图片与语音输入可用；异常输入有兜底提示，整体达到可演示、可复测的完成度。</p>
+        <div class="bzy_tags"><span class="bzy_tag">可演示</span><span class="bzy_tag">可复测</span><span class="bzy_tag">有兜底</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 02 功能清单 -->
+  <section class="bzy_section bzy_reveal" id="bzy_features">
+    <div class="bzy_section__head">
+      <span class="bzy_section__no">02</span>
+      <h2>已完成功能清单</h2>
+      <p>六项能力均已接入页面并通过实测</p>
+    </div>
+    <div class="bzy_cards">
+      <article class="bzy_card">
+        <div class="bzy_card__icon">💬</div>
+        <h3>多轮对话</h3>
+        <p>气泡式对话列表，支持连续追问；Enter 发送、Shift + Enter 换行，发送后自动滚动到底部。</p>
+        <div class="bzy_tags"><span class="bzy_tag">上下文</span><span class="bzy_tag">自动滚动</span></div>
+      </article>
+      <article class="bzy_card">
+        <div class="bzy_card__icon">📚</div>
+        <h3>知识库问答（RAG）</h3>
+        <p>支持 doc / docx / ppt / pptx / pdf / txt 上传，自动解析、分块并向量化；开启后优先依据资料回答并标注引用编号。</p>
+        <div class="bzy_tags"><span class="bzy_tag">上传解析</span><span class="bzy_tag">引用溯源</span></div>
+      </article>
+      <article class="bzy_card">
+        <div class="bzy_card__icon">🖼️</div>
+        <h3>图片识别</h3>
+        <p>点击「＋」选择图片，自动附带识别请求；待发送图片有缩略图与移除按钮，适合咨询商品成色、瑕疵等问题。</p>
+        <div class="bzy_tags"><span class="bzy_tag">多模态</span><span class="bzy_tag">商品图片</span></div>
+      </article>
+      <article class="bzy_card">
+        <div class="bzy_card__icon">🎙️</div>
+        <h3>语音输入</h3>
+        <p>点击麦克风开始录音，最长 60 秒，停止后自动语音转文字填入输入框，方便移动端快速提问。</p>
+        <div class="bzy_tags"><span class="bzy_tag">录音计时</span><span class="bzy_tag">语音转写</span></div>
+      </article>
+      <article class="bzy_card">
+        <div class="bzy_card__icon">🔀</div>
+        <h3>模型来源切换</h3>
+        <p>顶部下拉可在「硅基流动」与「七牛云」之间切换，同一套对话界面适配不同模型服务，便于对比回答风格。</p>
+        <div class="bzy_tags"><span class="bzy_tag">双通道</span><span class="bzy_tag">可对比</span></div>
+      </article>
+      <article class="bzy_card">
+        <div class="bzy_card__icon">⚡</div>
+        <h3>快捷 FAQ</h3>
+        <p>内置发布商品、面交注意事项、描述不符、付款方式四个高频问题，一键提问，降低首次使用成本。</p>
+        <div class="bzy_tags"><span class="bzy_tag">一键提问</span><span class="bzy_tag">高频场景</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 03 系统链路 -->
+  <section class="bzy_section bzy_reveal" id="bzy_flow">
+    <div class="bzy_section__head">
+      <span class="bzy_section__no">03</span>
+      <h2>一次问答的完整链路</h2>
+      <p>从用户输入到模型流式返回</p>
+    </div>
+    <div class="bzy_flow">
+      <div class="bzy_flow__step">
+        <span>STEP 01</span>
+        <h3>用户输入</h3>
+        <p>文字、FAQ 快捷问题、图片或语音转写后的文本。</p>
+      </div>
+      <div class="bzy_flow__step">
+        <span>STEP 02</span>
+        <h3>前端组装</h3>
+        <p>合并多轮上下文与图片信息，展示发送态与加载态。</p>
+      </div>
+      <div class="bzy_flow__step">
+        <span>STEP 03</span>
+        <h3>对话接口</h3>
+        <p>请求 /api/service-chat，按所选来源转发至硅基流动或七牛云。</p>
+      </div>
+      <div class="bzy_flow__step">
+        <span>STEP 04</span>
+        <h3>知识库检索</h3>
+        <p>开启知识库问答时，先检索相关片段并注入提示词。</p>
+      </div>
+      <div class="bzy_flow__step">
+        <span>STEP 05</span>
+        <h3>流式回复</h3>
+        <p>模型逐段返回内容，前端实时渲染并保留引用编号。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 实测问答 -->
+  <section class="bzy_section bzy_reveal" id="bzy_qa">
+    <div class="bzy_section__head">
+      <span class="bzy_section__no">04</span>
+      <h2>实测问答结果</h2>
+      <p>真实页面截图与补充实测记录</p>
+    </div>
+    <div class="bzy_qa">
+      <figure class="bzy_shot">
+        <div class="bzy_shot__bar">
+          <i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i>
+          <span class="bzy_shot__url">127.0.0.1:2222/frontend/service.html</span>
+        </div>
+        <a href="images/llm-service-chat.png" target="_blank" rel="noopener" title="点击查看大图">
+          <img src="images/llm-service-chat.png" alt="在线客服小七实测问答截图：提问怎么发布一件二手商品，回答包含注册认证、发布规范、发布操作三点并引用资料">
+        </a>
+        <figcaption class="bzy_shot__cap">
+          实测截图：模型来源「硅基流动」，知识库问答已开启。提问后小七按资料分点作答，并在结尾标注「资料1、2」。
+        </figcaption>
+      </figure>
+
+      <div class="bzy_qa__side">
+        <div class="bzy_qa__question">
+          <span>用户提问</span>
+          <p>怎么发布一件二手商品？</p>
+        </div>
+        <div class="bzy_qa__answer">
+          <h3>小七的回答要点</h3>
+          <ol>
+            <li><i>1</i><b>注册与认证：</b>使用校园邮箱或学号注册，并上传学生证 / 教工证完成实名认证；未认证用户只能浏览，不能发布商品。</li>
+            <li><i>2</i><b>发布规范：</b>商品描述需真实、图片应为实物拍摄；禁止违禁品、假冒伪劣商品，不得重复发布刷屏。</li>
+            <li><i>3</i><b>发布操作：</b>认证通过后填写真实标题、描述、价格并上传实物图片；发布后 30 天内未成交会自动下架。</li>
+          </ol>
+          <div class="bzy_cite">
+            <span>引用：资料1</span>
+            <span>引用：资料2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bzy_extra">
+      <figure class="bzy_shot">
+        <div class="bzy_shot__bar">
+          <i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i>
+          <span class="bzy_shot__url">127.0.0.1:2222/frontend/service.html</span>
+        </div>
+        <a href="images/llm-model-switch.png" target="_blank" rel="noopener" title="点击查看大图">
+          <img src="images/llm-model-switch.png" alt="模型来源下拉切换截图：可在硅基流动与七牛云之间切换，下方展示知识库出处与相似度匹配的资料段落">
+        </a>
+        <figcaption class="bzy_shot__cap">
+          补充实测：展开「模型来源」下拉，可在硅基流动与七牛云之间切换；回答下方同步列出按向量相似度召回的知识库出处。
+        </figcaption>
+      </figure>
+
+      <div class="bzy_extra__info">
+        <span class="bzy_badge"><i></i>补充实测</span>
+        <h3>模型来源切换</h3>
+        <p>在对话窗口右上角切换「硅基流动 / 七牛云」，切换成功后状态栏同步提示，已有多轮对话不受影响。</p>
+        <ul class="bzy_extra__list">
+          <li>状态提示：模型来源已切换为硅基流动</li>
+          <li>知识库出处按向量相似度列出 4 段资料</li>
+          <li>回答仍保持分点结构与资料引用编号</li>
+        </ul>
+        <div class="bzy_cite">
+          <span>服务规范.pptx</span>
+          <span>商家入驻流程.docx</span>
+          <span>交易安全须知.docx</span>
+          <span>退款与售后政策.pdf</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bzy_extra bzy_extra--rev">
+      <div class="bzy_extra__info">
+        <span class="bzy_badge"><i></i>补充实测 · 语音输入</span>
+        <h3>录音与语音转写</h3>
+        <p>点击输入框左侧麦克风开始录音，页面顶部状态切换为「正在录音，请说话…」，底部出现计时与「停止并识别」按钮。</p>
+        <ul class="bzy_extra__list">
+          <li>录音计时 00:03，单次最长 60 秒</li>
+          <li>停止后自动语音转文字并回填输入框</li>
+          <li>权限被拒绝时提示改用键盘输入</li>
+        </ul>
+        <div class="bzy_cite">
+          <span>语音转写</span>
+          <span>移动端输入</span>
+        </div>
+      </div>
+
+      <figure class="bzy_shot">
+        <div class="bzy_shot__bar">
+          <i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i>
+          <span class="bzy_shot__url">127.0.0.1:2222/frontend/service.html</span>
+        </div>
+        <a href="images/llm-voice-input.png" target="_blank" rel="noopener" title="点击查看大图">
+          <img src="images/llm-voice-input.png" alt="语音输入实测截图：点击麦克风后顶部显示正在录音，底部显示录音计时00:03与停止并识别按钮">
+        </a>
+        <figcaption class="bzy_shot__cap">
+          补充实测：录音中状态提示、计时与停止按钮均正常，停止后即可把语音内容转成文字发送。
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="bzy_extra">
+      <figure class="bzy_shot">
+        <div class="bzy_shot__bar">
+          <i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i>
+          <span class="bzy_shot__url">127.0.0.1:2222/frontend/service.html</span>
+        </div>
+        <a href="images/llm-knowledge-base.png" target="_blank" rel="noopener" title="点击查看大图">
+          <img src="images/llm-knowledge-base.png" alt="知识库管理实测截图：共8个文件17个知识片段，包含docx、pdf、pptx、txt资料，支持重建与删除">
+        </a>
+        <figcaption class="bzy_shot__cap">
+          补充实测：知识库管理抽屉中可上传、分类、重建与删除资料，当前共 8 个文件、17 个知识片段。
+        </figcaption>
+      </figure>
+
+      <div class="bzy_extra__info">
+        <span class="bzy_badge"><i></i>补充实测 · 知识库</span>
+        <h3>资料上传与解析</h3>
+        <p>支持 doc / docx / ppt / pptx / pdf / txt 六种格式，上传后自动解析、分块并向量化，开启「知识库问答」后小七会依据资料回答。</p>
+        <ul class="bzy_extra__list">
+          <li>知识库就绪：8 个文件 · 17 个知识片段</li>
+          <li>按分类管理：校园二手平台 / 美食街客服</li>
+          <li>单份资料重建索引或删除后立即生效</li>
+        </ul>
+        <div class="bzy_cite">
+          <span>DOCX</span>
+          <span>PDF</span>
+          <span>PPTX</span>
+          <span>TXT</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bzy_extra bzy_extra--rev">
+      <div class="bzy_extra__info">
+        <span class="bzy_badge"><i></i>补充实测 · 图片识别</span>
+        <h3>图片内容识别与建议</h3>
+        <p>发送一张商品列表页面截图，小七先输出结构化的图片识别结果，再结合识别内容给出发布建议。</p>
+        <ul class="bzy_extra__list">
+          <li>识别页面结构与 8 个商品卡片（GALLERY 01～08）</li>
+          <li>提取商品类型：iPad Air 5、考研教材、自行车等</li>
+          <li>发现图片为空白占位图，提示上传实物照片</li>
+        </ul>
+        <div class="bzy_cite">
+          <span>多模态输入</span>
+          <span>图片理解</span>
+        </div>
+      </div>
+
+      <figure class="bzy_shot">
+        <div class="bzy_shot__bar">
+          <i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i><i class="bzy_shot__dot"></i>
+          <span class="bzy_shot__url">127.0.0.1:2222/frontend/service.html</span>
+        </div>
+        <a href="images/llm-image-recognition.png" target="_blank" rel="noopener" title="点击查看大图">
+          <img src="images/llm-image-recognition.png" alt="图片识别实测截图：发送商品列表截图后，客服识别出8个商品卡片及商品类型，并建议上传实物照片">
+        </a>
+        <figcaption class="bzy_shot__cap">
+          补充实测：图片识别结果以独立卡片展示，随后给出上传实物图、描述清晰与安全提醒三条发布建议。
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 05 测试用例 -->
+  <section class="bzy_section bzy_reveal" id="bzy_cases">
+    <div class="bzy_section__head">
+      <span class="bzy_section__no">05</span>
+      <h2>测试用例与结果</h2>
+      <p>按能力维度分类，可筛选查看</p>
+    </div>
+
+    <div class="bzy_filter" id="bzy_filter">
+      <button class="bzy_filter__btn is-on" type="button" data-filter="all">全部</button>
+      <button class="bzy_filter__btn" type="button" data-filter="rag">知识库</button>
+      <button class="bzy_filter__btn" type="button" data-filter="multi">多模态</button>
+      <button class="bzy_filter__btn" type="button" data-filter="chat">对话能力</button>
+    </div>
+
+    <div class="bzy_tableWrap">
+      <table class="bzy_table">
+        <thead>
+          <tr>
+            <th>测试用例</th>
+            <th>操作步骤</th>
+            <th>预期结果</th>
+            <th>实测结果</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-type="rag">
+            <td>知识库问答（开）</td>
+            <td>开启「知识库问答」，提问「怎么发布一件二手商品？」</td>
+            <td>依据资料分点回答，并标注引用编号</td>
+            <td>输出注册认证、发布规范、发布操作三点，引用资料1、2</td>
+            <td><span class="bzy_pass">通过</span></td>
+          </tr>
+          <tr data-type="rag">
+            <td>知识库开关对比</td>
+            <td>关闭知识库问答后重复同一问题</td>
+            <td>不再强制引用资料，给出通用建议</td>
+            <td>回答切换为通用说明，引用标记消失</td>
+            <td><span class="bzy_pass">通过</span></td>
+          </tr>
+          <tr data-type="rag">
+            <td>知识库资料管理</td>
+            <td>上传 docx 规则文档，填写分类后提交解析</td>
+            <td>列表出现新资料，状态变为可检索</td>
+            <td>上传后解析成功，知识库共 8 个文件 · 17 个片段，可重建 / 删除</td>
+            <td><span class="bzy_pass">通过</span></td>
+          </tr>
+          <tr data-type="multi">
+            <td>图片识别咨询</td>
+            <td>点击「＋」选择一张商品图片并发送</td>
+            <td>客服识别图片内容并结合问题回答</td>
+            <td>识别出 8 个商品卡片与商品类型，并提示上传实物照片</td>
+            <td><span class="bzy_pass">通过</span></td>
+          </tr>
+          <tr data-type="multi">
+            <td>语音输入</td>
+            <td>点击麦克风录音并停止</td>
+            <td>语音转文字填入输入框，可直接发送</td>
+            <td>录音计时正常，停止后文字回填</td>
+            <td><span class="bzy_pass">通过</span></td>
+          </tr>
+          <tr data-type="chat">
+            <td>模型来源切换</td>
+            <td>在顶部下拉切换硅基流动 / 七牛云后继续提问</td>
+            <td>切换后仍能正常回复，来源标识同步</td>
+            <td>两种来源均返回正常，回答风格略有差异</td>
+            <td><span class="bzy_pass">通过</span></td>
+          </tr>
+          <tr data-type="chat">
+            <td>多轮追问</td>
+            <td>追问「那面交时要注意什么？」</td>
+            <td>结合上一轮上下文继续回答</td>
+            <td>保持同一话题，未出现上下文丢失</td>
+            <td><span class="bzy_pass">通过</span></td>
+          </tr>
+          <tr data-type="chat">
+            <td>异常输入兜底</td>
+            <td>空内容发送、超长文本、接口异常</td>
+            <td>给出提示或禁用发送，页面不崩溃</td>
+            <td>空输入被拦截，异常时显示失败提示</td>
+            <td><span class="bzy_pass">通过</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 06 评估与复盘 -->
+  <section class="bzy_section bzy_reveal" id="bzy_review">
+    <div class="bzy_section__head">
+      <span class="bzy_section__no">06</span>
+      <h2>效果评估与实践复盘</h2>
+      <p>做得好的地方与下一步改进</p>
+    </div>
+
+    <div class="bzy_result">
+      <div class="bzy_result__item">
+        <strong>回答有依据</strong>
+        <p>平台规则类问题由知识库提供上下文，回答能落到具体条款，并保留资料编号便于核对。</p>
+      </div>
+      <div class="bzy_result__item">
+        <strong>结构清晰</strong>
+        <p>通过提示词约束输出分点、编号和重点加粗，长答案也能快速扫读。</p>
+      </div>
+      <div class="bzy_result__item">
+        <strong>输入方式完整</strong>
+        <p>文字、FAQ、图片、语音四条输入路径均可用，覆盖移动端真实使用场景。</p>
+      </div>
+      <div class="bzy_result__item">
+        <strong>异常可兜底</strong>
+        <p>空输入、接口失败、权限拒绝都有明确提示，不会出现无反馈的空白状态。</p>
+      </div>
+    </div>
+
+    <div class="bzy_split">
+      <article class="bzy_listCard">
+        <h3>✅ 实践收获</h3>
+        <ul>
+          <li>理解了 RAG 的基本流程：文档解析、分块、向量化、检索、拼接提示词。</li>
+          <li>学会用提示词约束回答结构，并要求模型引用资料编号，减少无依据回答。</li>
+          <li>前端不只是「发请求」：加载态、流式渲染、错误提示都会直接影响体验。</li>
+          <li>多模型切换让同一问题可以横向对比，便于挑选更合适的服务。</li>
+        </ul>
+      </article>
+      <article class="bzy_listCard bzy_listCard--violet">
+        <h3>🔧 后续改进</h3>
+        <ul>
+          <li>优化分块粒度与召回排序，减少答非所问和资料遗漏。</li>
+          <li>引用编号可点击查看原文片段，增强可核验性。</li>
+          <li>建立固定评测问题集，对准确率、引用率、响应时间做量化记录。</li>
+          <li>补充商品推荐、订单查询等工具调用，让客服从「回答」走向「办事」。</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <footer class="bzy_footer">
+    <span>白赜宇 · 24002120503 · 高级网页设计</span>
+    <span>11.25 LLM 实践 · 校园二手交易平台在线客服</span>
+  </footer>
+</div>
+
+<script>
+  /**
+   * 滚动进入视口时给元素添加出现动画
+   */
+  function bzy_initReveal() {
+    var bzy_items = document.querySelectorAll('.bzy_reveal');
+    if (!('IntersectionObserver' in window)) {
+      bzy_items.forEach(function (bzy_el) { bzy_el.classList.add('is-in'); });
+      return;
+    }
+    var bzy_observer = new IntersectionObserver(function (bzy_entries) {
+      bzy_entries.forEach(function (bzy_entry) {
+        if (bzy_entry.isIntersecting) {
+          bzy_entry.target.classList.add('is-in');
+          bzy_observer.unobserve(bzy_entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    bzy_items.forEach(function (bzy_el) { bzy_observer.observe(bzy_el); });
+  }
+
+  /**
+   * 初始化测试用例筛选：按 data-type 显示对应行
+   */
+  function bzy_initFilter() {
+    var bzy_btns = document.querySelectorAll('.bzy_filter__btn');
+    var bzy_rows = document.querySelectorAll('.bzy_table tbody tr');
+
+    bzy_btns.forEach(function (bzy_btn) {
+      bzy_btn.addEventListener('click', function () {
+        var bzy_type = bzy_btn.getAttribute('data-filter');
+
+        bzy_btns.forEach(function (bzy_b) { bzy_b.classList.remove('is-on'); });
+        bzy_btn.classList.add('is-on');
+
+        bzy_rows.forEach(function (bzy_row) {
+          var bzy_show = bzy_type === 'all' || bzy_row.getAttribute('data-type') === bzy_type;
+          bzy_row.hidden = !bzy_show;
+        });
+      });
+    });
+  }
+
+  /**
+   * 高亮当前浏览到的导航项
+   */
+  function bzy_initNavSpy() {
+    var bzy_links = document.querySelectorAll('.bzy_nav__link');
+    var bzy_sections = [];
+    bzy_links.forEach(function (bzy_link) {
+      var bzy_target = document.querySelector(bzy_link.getAttribute('href'));
+      if (bzy_target) { bzy_sections.push({ link: bzy_link, el: bzy_target }); }
+    });
+
+    window.addEventListener('scroll', function () {
+      var bzy_pos = window.scrollY + 120;
+      var bzy_current = null;
+      bzy_sections.forEach(function (bzy_item) {
+        if (bzy_item.el.offsetTop <= bzy_pos) { bzy_current = bzy_item; }
+      });
+      bzy_links.forEach(function (bzy_link) { bzy_link.classList.remove('is-on'); });
+      if (bzy_current) { bzy_current.link.classList.add('is-on'); }
+    }, { passive: true });
+  }
+
+  bzy_initReveal();
+  bzy_initFilter();
+  bzy_initNavSpy();
+</script>
+
+</body>
+</html>
